@@ -1,4 +1,4 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.scannerapp.database.entities.BatchDetails
 
 /*
 DAOs are responsible for defining methods that access the DB.

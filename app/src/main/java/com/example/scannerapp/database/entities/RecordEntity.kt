@@ -1,4 +1,4 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,9 +1,7 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.ForeignKey
-import java.util.Date
 
 // Entity: User
 @Entity(tableName = "user")

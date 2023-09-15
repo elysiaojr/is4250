@@ -1,4 +1,4 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database.converters
 
 import androidx.room.TypeConverter
 import java.text.SimpleDateFormat

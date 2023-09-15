@@ -1,9 +1,12 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.scannerapp.database.AppDatabase
+import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.repository.RecordRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

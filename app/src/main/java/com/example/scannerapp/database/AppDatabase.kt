@@ -1,10 +1,20 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.scannerapp.database.dao.BatchDetailsDao
+import com.example.scannerapp.database.dao.ConsumableDao
+import com.example.scannerapp.database.converters.DateConverters
+import com.example.scannerapp.database.converters.EnumConverters
+import com.example.scannerapp.database.dao.RecordDao
+import com.example.scannerapp.database.dao.UserDao
+import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Consumable
+import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.database.entities.User
 
 @Database(
   entities = [Consumable::class, BatchDetails::class, Record::class, User::class],

@@ -1,6 +1,8 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.repository
 
 import androidx.lifecycle.LiveData
+import com.example.scannerapp.database.dao.ConsumableDao
+import com.example.scannerapp.database.entities.Consumable
 
 /*
 Repositories are responsible for abstracting the source of data for your app.

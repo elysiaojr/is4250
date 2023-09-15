@@ -1,9 +1,8 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
-import java.util.Date
 
 // Entity: BatchDetails
 // INSERT into BatchDetails (batchId, batchNumber, expiryDate, batchInitialQuantity, batchRemainingQuantity, storageLocation, consumableId) VALUES (0, "999888", "19/05/2027", 50, 50, "SHELF_1", 0)

@@ -1,6 +1,10 @@
-package com.example.scannerapp.data
+package com.example.scannerapp.database.converters
 
 import androidx.room.TypeConverter
+import com.example.scannerapp.database.entities.ConsumableCategory
+import com.example.scannerapp.database.entities.MeasurementUnit
+import com.example.scannerapp.database.entities.RecordType
+import com.example.scannerapp.database.entities.StorageLocation
 
 // Converting Enums to String, vice versa
 class EnumConverters {
