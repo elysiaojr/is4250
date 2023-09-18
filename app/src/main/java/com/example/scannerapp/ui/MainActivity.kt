@@ -10,7 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
+import com.example.scannerapp.database.entities.User
 import com.example.scannerapp.theme.ScannerAppTheme
+import com.example.scannerapp.viewmodels.UserViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -34,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
   // For testing only
   private fun insertIntoDatabase() {
-    val user = User(0, "Justin")
+    val user = User(name = "Justin", status = 0)
     mUserViewModel.addUser(user)
   }
 
