@@ -1,4 +1,4 @@
-package com.example.scannerapp
+package com.example.scannerapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,10 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelProvider
-import com.example.scannerapp.database.entities.User
-import com.example.scannerapp.ui.theme.ScannerAppTheme
-import com.example.scannerapp.viewmodels.UserViewModel
+import com.example.scannerapp.theme.ScannerAppTheme
 
 class MainActivity : ComponentActivity() {
 
