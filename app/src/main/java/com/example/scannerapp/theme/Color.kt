@@ -1,4 +1,4 @@
-package com.example.scannerapp.ui.theme
+package com.example.scannerapp.theme
 
 import androidx.compose.ui.graphics.Color
 

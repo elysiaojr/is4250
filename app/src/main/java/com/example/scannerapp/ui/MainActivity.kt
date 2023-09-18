@@ -1,4 +1,4 @@
-package com.example.scannerapp
+package com.example.scannerapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,15 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.database.entities.User
-import com.example.scannerapp.ui.theme.ScannerAppTheme
+import com.example.scannerapp.theme.ScannerAppTheme
 import com.example.scannerapp.viewmodels.UserViewModel
 
 class MainActivity : ComponentActivity() {
 
-  //  private lateinit var mUserViewModel: UserViewModel
+  private lateinit var mUserViewModel: UserViewModel
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+    mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
     setContent {
       ScannerAppTheme {
         // A surface container using the 'background' color from the theme
@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background
         ) {
-//          insertIntoDatabase()
+          insertIntoDatabase()
           Greeting("Group 7")
         }
       }
@@ -36,10 +36,10 @@ class MainActivity : ComponentActivity() {
   }
 
   // For testing only
-//  private fun insertIntoDatabase() {
-//    val user = User(0, "Justin")
-//    mUserViewModel.addUser(user)
-//  }
+  private fun insertIntoDatabase() {
+    val user = User(name = "Justin", status = 0)
+    mUserViewModel.addUser(user)
+  }
 
   @Composable
   fun Greeting(name: String, modifier: Modifier = Modifier) {

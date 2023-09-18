@@ -50,7 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
           context.applicationContext,
           AppDatabase::class.java,
           "app_database"
-        ).createFromAsset("database/ScannerApp.db").build()
+        ).build()
         INSTANCE = instance
         return instance
       }
