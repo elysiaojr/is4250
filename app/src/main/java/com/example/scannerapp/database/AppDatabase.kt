@@ -26,10 +26,10 @@ abstract class AppDatabase : RoomDatabase() {
 
   abstract fun consumablesDao(): ConsumableDao
 
-  @TypeConverters(DateConverters::class)
+  @TypeConverters(EnumConverters::class, DateConverters::class)
   abstract fun batchDetailsDao(): BatchDetailsDao
 
-  @TypeConverters(DateConverters::class)
+  @TypeConverters(EnumConverters::class, DateConverters::class)
   abstract fun recordDao(): RecordDao
   abstract fun userDao(): UserDao
 
@@ -50,7 +50,9 @@ abstract class AppDatabase : RoomDatabase() {
           context.applicationContext,
           AppDatabase::class.java,
           "app_database"
-        ).build()
+        )
+          .createFromAsset("database/ScannerApp.db")
+          .build()
         INSTANCE = instance
         return instance
       }

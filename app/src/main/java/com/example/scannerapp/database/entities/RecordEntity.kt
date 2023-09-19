@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 
 
 // Entity: Record
-// INSERT into Record (recordId, recordDate, recordQuantityTaken, recordRemarks, recordType, batchId, userId) VALUES (0, "19/05/2023", 0, "Test", "TAKE_OUT", 0, 0)
+// INSERT into record (recordDate, recordQuantityTaken, recordRemarks, recordType, batchId, userId) VALUES (0, "19/05/2023", 0, "Test", "TAKE_OUT", 0, 0)
 @Entity(
   tableName = "record",
   foreignKeys = [
@@ -14,18 +14,19 @@ import androidx.room.ForeignKey
       entity = BatchDetails::class,
       parentColumns = arrayOf("batchId"),
       childColumns = arrayOf("batchId"),
-      onDelete = ForeignKey.CASCADE
+//      onDelete = ForeignKey.CASCADE
     ),
     ForeignKey(
       entity = User::class,
       parentColumns = arrayOf("userId"),
       childColumns = arrayOf("userId"),
-      onDelete = ForeignKey.CASCADE
+//      onDelete = ForeignKey.CASCADE
     )
   ]
 )
 data class Record(
-  @PrimaryKey(autoGenerate = true) val recordId: Int,
+  @PrimaryKey(autoGenerate = true)
+  val recordId: Int = 1,
   val recordDate: String,
   val recordQuantityTaken: Int,
   val recordRemarks: String,

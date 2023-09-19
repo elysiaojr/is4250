@@ -16,7 +16,7 @@ We write queries here!
 @Dao
 interface UserDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun addUser(user: User): Long
+  suspend fun insert(user: User)
 
   @Update
   suspend fun update(user: User)
