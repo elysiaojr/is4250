@@ -29,8 +29,8 @@ class CreateUserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_user)
 
-    // initialise the ViewModel
-    userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        // initialise the ViewModel
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         textInputLayoutName = findViewById(R.id.textInputLayoutName)
         textInputEditTextName = findViewById(R.id.textInputEditTextName)
@@ -83,41 +83,5 @@ class CreateUserActivity : AppCompatActivity() {
             ).show()
         }
     }
-  }
-
-  private fun saveUserToDatabase() {
-    val userName = editTextName.text.toString().trim()
-    val switchStatus = switchStatus.isChecked // true for enabled, false for disabled
-
-    val userStatus: Int = if (switchStatus) {
-      1
-    } else {
-      0
-    } // 1 for enabled, 0 for disabled
-
-    if (userName.isNotEmpty()) {
-
-      val newUser = User(userId = 0, name = userName, status = userStatus)
-
-      // use the function in ViewModel to add the user
-      userViewModel.addUser(newUser)
-
-      // display success message
-      Toast.makeText(
-        this@CreateUserActivity,
-        "User created successfully!",
-        Toast.LENGTH_SHORT
-      ).show()
-
-
-    } else {
-      // display an error message if the user name is empty
-      Toast.makeText(
-        this@CreateUserActivity,
-        "Please enter a name.",
-        Toast.LENGTH_SHORT
-      ).show()
-    }
-  }
 
 }
