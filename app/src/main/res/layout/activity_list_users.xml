@@ -29,25 +29,6 @@
                 android:id="@+id/userlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
-<!--            <LinearLayout-->
-<!--                xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:padding="16dp">-->
-<!--                <ImageView-->
-<!--                    android:id="@+id/userIcon"-->
-<!--                    android:layout_width="24dp"-->
-<!--                    android:layout_height="24dp"-->
-<!--                    android:src="@drawable/baseline_person_outline_24"/> &lt;!&ndash; Replace with your user icon image &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:id="@+id/username"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="User Name"-->
-<!--                    android:layout_marginStart="16dp"-->
-<!--                    android:textSize="16sp" />-->
-<!--            </LinearLayout>-->
             </ListView>
         </LinearLayout>
     </RelativeLayout>

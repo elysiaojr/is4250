@@ -36,7 +36,6 @@ class UserListAdapter(private val context: Context, private var userList: List<U
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.list_item_user, null)
 
-        //val userIconImageView = view.findViewById<ImageView>(R.id.userIcon)
         val usernameTextView = view.findViewById<TextView>(R.id.username)
 
         // Set user data to views
