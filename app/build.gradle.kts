@@ -77,4 +77,9 @@ dependencies {
   kapt("androidx.room:room-compiler:$roomVersion")
   implementation("androidx.room:room-ktx:$roomVersion")
 
+  // Material Design Library
+  implementation("androidx.compose.material3:material3:1.1.1")
+  implementation("androidx.compose.material3:material3-window-size-class:1.1.1")
+
+
 }
