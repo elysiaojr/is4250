@@ -2,6 +2,8 @@
 <resources>
 
     <style name="Theme.ScannerApp" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#3368B7</item>
     </style>
 
 </resources>

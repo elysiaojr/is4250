@@ -31,6 +31,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
+  fun getUserById(userId: Int) {
+
+  }
+
+  fun updateUser(updatedUser: User) {
+
+  }
+
   // More functions...
 }
 
