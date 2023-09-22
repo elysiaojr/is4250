@@ -31,9 +31,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  fun getUserById(user: User) {
+  fun getUserById(userId: Int) {
     viewModelScope.launch(Dispatchers.IO) {
-      return userRepository.getUserById(user)
+      userRepository.getUserById(userId)
     }
   }
 
