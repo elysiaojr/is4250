@@ -26,7 +26,7 @@ class UserRepository(private val userDao: UserDao) {
   }
 
   suspend fun getUserById(user: User) {
-    userDao.getUserById(user.userId)
+    return userDao.getUserById(user.userId)
   }
 
   // More functions...
