@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="hintTextColor">@color/text_input_hint</item>
+        <item name="boxBackgroundColor">@color/text_input_background</item>
+
+        // is it nicer with rounded or non-rounded edges?
+<!--        <item name="boxCornerRadiusTopStart">20dp</item>-->
+<!--        <item name="boxCornerRadiusTopEnd">20dp</item>-->
+<!--        <item name="boxCornerRadiusBottomStart">20dp</item>-->
+<!--        <item name="boxCornerRadiusBottomEnd">20dp</item>-->
+
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+    </style>
+
+    <style name="CardTextButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/button_background</item>
+    </style>
+
+    <style name="IconButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:minWidth">@dimen/m3_btn_icon_only_min_width</item>
+        <item name="android:paddingLeft">@dimen/m3_btn_icon_only_default_padding</item>
+        <item name="android:paddingRight">@dimen/m3_btn_icon_only_default_padding</item>
+        <item name="android:paddingTop">@dimen/m3_btn_icon_only_default_padding</item>
+        <item name="android:paddingBottom">@dimen/m3_btn_icon_only_default_padding</item>
+        <item name="android:insetLeft">@dimen/m3_btn_inset</item>
+        <item name="android:insetRight">@dimen/m3_btn_inset</item>
+        <item name="iconSize">@dimen/m3_btn_icon_only_default_size</item>
+        <item name="iconTint">@color/black</item>
+        <item name="iconPadding">@dimen/m3_btn_icon_only_icon_padding</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
+    </style>
+
+    <style name="NavigationBar" parent="Widget.Material3.BottomNavigationView">
+        <item name="elevation">8dp</item>
+        <item name="backgroundTint">#F9F9F9</item>
+        <item name="compatShadowEnabled">true</item>
+    </style>
+
+</resources>

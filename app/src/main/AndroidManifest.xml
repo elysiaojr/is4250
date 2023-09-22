@@ -12,25 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScannerApp"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ui.ListConsumablesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ListBatchesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ListRecordsActivity"
+            android:exported="true" >
+        </activity>
+        <activity
+            android:name=".ui.EditUserActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true" >
         </activity>
-
         <activity
             android:name=".ui.CreateUserActivity"
-            android:exported="true" >
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".ui.ListUsersActivity"
+            android:exported="true">
             <!-- add this intent-filter to whichever activity you want to show on launch -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.ListUsersActivity"
-            android:exported="false" >
         </activity>
     </application>
 
