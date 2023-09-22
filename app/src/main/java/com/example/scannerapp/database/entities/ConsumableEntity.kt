@@ -4,25 +4,22 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // Entity: Consumable
-// INSERT INTO consumable (name, description, barcodeId, measurementUnit, currentQuantity, minimumQuantity, isG1Barcode, consumableCategory) VALUES ("Best Syringes", "Best Syringes Made in SG", "010203", "BOXES", 50, 10, 0, "SYRINGES")
+// INSERT INTO consumable (consumableName, consumableBrand, consumableType, consumableSize, barcodeId, unitOfMeasurement, perUnitQuantity, minimumQuantity, isActive) VALUES ("Best Syringes", "John & Son", "Type A", "50ml", "BarcodeID01239", "BOX", 50, 10, 1)
 @Entity(tableName = "consumable")
 data class Consumable(
   @PrimaryKey(autoGenerate = true)
   val consumableId: Int = 1,
-  val name: String,
-  val description: String,
+  val consumableName: String,
+  val consumableBrand: String,
+  val consumableType: String?, // optional
+  val consumableSize: String?, // optional
   val barcodeId: String,
-  val measurementUnit: MeasurementUnit,
-  val currentQuantity: Int,
+  val unitOfMeasurement: UnitOfMeasurement,
+  val perUnitQuantity: Int,
   val minimumQuantity: Int,
-  val isG1Barcode: Int,
-  val consumableCategory: ConsumableCategory
+  val isActive: Int
 )
 
-enum class ConsumableCategory {
-  SYRINGES, VIALS
-}
-
-enum class MeasurementUnit {
-  BOXES, PIECES
+enum class UnitOfMeasurement {
+  BOX, PIECE, PACK
 }

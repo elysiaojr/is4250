@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.ForeignKey
 
 // Entity: BatchDetails
-// INSERT into batch_details (batchNumber, expiryDate, batchInitialQuantity, batchRemainingQuantity, storageLocation, consumableId) VALUES ( "999888", "19/05/2027", 50, 50, "SHELF_1", 1)
+// INSERT into batch_details (batchNumber, expiryDate, batchReceivedQuantity, batchRemainingQuantity, isActive, consumableId) VALUES ( "999888", "19/05/2027", 50, 50, 1, 1)
 @Entity(
   tableName = "batch_details",
   foreignKeys = [ForeignKey(
@@ -20,12 +20,8 @@ data class BatchDetails(
   val batchId: Int = 1,
   val batchNumber: String,
   val expiryDate: String,
-  val batchInitialQuantity: Int,
+  val batchReceivedQuantity: Int,
   val batchRemainingQuantity: Int,
-  val storageLocation: StorageLocation,
+  val isActive: Int,
   val consumableId: Int
 )
-
-enum class StorageLocation {
-  SHELF_1, SHELF_2
-}
