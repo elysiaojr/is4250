@@ -46,4 +46,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_list_consumables">ListConsumablesActivity</string>
+    <string name="title_activity_consumable_details">ConsumableDetailsActivity</string>
 </resources>

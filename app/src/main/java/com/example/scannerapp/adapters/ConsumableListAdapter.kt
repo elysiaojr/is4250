@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
-import com.example.scannerapp.ui.UserDetailsActivity
+import com.example.scannerapp.ui.ConsumableDetailsActivity
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -43,13 +43,13 @@ class ConsumableListAdapter(private val context: Context, private var consumable
         // Set user data to views
         consumableNameTextView.text = consumable.name // Replace with user's name
 
-//        val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
-//        listItemLayout.setOnClickListener {
-//            // Handle item click here
-//            val intent = Intent(context, ConsumableDetailsActivity::class.java) // like a navigator
-//            intent.putExtra("consumable", consumable) // Pass the selected user's data
-//            context.startActivity(intent)
-//        }
+        val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
+        listItemLayout.setOnClickListener {
+            // Handle item click here
+            val intent = Intent(context, ConsumableDetailsActivity::class.java) // like a navigator
+            intent.putExtra("consumable", consumable) // Pass the selected user's data
+            context.startActivity(intent)
+        }
 
         return view
     }
