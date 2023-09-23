@@ -39,9 +39,12 @@ class ConsumableListAdapter(private val context: Context, private var consumable
         val view = inflater.inflate(R.layout.list_item_consumable, null)
 
         val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
+        val consumableBarcodeIdTextView = view.findViewById<TextView>(R.id.consumableBarcodeId)
 
         // Set user data to views
         consumableNameTextView.text = consumable.name // Replace with user's name
+        val barcodeIdDisplay = "No. " + consumable.barcodeId.toString()
+        consumableBarcodeIdTextView.text = barcodeIdDisplay
 
         val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
         listItemLayout.setOnClickListener {

@@ -4,14 +4,6 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.scannerapp.R
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
@@ -28,12 +20,21 @@ class ConsumableDetailsActivity : ComponentActivity() {
         val consumable = intent.getParcelableExtra<Consumable>("consumable")
 
         val consumableNameTextView = findViewById<TextView>(R.id.consumableNameTextView)
-        //val userStatusTextView = findViewById<TextView>(R.id.userStatusTextView)
+        val consumableBarcodeIdTextView = findViewById<TextView>(R.id.consumableBarcodeIdTextView)
+        val consumableCurrentQuantityTextView = findViewById<TextView>(R.id.consumableCurrentQuantityTextView)
+        val consumableMinimumQuantityTextView = findViewById<TextView>(R.id.consumableMinimumQuantityTextView)
+        val consumableIsGS1BarcodeTextView = findViewById<TextView>(R.id.consumableIsGS1BarcodeTextView)
+
         // Populate the user's name and status in the TextViews
         consumable?.let {
             consumableNameTextView.text = it.name
-            //val statusParsed = getStatusText(it.status)
-            //userStatusTextView.text = statusParsed
+            consumableBarcodeIdTextView.text = it.barcodeId
+            val currentQuantity = it.currentQuantity.toString() + " " + it.measurementUnit.toString()
+            consumableCurrentQuantityTextView.text = currentQuantity
+            val minimumQuantity = it.minimumQuantity.toString() + " " + it.measurementUnit.toString()
+            consumableMinimumQuantityTextView.text = minimumQuantity
+            val isGS1BarcodeParsed = getIsGS1BarcodeText(it.isG1Barcode)
+            consumableIsGS1BarcodeTextView.text = isGS1BarcodeParsed
         }
 
         // Find the back button by its ID
@@ -50,20 +51,13 @@ class ConsumableDetailsActivity : ComponentActivity() {
         super.onBackPressed()
         // Optionally, you can add additional logic here if needed
     }
-}
 
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    ScannerAppTheme {
-        Greeting2("Android")
+    private fun getIsGS1BarcodeText(status: Int): String {
+        // You can customize this function to map status values to text
+        return when (status) {
+            0 -> "No"
+            1 -> "Yes"
+            else -> "Unknown"
+        }
     }
 }

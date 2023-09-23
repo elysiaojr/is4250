@@ -24,13 +24,6 @@ class UserDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_details)
 
         // Retrieve the selected user's data from the intent extras
-        //val user = intent.getSerializableExtra("user") as User
-
-        // Display user details in the activity's UI
-        //val nameTextView = findViewById<TextView>(R.id.userNameTextView)
-        //nameTextView.text = user.name
-
-        // Retrieve the selected user's data from the intent extras
         val user = intent.getParcelableExtra<User>("user")
 
         val userNameTextView = findViewById<TextView>(R.id.userNameTextView)
@@ -49,9 +42,6 @@ class UserDetailsActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             handleOnBackPressed() // This will navigate back to the previous screen
         }
-        // Display user details in the activity's UI
-        //val nameTextView = findViewById<TextView>(R.id.userNameTextView)
-        //nameTextView.text = user.name
     }
 
     // Handle the back button press

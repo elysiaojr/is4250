@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"><![CDATA[>]]>
         <ImageView
-            android:id="@+id/userIcon"
+            android:id="@+id/consumableIcon"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:src="@drawable/outline_medication_24"
@@ -53,35 +53,112 @@
             android:layout_height="wrap_content"
             android:rowCount="1"
             android:columnCount="2"
-
             app:layout_constraintTop_toBottomOf="@+id/consumableNameTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
-
             <!-- Column 1: "Status" -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Status:"
+                android:text="Barcode No.:"
                 android:textSize="16sp"
                 android:textAlignment="viewStart"
                 android:layout_gravity="start|center_vertical"
                 android:gravity="start"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:layout_marginBottom="10dp"/>
 
             <!-- Column 2: "Active" -->
             <TextView
-                android:id="@+id/userStatusTextView"
+                android:id="@+id/consumableBarcodeIdTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Active"
+                android:text="000000"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textAlignment="viewStart"
                 android:layout_gravity="end|center_vertical"
                 android:gravity="start"
-                android:layout_column="1" />
+                android:layout_column="1"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Column 1: "Status" -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Quantity:"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="start|center_vertical"
+                android:gravity="start"
+                android:layout_column="0"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Column 2: "Active" -->
+            <TextView
+                android:id="@+id/consumableCurrentQuantityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="start"
+                android:layout_column="1"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Column 1: "Status" -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minimum Quantity:"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="start|center_vertical"
+                android:gravity="start"
+                android:layout_column="0"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Column 2: "Active" -->
+            <TextView
+                android:id="@+id/consumableMinimumQuantityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="start"
+                android:layout_column="1"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Column 1: "Status" -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Has GS1 Barcode:"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="start|center_vertical"
+                android:gravity="start"
+                android:layout_column="0"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Column 2: "Active" -->
+            <TextView
+                android:id="@+id/consumableIsGS1BarcodeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="start"
+                android:layout_column="1"
+                android:layout_marginBottom="10dp"/>
 
         </GridLayout>
 
@@ -97,13 +174,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/userStatusTextView"
+            app:layout_constraintTop_toBottomOf="@+id/consumableBarcodeIdTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <!-- Button 1 -->
             <Button
-                android:id="@+id/userDeleteButton"
+                android:id="@+id/consumableDeleteButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -117,7 +194,7 @@
                 android:layout_height="match_parent"/>
             <!-- Button 2 -->
             <Button
-                android:id="@+id/userEditButton"
+                android:id="@+id/consumableEditButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
