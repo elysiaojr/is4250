@@ -31,6 +31,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
+  fun getUserById(userId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      userRepository.getUserById(userId)
+    }
+  }
+
+  fun updateUser(updatedUser: User) {
+
+  }
+
   // More functions...
 }
 

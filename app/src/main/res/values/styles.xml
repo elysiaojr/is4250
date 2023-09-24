@@ -32,4 +32,10 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
     </style>
 
+    <style name="NavigationBar" parent="Widget.Material3.BottomNavigationView">
+        <item name="elevation">8dp</item>
+        <item name="backgroundTint">#F9F9F9</item>
+        <item name="compatShadowEnabled">true</item>
+    </style>
+
 </resources>

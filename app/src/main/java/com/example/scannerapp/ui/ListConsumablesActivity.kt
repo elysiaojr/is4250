@@ -17,6 +17,7 @@ import com.example.scannerapp.R
 import com.example.scannerapp.adapters.ConsumableListAdapter
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.viewmodels.ConsumableViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ListConsumablesActivity : ComponentActivity() {
     private lateinit var consumableViewModel: ConsumableViewModel
@@ -34,6 +35,19 @@ class ListConsumablesActivity : ComponentActivity() {
 
             adapter.updateData(consumables)
         })
+    }
+
+    // for navigation bar
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, ListConsumablesActivity::class.java)
+        }
+    }
+
+    // for navigation bar
+    override fun setActiveNavigationItem() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.item_consumables
     }
 }
 

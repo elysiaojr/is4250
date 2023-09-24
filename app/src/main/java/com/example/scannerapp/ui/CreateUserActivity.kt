@@ -39,11 +39,12 @@ class CreateUserActivity : AppCompatActivity() {
 
         // only enable the "Save" button when there is text in the EditText
         // not sure why its not working :-( button is still enabled when there is no text
-//    textInputLayoutName.setEndIconOnClickListener  {
-//      val userName = textInputEditTextName.text.toString().trim()
-//      val isNameEmpty = userName.isEmpty()
-//      buttonSave.isEnabled = !isNameEmpty
-//    }
+//        textInputEditTextName.setOnClickListener  {
+//          val userName = textInputEditTextName.text.toString().trim()
+//          val isNameEmpty = userName.isEmpty()
+//          buttonSave.isEnabled = !isNameEmpty
+//        }
+
         buttonSave.setOnClickListener {
             saveUserToDatabase()
         }

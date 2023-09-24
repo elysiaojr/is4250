@@ -16,6 +16,19 @@ class UserRepository(private val userDao: UserDao) {
     userDao.insert(user)
   }
 
+  // For soft deletion, use this
+  suspend fun updateUser(user: User) {
+    userDao.update(user)
+  }
+
+  suspend fun deleteUser(user: User) {
+    userDao.delete(user)
+  }
+
+  suspend fun getUserById(userId: Int): User {
+    return userDao.getUserById(userId)
+  }
+
   // More functions...
 }
 
