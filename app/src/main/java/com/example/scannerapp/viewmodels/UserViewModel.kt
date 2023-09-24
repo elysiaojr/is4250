@@ -38,7 +38,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun updateUser(updatedUser: User) {
-
+    viewModelScope.launch(Dispatchers.IO) {
+      userRepository.updateUser(updatedUser)
+    }
   }
 
   // More functions...

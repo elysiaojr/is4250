@@ -45,9 +45,6 @@
             android:exported="true" >
         </activity>
         <activity
-            android:name=".ui.CreateUserActivity"
-            android:exported="true"/>
-        <activity
             android:name=".ui.EditUserActivity"
             android:exported="true" />
         <activity

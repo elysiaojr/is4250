@@ -9,7 +9,7 @@ import android.os.Parcelable
 @Entity(tableName = "user")
 data class User(
   @PrimaryKey(autoGenerate = true)
-  val userId: Int = 1,
+  var userId: Int = 1,
   val name: String,
   val status: Int
 ) : Parcelable {

@@ -21,11 +21,10 @@ import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ListConsumablesActivity : ComponentActivity() {
+class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables) {
     private lateinit var consumableViewModel: ConsumableViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_consumables)
 
         consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
         val consumableListView = findViewById<ListView>(R.id.consumablelist)
@@ -47,10 +46,11 @@ class ListConsumablesActivity : ComponentActivity() {
     }
 
     // for navigation bar
-    fun setActiveNavigationItem() {
+    override fun setActiveNavigationItem() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.item_consumables
     }
+
 }
 
 @Composable
