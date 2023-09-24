@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // Entity: Consumable
-// INSERT INTO consumable (consumableName, consumableBrand, consumableType, consumableSize, barcodeId, unitOfMeasurement, perUnitQuantity, minimumQuantity, isActive) VALUES ("Best Syringes", "John & Son", "Type A", "50ml", "BarcodeID01239", "BOX", 50, 10, 1)
+// INSERT INTO consumable (consumableName, consumableBrand, consumableType, consumableSize, barcodeId, unitOfMeasurement, perUnitQuantity, minimumQuantity, isActive, isG1Barcode) VALUES ("Best Syringes", "John & Son", "Type A", "50ml", "BarcodeID01239", "BOX", 50, 10, 1, 0)
 @Entity(tableName = "consumable")
 data class Consumable(
   @PrimaryKey(autoGenerate = true)
@@ -19,8 +19,6 @@ data class Consumable(
   val unitOfMeasurement: UnitOfMeasurement,
   val perUnitQuantity: Int,
   val minimumQuantity: Int,
-  val isG1Barcode: Int,
-  val consumableCategory: ConsumableCategory
   val isActive: Int
 ) : Parcelable {
   constructor(parcel: Parcel) : this(
@@ -28,24 +26,26 @@ data class Consumable(
     parcel.readString() ?: "",
     parcel.readString() ?: "",
     parcel.readString() ?: "",
-    parcel.readSerializable() as MeasurementUnit,
+    parcel.readString() ?: "",
+    parcel.readString() ?: "",
+    parcel.readSerializable() as UnitOfMeasurement,
     parcel.readInt(),
     parcel.readInt(),
     parcel.readInt(),
-    parcel.readSerializable() as ConsumableCategory,
     // Initialize other properties here
   )
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {
     parcel.writeInt(consumableId)
-    parcel.writeString(name)
-    parcel.writeString(description)
+    parcel.writeString(consumableName)
+    parcel.writeString(consumableBrand)
+    parcel.writeString(consumableType)
+    parcel.writeString(consumableSize)
     parcel.writeString(barcodeId)
-    parcel.writeSerializable(measurementUnit)
-    parcel.writeInt(currentQuantity)
+    parcel.writeSerializable(unitOfMeasurement)
+    parcel.writeInt(perUnitQuantity)
     parcel.writeInt(minimumQuantity)
-    parcel.writeInt(isG1Barcode)
-    parcel.writeSerializable(consumableCategory)
+    parcel.writeInt(isActive)
     // Write other properties to the parcel
   }
 
@@ -63,7 +63,7 @@ data class Consumable(
     }
   }
 }
-  
+
 
 enum class UnitOfMeasurement {
   BOX, PIECE, PACK

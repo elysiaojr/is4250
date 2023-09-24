@@ -1,5 +1,7 @@
 package com.example.scannerapp.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
 import androidx.activity.ComponentActivity
@@ -45,7 +47,7 @@ class ListConsumablesActivity : ComponentActivity() {
     }
 
     // for navigation bar
-    override fun setActiveNavigationItem() {
+    fun setActiveNavigationItem() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.item_consumables
     }

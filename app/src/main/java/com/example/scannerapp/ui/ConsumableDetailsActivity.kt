@@ -23,18 +23,17 @@ class ConsumableDetailsActivity : ComponentActivity() {
         val consumableBarcodeIdTextView = findViewById<TextView>(R.id.consumableBarcodeIdTextView)
         val consumableCurrentQuantityTextView = findViewById<TextView>(R.id.consumableCurrentQuantityTextView)
         val consumableMinimumQuantityTextView = findViewById<TextView>(R.id.consumableMinimumQuantityTextView)
-        val consumableIsGS1BarcodeTextView = findViewById<TextView>(R.id.consumableIsGS1BarcodeTextView)
 
         // Populate the user's name and status in the TextViews
         consumable?.let {
-            consumableNameTextView.text = it.name
+            consumableNameTextView.text = it.consumableName
             consumableBarcodeIdTextView.text = it.barcodeId
-            val currentQuantity = it.currentQuantity.toString() + " " + it.measurementUnit.toString()
+            val currentQuantity = it.perUnitQuantity.toString() + " " + it.unitOfMeasurement.toString()
             consumableCurrentQuantityTextView.text = currentQuantity
-            val minimumQuantity = it.minimumQuantity.toString() + " " + it.measurementUnit.toString()
+            val minimumQuantity = it.minimumQuantity.toString() + " " + it.unitOfMeasurement.toString()
             consumableMinimumQuantityTextView.text = minimumQuantity
-            val isGS1BarcodeParsed = getIsGS1BarcodeText(it.isG1Barcode)
-            consumableIsGS1BarcodeTextView.text = isGS1BarcodeParsed
+            //val isGS1BarcodeParsed = getIsGS1BarcodeText(it.isG1Barcode)
+            //consumableIsGS1BarcodeTextView.text = isGS1BarcodeParsed
         }
 
         // Find the back button by its ID

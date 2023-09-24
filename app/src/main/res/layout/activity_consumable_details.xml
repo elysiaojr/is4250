@@ -23,7 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"><![CDATA[>]]>
+        android:orientation="vertical">
         <ImageView
             android:id="@+id/consumableIcon"
             android:layout_width="match_parent"
@@ -134,31 +134,7 @@
                 android:layout_column="1"
                 android:layout_marginBottom="10dp"/>
 
-            <!-- Column 1: "Status" -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Has GS1 Barcode:"
-                android:textSize="16sp"
-                android:textAlignment="viewStart"
-                android:layout_gravity="start|center_vertical"
-                android:gravity="start"
-                android:layout_column="0"
-                android:layout_marginBottom="10dp"/>
 
-            <!-- Column 2: "Active" -->
-            <TextView
-                android:id="@+id/consumableIsGS1BarcodeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Yes"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textAlignment="viewStart"
-                android:layout_gravity="end|center_vertical"
-                android:gravity="start"
-                android:layout_column="1"
-                android:layout_marginBottom="10dp"/>
 
         </GridLayout>
 

@@ -42,8 +42,9 @@ class ConsumableListAdapter(private val context: Context, private var consumable
         val consumableBarcodeIdTextView = view.findViewById<TextView>(R.id.consumableBarcodeId)
 
         // Set user data to views
-        consumableNameTextView.text = consumable.name // Replace with user's name
-        val barcodeIdDisplay = "No. " + consumable.barcodeId.toString()
+        val consumableTitleDisplay = consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
+        consumableNameTextView.text = consumableTitleDisplay// Replace with user's name
+        val barcodeIdDisplay = "No. " + consumable.barcodeId
         consumableBarcodeIdTextView.text = barcodeIdDisplay
 
         val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
