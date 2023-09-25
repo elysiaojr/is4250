@@ -30,6 +30,7 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
 
         // initialise the ViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
         val userListView = findViewById<ListView>(R.id.userlist)
 
         // Observe the LiveData and update the adapter when data changes

@@ -47,4 +47,9 @@
     </string>
     <string name="title_activity_list_consumables">ListConsumablesActivity</string>
     <string name="title_activity_consumable_details">ConsumableDetailsActivity</string>
+    <string-array name="uom_values">
+        <item>BOX</item>
+        <item>PIECE</item>
+        <item>PACK</item>
+    </string-array>
 </resources>

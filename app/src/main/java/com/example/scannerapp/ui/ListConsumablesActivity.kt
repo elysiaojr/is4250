@@ -20,6 +20,7 @@ import com.example.scannerapp.adapters.ConsumableListAdapter
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables) {
     private lateinit var consumableViewModel: ConsumableViewModel
@@ -36,6 +37,13 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
 
             adapter.updateData(consumables)
         })
+
+        val fab = findViewById<FloatingActionButton>(R.id.fab_consumables)
+
+        fab.setOnClickListener {
+            val dialogFragment = CreateConsumableDialog()
+            dialogFragment.show(supportFragmentManager, "CreateConsumableDialog")
+        }
     }
 
     // for navigation bar
