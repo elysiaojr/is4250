@@ -30,7 +30,6 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
       batchDetailsRepository.addBatchDetails(batchDetails)
     }
   }
-
   /**
    * Removes a specified quantity of items from a batch identified by its ID.
    *
@@ -44,6 +43,23 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   fun takeOutFromBatch(batchID: Int, quantityTaken: Int) {
     viewModelScope.launch(Dispatchers.IO) {
       batchDetailsRepository.takeOutFromBatch(batchID, quantityTaken)
+    }
+  }
+  fun updateBatchDetails(updatedBatchDetails: BatchDetails) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.updateBatchDetails(updatedBatchDetails)
+    }
+  }
+
+  fun deleteBatchDetails(batchDetailsToDelete: BatchDetails) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.deleteBatchDetails(batchDetailsToDelete)
+    }
+  }
+
+  fun getBatchDetailsById(batchId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.getBatchDetailsById(batchId)
     }
   }
   // More functions...

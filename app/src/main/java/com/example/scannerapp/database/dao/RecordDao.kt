@@ -16,7 +16,7 @@ We write queries here!
 @Dao
 interface RecordDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun addRecord(record: Record): Long
+  suspend fun insert(record: Record)
 
   @Update
   suspend fun update(record: Record)
@@ -25,7 +25,7 @@ interface RecordDao {
   suspend fun delete(record: Record)
 
   @Query("SELECT * FROM record WHERE recordId = :id")
-  suspend fun getRecordById(id: Int): Record?
+  suspend fun getRecordById(id: Int): Record
 
   @Query("SELECT * FROM record")
   fun getAllRecords(): LiveData<List<Record>>

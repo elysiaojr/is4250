@@ -16,7 +16,7 @@ We write queries here!
 @Dao
 interface BatchDetailsDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun addBatchDetails(batchDetail: BatchDetails): Long
+  suspend fun insert(batchDetail: BatchDetails)
 
   @Update
   suspend fun update(batchDetail: BatchDetails)
@@ -27,7 +27,11 @@ interface BatchDetailsDao {
   @Query("SELECT * FROM batch_details WHERE batchId = :id")
   suspend fun getBatchDetailById(id: Int): BatchDetails
 
+
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>
+
+  @Query("UPDATE batch_details SET batchRemainingQuantity = :remainingQuantity WHERE batchID = :batchID")
+  suspend fun updateBatchRemainingQuantity(batchID: Int, remainingQuantity: Int)
 }
 

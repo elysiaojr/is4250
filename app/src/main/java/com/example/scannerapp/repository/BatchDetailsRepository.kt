@@ -12,13 +12,27 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
   val getAllBatchDetails: LiveData<List<BatchDetails>> = batchDetailsDao.getAllBatchDetails()
 
   suspend fun addBatchDetails(batchDetails: BatchDetails) {
-    batchDetailsDao.addBatchDetails(batchDetails)
+    batchDetailsDao.insert(batchDetails)
+  }
+
+  // For soft deletion, use this
+  suspend fun updateBatchDetails(batchDetails: BatchDetails) {
+    batchDetailsDao.update(batchDetails)
+  }
+
+  suspend fun deleteBatchDetails(batchDetails: BatchDetails) {
+    batchDetailsDao.delete(batchDetails)
+  }
+
+  suspend fun getBatchDetailsById(batchId: Int): BatchDetails {
+    return batchDetailsDao.getBatchDetailById(batchId)
   }
 
   suspend fun takeOutFromBatch(batchID: Int, quantityTaken: Int) {
     val batchDetails: BatchDetails = batchDetailsDao.getBatchDetailById(batchID)
     val remainingQuantity = batchDetails.batchRemainingQuantity - quantityTaken
-    batchDetailsDao.addBatchDetails(batchDetails)
+    batchDetailsDao.updateBatchRemainingQuantity(batchID, remainingQuantity)
   }
   // More functions...
+
 }

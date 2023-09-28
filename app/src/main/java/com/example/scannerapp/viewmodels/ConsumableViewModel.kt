@@ -31,9 +31,21 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
     }
   }
 
-  fun getConsumable(consumableId: Int) {
+  fun updateConsumable(updatedConsumable: Consumable) {
     viewModelScope.launch(Dispatchers.IO) {
-      consumableRepository.getConsumable(consumableId)
+      consumableRepository.updateConsumable(updatedConsumable)
+    }
+  }
+
+  fun deleteConsumable(consumableToDelete: Consumable) {
+    viewModelScope.launch(Dispatchers.IO) {
+      consumableRepository.deleteConsumable(consumableToDelete)
+    }
+  }
+
+  fun getConsumableById(consumableId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      consumableRepository.getConsumableById(consumableId)
     }
   }
 
