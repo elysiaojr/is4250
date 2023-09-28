@@ -31,5 +31,23 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
   }
 
+  fun updateBatchDetails(updatedBatchDetails: BatchDetails) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.updateBatchDetails(updatedBatchDetails)
+    }
+  }
+
+  fun deleteBatchDetails(batchDetailsToDelete: BatchDetails) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.deleteBatchDetails(batchDetailsToDelete)
+    }
+  }
+
+  fun getBatchDetailsById(batchId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.getBatchDetailsById(batchId)
+    }
+  }
+
   // More functions...
 }

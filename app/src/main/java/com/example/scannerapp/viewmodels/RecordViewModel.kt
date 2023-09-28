@@ -27,5 +27,23 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
     }
   }
 
+  fun updateRecord(updatedRecord: Record) {
+    viewModelScope.launch(Dispatchers.IO) {
+      recordRepository.updateRecord(updatedRecord)
+    }
+  }
+
+  fun deleteRecord(recordToDelete: Record) {
+    viewModelScope.launch(Dispatchers.IO) {
+      recordRepository.deleteRecord(recordToDelete)
+    }
+  }
+
+  fun getRecordById(recordId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      recordRepository.getRecordById(recordId)
+    }
+  }
+
   // More functions...
 }

@@ -12,10 +12,18 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
   val getAllConsumables: LiveData<List<Consumable>> = consumableDao.getAllConsumables()
 
   suspend fun addConsumable(consumable: Consumable) {
-    consumableDao.addConsumable(consumable)
+    consumableDao.insert(consumable)
   }
 
-  suspend fun getConsumable(consumableId: Int) {
+  suspend fun updateConsumable(consumable: Consumable) {
+    consumableDao.update(consumable)
+  }
+
+  suspend fun deleteConsumable(consumable: Consumable) {
+    consumableDao.delete(consumable)
+  }
+
+  suspend fun getConsumableById(consumableId: Int) {
     consumableDao.getConsumableById(consumableId)
   }
 
