@@ -25,9 +25,14 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
   }
 
   suspend fun getBatchDetailsById(batchId: Int): BatchDetails {
-    return batchDetailsDao.getBatchDetailsById(batchId)
+    return batchDetailsDao.getBatchDetailById(batchId)
   }
 
+  suspend fun takeOutFromBatch(batchID: Int, quantityTaken: Int) {
+    val batchDetails: BatchDetails = batchDetailsDao.getBatchDetailById(batchID)
+    val remainingQuantity = batchDetails.batchRemainingQuantity - quantityTaken
+    batchDetailsDao.updateBatchRemainingQuantity(batchID, remainingQuantity)
+  }
   // More functions...
 
 }

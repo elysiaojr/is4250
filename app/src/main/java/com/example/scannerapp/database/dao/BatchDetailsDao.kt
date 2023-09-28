@@ -25,9 +25,13 @@ interface BatchDetailsDao {
   suspend fun delete(batchDetail: BatchDetails)
 
   @Query("SELECT * FROM batch_details WHERE batchId = :id")
-  suspend fun getBatchDetailsById(id: Int): BatchDetails
+  suspend fun getBatchDetailById(id: Int): BatchDetails
+
 
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>
+
+  @Query("UPDATE batch_details SET batchRemainingQuantity = :remainingQuantity WHERE batchID = :batchID")
+  suspend fun updateBatchRemainingQuantity(batchID: Int, remainingQuantity: Int)
 }
 

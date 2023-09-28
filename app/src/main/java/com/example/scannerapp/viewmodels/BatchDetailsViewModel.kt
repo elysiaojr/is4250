@@ -30,7 +30,21 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
       batchDetailsRepository.addBatchDetails(batchDetails)
     }
   }
-
+  /**
+   * Removes a specified quantity of items from a batch identified by its ID.
+   *
+   * This function allows you to reduce the quantity of items available in a batch.
+   *
+   * @param batchID The unique identifier of the batch from which items are being taken.
+   * @param quantityTaken The quantity of items to remove from the batch.
+   *
+   * @see [BatchDetailsRepository.takeOutFromBatch] for the underlying data operation.
+   */
+  fun takeOutFromBatch(batchID: Int, quantityTaken: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      batchDetailsRepository.takeOutFromBatch(batchID, quantityTaken)
+    }
+  }
   fun updateBatchDetails(updatedBatchDetails: BatchDetails) {
     viewModelScope.launch(Dispatchers.IO) {
       batchDetailsRepository.updateBatchDetails(updatedBatchDetails)
@@ -48,6 +62,5 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
       batchDetailsRepository.getBatchDetailsById(batchId)
     }
   }
-
   // More functions...
 }
