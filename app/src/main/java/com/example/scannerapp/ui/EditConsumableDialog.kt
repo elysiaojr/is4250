@@ -8,24 +8,39 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
-import androidx.compose.ui.text.capitalize
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.UnitOfMeasurement
-import com.example.scannerapp.database.entities.User
 import com.example.scannerapp.viewmodels.ConsumableViewModel
-import com.example.scannerapp.viewmodels.UserViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 
-class CreateConsumableDialog : DialogFragment() {
+
+class EditConsumableDialog(private val consumable: Consumable) : DialogFragment() {
     private lateinit var consumableViewModel: ConsumableViewModel
+    var consumableUpdatedListener: OnConsumableUpdatedListener? = null
+
+    private lateinit var closeButton: Button
+    private lateinit var textInputEditTextItem: TextInputEditText
+    private lateinit var textInputEditTextBrand: TextInputEditText
+    private lateinit var textInputEditTextType: TextInputEditText
+    private lateinit var textInputEditTextSize: TextInputEditText
+    private lateinit var textInputEditTextNameItemCode: TextInputEditText
+    private lateinit var spinnerUOM: AppCompatSpinner
+    private lateinit var textInputEditTextNamePerUnitQuantity: TextInputEditText
+    private lateinit var textInputEditTextNameMinQuantity: TextInputEditText
+    private lateinit var switchStatus: MaterialSwitch
+    private lateinit var saveButton: MaterialButton
+
+    // for updating the ConsumableDetails activity
+    interface OnConsumableUpdatedListener {
+        fun onConsumableUpdated(consumable: Consumable)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,36 +49,52 @@ class CreateConsumableDialog : DialogFragment() {
         setStyle(STYLE_NORMAL, R.style.FullScreenDialog)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Load the consumable when the view is created
+        consumableViewModel.getConsumable(consumable.consumableId)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.dialog_edit_consumable, container, false)
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val view = inflater.inflate(R.layout.dialog_edit_consumable, container, false)
 
         // initialise the ViewModel
         consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
 
         // Initialize and set up views and listeners here
-        val closeButton = view.findViewById<Button>(R.id.closeButton)
-        val textInputEditTextItem = view.findViewById<TextInputEditText>(R.id.textInputEditTextItem)
-        val textInputEditTextBrand = view.findViewById<TextInputEditText>(R.id.textInputEditTextBrand)
-        val textInputEditTextType = view.findViewById<TextInputEditText>(R.id.textInputEditTextType)
-        val textInputEditTextSize = view.findViewById<TextInputEditText>(R.id.textInputEditTextSize)
-        val textInputEditTextNameItemCode = view.findViewById<TextInputEditText>(R.id.textInputEditTextNameItemCode)
-        val spinnerUOM = view.findViewById<AppCompatSpinner>(R.id.spinnerUOM)
-        val textInputEditTextNamePerUnitQuantity = view.findViewById<TextInputEditText>(R.id.textInputEditTextNamePerUnitQuantity)
-        val textInputEditTextNameMinQuantity = view.findViewById<TextInputEditText>(R.id.textInputEditTextNameMinQuantity)
-        val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
-        val saveButton = view.findViewById<MaterialButton>(R.id.buttonSave)
+        closeButton = view.findViewById(R.id.closeButton)
+        textInputEditTextItem = view.findViewById(R.id.textInputEditTextItem)
+        textInputEditTextBrand = view.findViewById(R.id.textInputEditTextBrand)
+        textInputEditTextType = view.findViewById(R.id.textInputEditTextType)
+        textInputEditTextSize = view.findViewById(R.id.textInputEditTextSize)
+        textInputEditTextNameItemCode = view.findViewById(R.id.textInputEditTextNameItemCode)
+        spinnerUOM = view.findViewById(R.id.spinnerUOM)
+        textInputEditTextNamePerUnitQuantity = view.findViewById(R.id.textInputEditTextNamePerUnitQuantity)
+        textInputEditTextNameMinQuantity = view.findViewById(R.id.textInputEditTextNameMinQuantity)
+        switchStatus = view.findViewById(R.id.switchStatus)
+        saveButton = view.findViewById(R.id.buttonSave)
 
         // Close the dialog when the close button is clicked
         closeButton.setOnClickListener {
             dismiss()
         }
+
+        // Populate dialog with consumable data
+        textInputEditTextItem.setText(consumable.consumableName)
+        textInputEditTextBrand.setText(consumable.consumableBrand)
+        textInputEditTextType.setText(consumable.consumableType)
+        textInputEditTextSize.setText(consumable.consumableSize)
+        textInputEditTextNameItemCode.setText(consumable.barcodeId)
+        textInputEditTextNamePerUnitQuantity.setText(consumable.perUnitQuantity.toString())
+        textInputEditTextNameMinQuantity.setText(consumable.minimumQuantity.toString())
+        switchStatus.isChecked = consumable.isActive == 1 // Set the switch based on user status
+
+        var selectedUOM = consumable.unitOfMeasurement.toString()
 
         // Retrieve the string array from resources
         val uomValues = resources.getStringArray(R.array.uom_values)
@@ -77,7 +108,12 @@ class CreateConsumableDialog : DialogFragment() {
         // Set the adapter to the Spinner
         spinnerUOM.adapter = adapter
 
-        var selectedUOM = ""
+        // Find the index of the selected UOM in the uomValues array
+        val selectedIndex = uomValues.indexOf(selectedUOM)
+
+        // Set the spinner selection to the index
+        spinnerUOM.setSelection(selectedIndex)
+
         spinnerUOM.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
                 // Handle item selection here
@@ -90,6 +126,7 @@ class CreateConsumableDialog : DialogFragment() {
                 spinnerUOM.prompt = "Select a Unit of Measurement"
             }
         }
+
 
         // Handle save button click
         saveButton.setOnClickListener {
@@ -136,7 +173,7 @@ class CreateConsumableDialog : DialogFragment() {
                     0
                 } // 1 for enabled, 0 for disabled
 
-                val newConsumable = Consumable(
+                val updatedConsumable = Consumable(
                     consumableId = 0,
                     consumableName = item,
                     consumableBrand = brand,
@@ -148,15 +185,31 @@ class CreateConsumableDialog : DialogFragment() {
                     minimumQuantity = minQuantity,
                     isActive = status)
 
-                // use the function in ViewModel to add the user
-                consumableViewModel.addConsumable(newConsumable)
+                // use update method in viewModel to update the consumable
+                consumable?.let {
+                    // If consumable is not null, it means we are editing an existing consumable
+                    updatedConsumable.consumableId = it.consumableId // Set the consumable ID to the existing consumable's ID
+
+                    // Update the selectedConsumable LiveData with the updated consumable
+                    consumableViewModel.selectedConsumable.value = updatedConsumable
+
+                    consumableViewModel.updateConsumable(updatedConsumable)
+
+                    // Notify the ConsumableDetails activity with the updated consumable
+                    consumableUpdatedListener?.onConsumableUpdated(updatedConsumable)
+
+                    dismiss()
+                }
 
                 // display success message
-                Toast.makeText(requireContext(), "Consumable created successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Consumable updated successfully!", Toast.LENGTH_SHORT).show()
 
-                dismiss()
             }
         }
+
+        return view
+
     }
 }
+
 

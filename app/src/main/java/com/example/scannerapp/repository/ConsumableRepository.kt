@@ -3,6 +3,7 @@ package com.example.scannerapp.repository
 import androidx.lifecycle.LiveData
 import com.example.scannerapp.database.dao.ConsumableDao
 import com.example.scannerapp.database.entities.Consumable
+import com.example.scannerapp.database.entities.User
 
 /*
 Repositories are responsible for abstracting the source of data for your app.
@@ -19,5 +20,9 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     consumableDao.getConsumableById(consumableId)
   }
 
+  // For soft deletion, use this
+  suspend fun updateConsumable(consumable: Consumable) {
+    consumableDao.update(consumable)
+  }
   // More functions...
 }

@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "consumable")
 data class Consumable(
   @PrimaryKey(autoGenerate = true)
-  val consumableId: Int = 1,
+  var consumableId: Int = 1,
   val consumableName: String,
   val consumableBrand: String,
   val consumableType: String?, // optional

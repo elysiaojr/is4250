@@ -3,6 +3,7 @@ package com.example.scannerapp.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.Consumable
@@ -18,6 +19,7 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
 
   val allConsumables: LiveData<List<Consumable>>
   private val consumableRepository: ConsumableRepository
+  val selectedConsumable = MutableLiveData<Consumable?>()
 
   init {
     val consumableDao = AppDatabase.getDatabase(application).consumablesDao()
@@ -36,6 +38,13 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
       consumableRepository.getConsumable(consumableId)
     }
   }
+
+  fun updateConsumable(updatedConsumable: Consumable) {
+    viewModelScope.launch(Dispatchers.IO) {
+      consumableRepository.updateConsumable(updatedConsumable)
+    }
+  }
+
 
   // More functions...
 }

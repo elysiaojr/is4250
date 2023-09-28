@@ -1,17 +1,28 @@
 package com.example.scannerapp.ui
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.scannerapp.R
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.database.entities.Consumable
+import com.example.scannerapp.viewmodels.ConsumableViewModel
 
-class ConsumableDetailsActivity : ComponentActivity() {
+class ConsumableDetailsActivity : AppCompatActivity(), EditConsumableDialog.OnConsumableUpdatedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var consumableViewModel: ConsumableViewModel
+    private lateinit var consumableNameTextView: TextView
+    private lateinit var consumableBarcodeIdTextView: TextView
+    private lateinit var consumableCurrentQuantityTextView: TextView
+    private lateinit var consumableMinimumQuantityTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consumable_details)
@@ -19,10 +30,10 @@ class ConsumableDetailsActivity : ComponentActivity() {
         // Retrieve the selected user's data from the intent extras
         val consumable = intent.getParcelableExtra<Consumable>("consumable")
 
-        val consumableNameTextView = findViewById<TextView>(R.id.consumableNameTextView)
-        val consumableBarcodeIdTextView = findViewById<TextView>(R.id.consumableBarcodeIdTextView)
-        val consumableCurrentQuantityTextView = findViewById<TextView>(R.id.consumableCurrentQuantityTextView)
-        val consumableMinimumQuantityTextView = findViewById<TextView>(R.id.consumableMinimumQuantityTextView)
+        consumableNameTextView = findViewById(R.id.consumableNameTextView)
+        consumableBarcodeIdTextView = findViewById(R.id.consumableBarcodeIdTextView)
+        consumableCurrentQuantityTextView = findViewById(R.id.consumableCurrentQuantityTextView)
+        consumableMinimumQuantityTextView = findViewById(R.id.consumableMinimumQuantityTextView)
 
         // Populate the user's name and status in the TextViews
         consumable?.let {
@@ -43,6 +54,14 @@ class ConsumableDetailsActivity : ComponentActivity() {
         backButton.setOnClickListener {
             handleOnBackPressed() // This will navigate back to the previous screen
         }
+
+        val fab = findViewById<Button>(R.id.consumableEditButton)
+
+        fab.setOnClickListener {
+            val dialogFragment = consumable?.let { it1 -> EditConsumableDialog(it1) }
+            dialogFragment?.consumableUpdatedListener = this // Set the listener
+            dialogFragment?.show(supportFragmentManager, "EditConsumableDialog")
+        }
     }
 
     // Handle the back button press
@@ -58,5 +77,17 @@ class ConsumableDetailsActivity : ComponentActivity() {
             1 -> "Yes"
             else -> "Unknown"
         }
+    }
+
+    // for edit consumable: to update the ConsumableDetails activity with edits
+    override fun onConsumableUpdated(consumable: Consumable) {
+
+        // Update the UI with the new consumable data here
+        consumableNameTextView.text = consumable.consumableName
+        consumableBarcodeIdTextView.text = consumable.barcodeId
+        val currentQuantity = "${consumable.perUnitQuantity} ${consumable.unitOfMeasurement}"
+        consumableCurrentQuantityTextView.text = currentQuantity
+        val minimumQuantity = "${consumable.minimumQuantity} ${consumable.unitOfMeasurement}"
+        consumableMinimumQuantityTextView.text = minimumQuantity
     }
 }
