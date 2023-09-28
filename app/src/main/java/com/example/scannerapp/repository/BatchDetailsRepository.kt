@@ -15,5 +15,10 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
     batchDetailsDao.addBatchDetails(batchDetails)
   }
 
+  suspend fun takeOutFromBatch(batchID: Int, quantityTaken: Int) {
+    val batchDetails: BatchDetails = batchDetailsDao.getBatchDetailById(batchID)
+    val remainingQuantity = batchDetails.batchRemainingQuantity - quantityTaken
+    batchDetailsDao.addBatchDetails(batchDetails)
+  }
   // More functions...
 }
