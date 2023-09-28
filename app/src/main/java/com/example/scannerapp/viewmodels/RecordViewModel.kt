@@ -17,7 +17,8 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
 
   init {
     val recordDao = AppDatabase.getDatabase(application).recordDao()
-    recordRepository = RecordRepository(recordDao)
+    val batchDetailDao = AppDatabase.getDatabase(application).batchDetailsDao()
+    recordRepository = RecordRepository(recordDao, batchDetailDao)
     allRecords = recordRepository.getAllRecords
   }
 

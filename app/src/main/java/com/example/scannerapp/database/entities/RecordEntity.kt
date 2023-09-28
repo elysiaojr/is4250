@@ -26,7 +26,7 @@ import androidx.room.ForeignKey
 )
 data class Record(
   @PrimaryKey(autoGenerate = true)
-  val recordId: Int = 1,
+  val recordId: Int = 0,
   val recordDate: String,
   val recordQuantityChanged: Int,
   val recordRemarks: String?,
