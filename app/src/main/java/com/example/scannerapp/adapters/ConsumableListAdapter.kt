@@ -54,6 +54,7 @@ class ConsumableListAdapter(private val context: Context, private var consumable
         val barcodeIdDisplay = "No. " + consumable.barcodeId
         consumableBarcodeIdTextView.text = barcodeIdDisplay
 
+        // Handle clicking into a Consumable Item
         val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
         listItemLayout.setOnClickListener {
             // Handle item click here
