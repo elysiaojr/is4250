@@ -4,18 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.widget.BaseAdapter
 import android.widget.ImageButton
+import android.widget.Filterable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.ui.ConsumableDetailsActivity
+import android.util.Log
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class ConsumableListAdapter(private val context: Context, private var consumableList: List<Consumable>) : BaseAdapter() {
+class ConsumableListAdapter(private val context: Context, private var consumableList: List<Consumable>) : BaseAdapter(), Filterable {
+
+    private var unfilteredConsumableList = consumableList
+
     override fun getCount(): Int {
         return consumableList.size
     }
@@ -31,6 +37,7 @@ class ConsumableListAdapter(private val context: Context, private var consumable
     // Custom method to update the data in the adapter
     fun updateData(newList: List<Consumable>) {
         consumableList = newList
+        unfilteredConsumableList = newList
         notifyDataSetChanged()
     }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -57,4 +64,46 @@ class ConsumableListAdapter(private val context: Context, private var consumable
 
         return view
     }
+
+    // for Filter/Sort/Search
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val results = FilterResults()
+                val filteredList = mutableListOf<Consumable>()
+                Log.d("CONSTRAINT STARTING LIST", unfilteredConsumableList.toString())
+
+                if (constraint.isNullOrBlank()) {
+                    //filteredList.addAll(consumableList)
+                    Log.d("CONSTRAINT EMPTY", unfilteredConsumableList.toString())
+                    results.values = unfilteredConsumableList
+                } else {
+                    Log.d("CONSTRAINT NON EMPTY", unfilteredConsumableList.toString())
+                    val filterPattern = constraint.toString().toLowerCase().trim()
+
+                    for (item in unfilteredConsumableList) {
+                        if (item.consumableName.toLowerCase().contains(filterPattern) ||
+                            item.consumableBrand.toLowerCase().contains(filterPattern) ||
+                            (item.consumableType != null && item.consumableType.toLowerCase()
+                                .contains(filterPattern)) ||
+                            (item.consumableType != null && item.consumableSize.toString()
+                                .toLowerCase().contains(filterPattern))
+                        ) {
+                            filteredList.add(item)
+                        }
+                    }
+                    results.values = filteredList
+                }
+
+                return results
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                @Suppress("UNCHECKED_CAST")
+                consumableList = results?.values as List<Consumable>
+                notifyDataSetChanged()
+            }
+        }
+    }
+
 }

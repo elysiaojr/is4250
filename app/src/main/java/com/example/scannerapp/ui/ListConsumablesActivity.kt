@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
+import androidx.appcompat.widget.SearchView
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,22 +26,39 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables) {
     private lateinit var consumableViewModel: ConsumableViewModel
+    private lateinit var consumableListView: ListView
+    private lateinit var searchView: SearchView
+    private lateinit var adapter: ConsumableListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
-        val consumableListView = findViewById<ListView>(R.id.consumablelist)
+        consumableListView = findViewById<ListView>(R.id.consumablelist)
+        searchView = findViewById(R.id.consumablesSearchView)
+
+        // Create the adapter and set it initially
+        adapter = ConsumableListAdapter(this, emptyList())
+        consumableListView.adapter = adapter
 
         // Observe the LiveData and update the adapter when data changes
         consumableViewModel.allConsumables.observe(this, Observer { consumables ->
-            val adapter = ConsumableListAdapter(this, consumables)
-            consumableListView.adapter = adapter
-
             adapter.updateData(consumables)
         })
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab_consumables)
+        // Set up the SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
 
+        // Floating Action Button
+        val fab = findViewById<FloatingActionButton>(R.id.fab_consumables)
         fab.setOnClickListener {
             val dialogFragment = CreateConsumableDialog()
             dialogFragment.show(supportFragmentManager, "CreateConsumableDialog")
