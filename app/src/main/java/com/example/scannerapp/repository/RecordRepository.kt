@@ -22,29 +22,30 @@ class RecordRepository(private val recordDao: RecordDao, private val batchDetail
 
     if (record.recordType.equals(RecordType.TAKE_OUT)) {
       val quantityTaken = record.recordQuantityChanged
-      // Update batch details
+      // Update quantity
       val batchDetails: BatchDetails = batchDetailsDao.getBatchDetailById(record.batchId)
       val remainingQuantity = batchDetails.batchRemainingQuantity - quantityTaken
 
+      // Updating if the remainingQuantity is valid
       if (remainingQuantity >= 0) {
         batchDetailsDao.updateBatchRemainingQuantity(record.batchId, remainingQuantity)
-        // Adding the Record
         recordDao.insert(record)
       } else {
-        throw IllegalStateException("Remaining quantity cannot be less than zero!")
+//        throw IllegalStateException("Remaining quantity cannot be less than zero!")
       }
-//    } else if (record.recordType.equals(RecordType.PUT_IN)) {
-//        val batchDetails: BatchDetails = BatchDetails(batchId = 0,
-//                                                      batchNumber = "1231",
-//                                                      expiryDate = "test",
-//                                                      batchReceivedQuantity = record.recordQuantityChanged,
-//                                                      batchRemainingQuantity = record.recordQuantityChanged,
-//                                                      isActive = record.isActive,
-//                                                      consumableId = 2)
-//      // Adding the Record
-//      recordDao.insert(record)
-//    } else {
-//      // Catch error
+    } else if (record.recordType.equals(RecordType.PUT_IN)) {
+
+      val quantityAdded = record.recordQuantityChanged
+      // Update quantity
+      val batchDetails: BatchDetails = batchDetailsDao.getBatchDetailById(record.batchId)
+      val remainingQuantity = batchDetails.batchRemainingQuantity + quantityAdded
+
+      // Updating the remainingQuantity
+      batchDetailsDao.updateBatchRemainingQuantity(record.batchId, remainingQuantity)
+      recordDao.insert(record)
+
+    } else {
+      // Catch error
     }
   }
 
