@@ -51,11 +51,6 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
     }
   }
 
-  fun updateConsumable(updatedConsumable: Consumable) {
-    viewModelScope.launch(Dispatchers.IO) {
-      consumableRepository.updateConsumable(updatedConsumable)
-    }
-  }
 
 
   // More functions...

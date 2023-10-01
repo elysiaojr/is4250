@@ -28,9 +28,5 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     consumableDao.getConsumableById(consumableId)
   }
 
-  // For soft deletion, use this
-  suspend fun updateConsumable(consumable: Consumable) {
-    consumableDao.update(consumable)
-  }
   // More functions...
 }

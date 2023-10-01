@@ -53,7 +53,7 @@ class EditConsumableDialog(private val consumable: Consumable) : DialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         // Load the consumable when the view is created
-        consumableViewModel.getConsumable(consumable.consumableId)
+        // consumableViewModel.getConsumable(consumable.consumableId)
     }
 
     override fun onCreateView(
