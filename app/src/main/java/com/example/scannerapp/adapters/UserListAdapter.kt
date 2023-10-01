@@ -1,15 +1,17 @@
 package com.example.scannerapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.R
-//import com.example.scannerapp.helpers.ModifyFood
 import com.example.scannerapp.database.entities.User
+import com.example.scannerapp.ui.UserDetailsActivity
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -40,6 +42,14 @@ class UserListAdapter(private val context: Context, private var userList: List<U
 
         // Set user data to views
         usernameTextView.text = user.name // Replace with user's name
+
+        val listItemLayout = view.findViewById<ConstraintLayout>(R.id.user_list_item)
+        listItemLayout.setOnClickListener {
+            // Handle item click here
+            val intent = Intent(context, UserDetailsActivity::class.java) // like a navigator
+            intent.putExtra("user", user) // Pass the selected user's data
+            context.startActivity(intent)
+        }
 
         return view
     }

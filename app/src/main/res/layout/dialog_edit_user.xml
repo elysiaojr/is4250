@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="271dp"
+<LinearLayout android:layout_width="271dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Button
         android:id="@+id/closeButton"
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7.5dp"
-        android:text="Add User"
+        android:text="Edit User"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -66,10 +66,11 @@
         style="@style/CardTextButton"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:text="Save"
         android:layout_gravity="center"
+        android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="parent" />
 
 </LinearLayout>
+

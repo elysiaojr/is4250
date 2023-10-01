@@ -3,17 +3,17 @@
     <item
         android:id="@+id/item_consumables"
         android:enabled="true"
-        android:icon="@drawable/home_04"
+        android:icon="@drawable/vaccines_24px"
         android:title="Consumables" />
     <item
         android:id="@+id/item_batches"
         android:enabled="true"
-        android:icon="@drawable/put_in_icon"
+        android:icon="@drawable/place_item_24px"
         android:title="Batches" />
     <item
         android:id="@+id/item_records"
         android:enabled="true"
-        android:icon="@drawable/take_out_icon"
+        android:icon="@drawable/remove_itemcopy"
         android:title="Records" />
     <item
         android:id="@+id/item_settings"

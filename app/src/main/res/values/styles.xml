@@ -38,4 +38,10 @@
         <item name="compatShadowEnabled">true</item>
     </style>
 
+    <style name="FullScreenDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>

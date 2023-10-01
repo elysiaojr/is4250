@@ -2,8 +2,11 @@
 <resources>
 
     <style name="Theme.ScannerApp" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">#3368B7</item>
-    </style>
+    <item name="colorPrimary">#3368B7</item></style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ScannerApp" parent="Theme.Material3.DayNight.NoActionBar"></style>
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
 
 </resources>
