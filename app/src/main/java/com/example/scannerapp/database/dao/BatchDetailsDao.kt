@@ -30,8 +30,5 @@ interface BatchDetailsDao {
 
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>
-
-  @Query("UPDATE batch_details SET batchRemainingQuantity = :remainingQuantity WHERE batchID = :batchID")
-  suspend fun updateBatchRemainingQuantity(batchID: Int, remainingQuantity: Int)
 }
 

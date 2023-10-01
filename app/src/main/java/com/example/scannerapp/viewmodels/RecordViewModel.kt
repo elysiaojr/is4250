@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.repository.BatchDetailsRepository
 import com.example.scannerapp.repository.RecordRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,8 +18,8 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
 
   init {
     val recordDao = AppDatabase.getDatabase(application).recordDao()
-    val batchDetailDao = AppDatabase.getDatabase(application).batchDetailsDao()
-    recordRepository = RecordRepository(recordDao, batchDetailDao)
+    val batchDetailsDao = AppDatabase.getDatabase(application).batchDetailsDao()
+    recordRepository = RecordRepository(recordDao, batchDetailsDao)
     allRecords = recordRepository.getAllRecords
   }
 
