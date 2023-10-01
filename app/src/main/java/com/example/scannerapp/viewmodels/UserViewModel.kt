@@ -31,15 +31,21 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
-  fun getUserById(userId: Int) {
-    viewModelScope.launch(Dispatchers.IO) {
-      userRepository.getUserById(userId)
-    }
-  }
-
   fun updateUser(updatedUser: User) {
     viewModelScope.launch(Dispatchers.IO) {
       userRepository.updateUser(updatedUser)
+    }
+  }
+
+  fun deleteUser(userToDelete: User) {
+    viewModelScope.launch(Dispatchers.IO) {
+      userRepository.deleteUser(userToDelete)
+    }
+  }
+
+  fun getUserById(userId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      userRepository.getUserById(userId)
     }
   }
 
