@@ -17,7 +17,7 @@ class ListBatchesActivity : BaseActivity(R.layout.activity_list_batches) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
-        batchDetailsViewModel.takeOutFromBatch(1, 25)
+        /*batchDetailsViewModel.takeOutFromBatch(1, 25)*/
     }
 
     companion object {
