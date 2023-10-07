@@ -38,7 +38,7 @@ class CreateConsumableDialog : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.dialog_edit_consumable, container, false)
+        return inflater.inflate(R.layout.dialog_create_consumable, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
