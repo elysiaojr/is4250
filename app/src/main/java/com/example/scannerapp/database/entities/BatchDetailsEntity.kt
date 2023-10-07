@@ -19,6 +19,7 @@ data class BatchDetails(
   @PrimaryKey(autoGenerate = true)
   val batchId: Int = 1,
   val batchNumber: String,
+  val createDate: String,
   val expiryDate: String,
   val batchReceivedQuantity: Int,
   val batchRemainingQuantity: Int,
