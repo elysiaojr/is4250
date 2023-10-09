@@ -88,7 +88,8 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
 
         var selectedUOM = ""
 
-        consumableViewModel.getConsumableById(consumable.consumableId).observe(viewLifecycleOwner, Observer { consumable ->
+        consumableViewModel.getConsumableById(consumable.consumableId).observe(viewLifecycleOwner
+        ) { consumable ->
             if (consumable != null) {
                 // Populate dialog with consumable data
                 textInputEditTextItem.setText(consumable.consumableName)
@@ -242,7 +243,7 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
 
                 }
             }
-        })
+        }
 
         return view
 
