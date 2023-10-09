@@ -184,6 +184,16 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
                         return@setOnClickListener // Exit the function early
                     }
 
+                    // Check if perUnitQuantity is zero or less and display an error message
+                    if (perUnitQuantity <= 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Per Unit Quantity must be greater than zero.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener // Exit the lambda early
+                    }
+
                     val minQuantity: Int = try {
                         minQuantityValue.toInt()
                     } catch (e: NumberFormatException) {
@@ -195,6 +205,16 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
                         ).show()
                         -1 // Set a default or error value
                         return@setOnClickListener // Exit the function early
+                    }
+
+                    // Check if minQuantity is zero or less and display an error message
+                    if (minQuantity <= 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Minimum Quantity in Stock must be greater than zero.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener // Exit the lambda early
                     }
 
                     val status: Int = if (switchStatus) {

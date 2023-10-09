@@ -121,12 +121,32 @@ class CreateConsumableDialog : DialogFragment() {
                     return@setOnClickListener // Exit the function early
                 }
 
+                // Check if perUnitQuantity is zero or less and display an error message
+                if (perUnitQuantity <= 0) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Per Unit Quantity must be greater than zero.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener // Exit the function early
+                }
+
                 val minQuantity: Int = try {
                     minQuantityValue.toInt()
                 } catch (e: NumberFormatException) {
                     // Handle the case where minQuantityValue is not a valid integer
                     Toast.makeText(requireContext(), "Please enter a valid Minimum Quantity in Stock.", Toast.LENGTH_SHORT).show()
                     -1 // Set a default or error value
+                    return@setOnClickListener // Exit the function early
+                }
+
+                // Check if minQuantity is zero or less and display an error message
+                if (minQuantity <= 0) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Minimum Quantity in Stock must be greater than zero.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener // Exit the function early
                 }
 
