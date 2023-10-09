@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_consumables"
+        android:id="@+id/item_records"
         android:enabled="true"
-        android:icon="@drawable/vaccines_24px"
-        android:title="Consumables" />
+        android:icon="@drawable/remove_itemcopy"
+        android:title="Records" />
     <item
         android:id="@+id/item_batches"
         android:enabled="true"
         android:icon="@drawable/place_item_24px"
         android:title="Batches" />
     <item
-        android:id="@+id/item_records"
+        android:id="@+id/item_consumables"
         android:enabled="true"
-        android:icon="@drawable/remove_itemcopy"
-        android:title="Records" />
+        android:icon="@drawable/vaccines_24px"
+        android:title="Consumables" />
     <item
         android:id="@+id/item_settings"
         android:enabled="true"
