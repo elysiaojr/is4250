@@ -25,7 +25,7 @@ interface ConsumableDao {
   suspend fun delete(consumable: Consumable)
 
   @Query("SELECT * FROM consumable WHERE consumableId = :id")
-  suspend fun getConsumableById(id: Int): Consumable
+  fun getConsumableById(id: Int): LiveData<Consumable>
 
   @Query("SELECT * FROM consumable")
   fun getAllConsumables(): LiveData<List<Consumable>>

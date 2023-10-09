@@ -24,7 +24,8 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     consumableDao.delete(consumable)
   }
 
-  suspend fun getConsumableById(consumableId: Int): Consumable {
+
+  fun getConsumableById(consumableId: Int): LiveData<Consumable> {
     return consumableDao.getConsumableById(consumableId)
   }
 

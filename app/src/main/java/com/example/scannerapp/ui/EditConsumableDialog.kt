@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
@@ -21,7 +22,7 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 
 
-class EditConsumableDialog(private val consumable: Consumable) : DialogFragment() {
+class EditConsumableDialog(private var consumable: Consumable) : DialogFragment() {
     private lateinit var consumableViewModel: ConsumableViewModel
     var consumableUpdatedListener: OnConsumableUpdatedListener? = null
 
@@ -47,6 +48,7 @@ class EditConsumableDialog(private val consumable: Consumable) : DialogFragment(
 
         // Set dialog style
         setStyle(STYLE_NORMAL, R.style.FullScreenDialog)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,10 +63,10 @@ class EditConsumableDialog(private val consumable: Consumable) : DialogFragment(
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.dialog_edit_consumable, container, false)
-
         // initialise the ViewModel
         consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
+
+        val view = inflater.inflate(R.layout.dialog_edit_consumable, container, false)
 
         // Initialize and set up views and listeners here
         closeButton = view.findViewById(R.id.closeButton)
@@ -84,128 +86,163 @@ class EditConsumableDialog(private val consumable: Consumable) : DialogFragment(
             dismiss()
         }
 
-        // Populate dialog with consumable data
-        textInputEditTextItem.setText(consumable.consumableName)
-        textInputEditTextBrand.setText(consumable.consumableBrand)
-        textInputEditTextType.setText(consumable.consumableType)
-        textInputEditTextSize.setText(consumable.consumableSize)
-        textInputEditTextNameItemCode.setText(consumable.barcodeId)
-        textInputEditTextNamePerUnitQuantity.setText(consumable.perUnitQuantity.toString())
-        textInputEditTextNameMinQuantity.setText(consumable.minimumQuantity.toString())
-        switchStatus.isChecked = consumable.isActive == 1 // Set the switch based on user status
+        var selectedUOM = ""
 
-        var selectedUOM = consumable.unitOfMeasurement.toString()
+        consumableViewModel.getConsumableById(consumable.consumableId).observe(viewLifecycleOwner, Observer { consumable ->
+            if (consumable != null) {
+                // Populate dialog with consumable data
+                textInputEditTextItem.setText(consumable.consumableName)
+                textInputEditTextBrand.setText(consumable.consumableBrand)
+                textInputEditTextType.setText(consumable.consumableType)
+                textInputEditTextSize.setText(consumable.consumableSize)
+                textInputEditTextNameItemCode.setText(consumable.barcodeId)
+                textInputEditTextNamePerUnitQuantity.setText(consumable.perUnitQuantity.toString())
+                textInputEditTextNameMinQuantity.setText(consumable.minimumQuantity.toString())
+                switchStatus.isChecked =
+                    consumable.isActive == 1 // Set the switch based on user status
 
-        // Retrieve the string array from resources
-        val uomValues = resources.getStringArray(R.array.uom_values)
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, uomValues)
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Set the adapter to the Spinner
-        spinnerUOM.adapter = adapter
-
-        // Find the index of the selected UOM in the uomValues array
-        val selectedIndex = uomValues.indexOf(selectedUOM)
-
-        // Set the spinner selection to the index
-        spinnerUOM.setSelection(selectedIndex)
-
-        spinnerUOM.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
-                // Handle item selection here
-                selectedUOM = uomValues[position]
-                Log.d("SpinnerSelection", "Selected UOM: $selectedUOM")
+                selectedUOM = consumable.unitOfMeasurement.toString()
             }
 
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // Handle no selection
-                spinnerUOM.prompt = "Select a Unit of Measurement"
+
+            // Retrieve the string array from resources
+            val uomValues = resources.getStringArray(R.array.uom_values)
+
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            val adapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, uomValues)
+
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            // Set the adapter to the Spinner
+            spinnerUOM.adapter = adapter
+
+            // Find the index of the selected UOM in the uomValues array
+            val selectedIndex = uomValues.indexOf(selectedUOM)
+
+            // Set the spinner selection to the index
+            spinnerUOM.setSelection(selectedIndex)
+
+            spinnerUOM.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>?,
+                    selectedItemView: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Handle item selection here
+                    selectedUOM = uomValues[position]
+                    Log.d("SpinnerSelection", "Selected UOM: $selectedUOM")
+                }
+
+                override fun onNothingSelected(parentView: AdapterView<*>?) {
+                    // Handle no selection
+                    spinnerUOM.prompt = "Select a Unit of Measurement"
+                }
             }
-        }
 
 
-        // Handle save button click
-        saveButton.setOnClickListener {
+            // Handle save button click
+            saveButton.setOnClickListener {
 
-            val item = textInputEditTextItem.text.toString().trim()
-            val brand = textInputEditTextBrand.text.toString().trim()
-            val type = textInputEditTextType.text.toString().trim()
-            val size = textInputEditTextSize.text.toString().trim()
-            val itemCode = textInputEditTextNameItemCode.text.toString().trim()
-            val uom = selectedUOM.capitalize()
-            val perUnitQuantityValue = textInputEditTextNamePerUnitQuantity.text.toString().trim()
-            val minQuantityValue = textInputEditTextNameMinQuantity.text.toString().trim()
-            val switchStatus = switchStatus.isChecked // true for enabled, false for disabled
+                val item = textInputEditTextItem.text.toString().trim()
+                val brand = textInputEditTextBrand.text.toString().trim()
+                val type = textInputEditTextType.text.toString().trim()
+                val size = textInputEditTextSize.text.toString().trim()
+                val itemCode = textInputEditTextNameItemCode.text.toString().trim()
+                val uom = selectedUOM.capitalize()
+                val perUnitQuantityValue =
+                    textInputEditTextNamePerUnitQuantity.text.toString().trim()
+                val minQuantityValue = textInputEditTextNameMinQuantity.text.toString().trim()
+                val switchStatus = switchStatus.isChecked // true for enabled, false for disabled
 
-            if (item.isEmpty() || brand.isEmpty() || itemCode.isEmpty() || uom.isEmpty()) {
+                if (item.isEmpty() || brand.isEmpty() || itemCode.isEmpty() || uom.isEmpty()) {
 
-                // display an error message if compulsory fields are empty
-                Toast.makeText(requireContext(), "Please fill in all required fields.", Toast.LENGTH_SHORT).show()
+                    // display an error message if compulsory fields are empty
+                    Toast.makeText(
+                        requireContext(),
+                        "Please fill in all required fields.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener // Exit the lambda early
 
-            } else {
-
-                // Check if perUnitQuantityValue and minQuantityValue are valid integers
-                val perUnitQuantity: Int = try {
-                    perUnitQuantityValue.toInt()
-                } catch (e: NumberFormatException) {
-                    // Handle the case where perUnitQuantityValue is not a valid integer
-                    Toast.makeText(requireContext(), "Please enter a valid Per Unit Quantity.", Toast.LENGTH_SHORT).show()
-                    -1 // Set a default or error value
-                    return@setOnClickListener // Exit the function early
-                }
-
-                val minQuantity: Int = try {
-                    minQuantityValue.toInt()
-                } catch (e: NumberFormatException) {
-                    // Handle the case where minQuantityValue is not a valid integer
-                    Toast.makeText(requireContext(), "Please enter a valid Minimum Quantity in Stock.", Toast.LENGTH_SHORT).show()
-                    -1 // Set a default or error value
-                    return@setOnClickListener // Exit the function early
-                }
-
-                val status: Int = if (switchStatus) {
-                    1
                 } else {
-                    0
-                } // 1 for enabled, 0 for disabled
 
-                val updatedConsumable = Consumable(
-                    consumableId = 0,
-                    consumableName = item,
-                    consumableBrand = brand,
-                    consumableType = type,
-                    consumableSize = size,
-                    barcodeId = itemCode,
-                    unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
-                    perUnitQuantity = perUnitQuantity,
-                    minimumQuantity = minQuantity,
-                    isActive = status)
+                    // Check if perUnitQuantityValue and minQuantityValue are valid integers
+                    val perUnitQuantity: Int = try {
+                        perUnitQuantityValue.toInt()
+                    } catch (e: NumberFormatException) {
+                        // Handle the case where perUnitQuantityValue is not a valid integer
+                        Toast.makeText(
+                            requireContext(),
+                            "Please enter a valid Per Unit Quantity.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        -1 // Set a default or error value
+                        return@setOnClickListener // Exit the function early
+                    }
 
-                // use update method in viewModel to update the consumable
-                consumable?.let {
-                    // If consumable is not null, it means we are editing an existing consumable
-                    updatedConsumable.consumableId = it.consumableId // Set the consumable ID to the existing consumable's ID
+                    val minQuantity: Int = try {
+                        minQuantityValue.toInt()
+                    } catch (e: NumberFormatException) {
+                        // Handle the case where minQuantityValue is not a valid integer
+                        Toast.makeText(
+                            requireContext(),
+                            "Please enter a valid Minimum Quantity in Stock.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        -1 // Set a default or error value
+                        return@setOnClickListener // Exit the function early
+                    }
 
-                    // Update the selectedConsumable LiveData with the updated consumable
-                    consumableViewModel.selectedConsumable.value = updatedConsumable
+                    val status: Int = if (switchStatus) {
+                        1
+                    } else {
+                        0
+                    } // 1 for enabled, 0 for disabled
 
-                    consumableViewModel.updateConsumable(updatedConsumable)
+                    val updatedConsumable = Consumable(
+                        consumableId = 0,
+                        consumableName = item,
+                        consumableBrand = brand,
+                        consumableType = type,
+                        consumableSize = size,
+                        barcodeId = itemCode,
+                        unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
+                        perUnitQuantity = perUnitQuantity,
+                        minimumQuantity = minQuantity,
+                        isActive = status
+                    )
 
-                    // Notify the ConsumableDetails activity with the updated consumable
-                    consumableUpdatedListener?.onConsumableUpdated(updatedConsumable)
+                    // use update method in viewModel to update the consumable
+                    consumable?.let {
+                        // If consumable is not null, it means we are editing an existing consumable
+                        updatedConsumable.consumableId =
+                            it.consumableId // Set the consumable ID to the existing consumable's ID
 
-                    dismiss()
+                        // Update the selectedConsumable LiveData with the updated consumable
+                        consumableViewModel.selectedConsumable.value = updatedConsumable
+
+                        consumableViewModel.updateConsumable(updatedConsumable)
+
+                        // Notify the ConsumableDetails activity with the updated consumable
+                        consumableUpdatedListener?.onConsumableUpdated(updatedConsumable)
+
+                        dismiss()
+                    }
+
+                    // display success message
+                    Toast.makeText(
+                        requireContext(),
+                        "Consumable updated successfully!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener // Exit the lambda early
+
                 }
-
-                // display success message
-                Toast.makeText(requireContext(), "Consumable updated successfully!", Toast.LENGTH_SHORT).show()
-
             }
-        }
+        })
 
         return view
 

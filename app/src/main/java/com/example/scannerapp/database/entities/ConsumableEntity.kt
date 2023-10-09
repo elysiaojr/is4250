@@ -35,6 +35,20 @@ data class Consumable(
     // Initialize other properties here
   )
 
+  // Parameterless constructor
+  constructor() : this(
+    1, // Default value for consumableId
+    "", // Default value for consumableName
+    "", // Default value for consumableBrand
+    null, // Default value for consumableType
+    null, // Default value for consumableSize
+    "", // Default value for barcodeId
+    UnitOfMeasurement.BOX, // Default value for unitOfMeasurement
+    0, // Default value for perUnitQuantity
+    0, // Default value for minimumQuantity
+    0  // Default value for isActive
+  )
+
   override fun writeToParcel(parcel: Parcel, flags: Int) {
     parcel.writeInt(consumableId)
     parcel.writeString(consumableName)
