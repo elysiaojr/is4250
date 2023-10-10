@@ -25,7 +25,7 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
   }
 
 
-  fun getConsumableById(consumableId: Int): LiveData<Consumable> {
+  fun getConsumableById(consumableId: Int): Consumable {
     return consumableDao.getConsumableById(consumableId)
   }
 

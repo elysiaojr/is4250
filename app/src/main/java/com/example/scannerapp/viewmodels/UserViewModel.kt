@@ -51,4 +51,3 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
   // More functions...
 }
-
