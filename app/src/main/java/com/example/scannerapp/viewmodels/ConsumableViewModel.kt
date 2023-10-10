@@ -45,10 +45,11 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
     }
   }
 
-  fun getConsumableById(consumableId: Int): LiveData<Consumable> {
-    return consumableRepository.getConsumableById(consumableId)
+  fun getConsumableById(consumableId: Int) {
+    viewModelScope.launch(Dispatchers.IO) {
+      consumableRepository.getConsumableById(consumableId)
+    }
   }
-
 
 
   // More functions...

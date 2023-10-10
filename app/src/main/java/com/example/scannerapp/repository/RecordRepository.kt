@@ -6,6 +6,8 @@ import com.example.scannerapp.database.dao.RecordDao
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Record
 import com.example.scannerapp.database.entities.RecordType
+import com.example.scannerapp.exceptions.InsufficientQuantityException
+import com.example.scannerapp.exceptions.InvalidRecordTypeException
 import java.lang.IllegalStateException
 
 /*
@@ -22,33 +24,29 @@ class RecordRepository(
 
 
   suspend fun addRecord(record: Record) {
-    try {
-      // Get current BatchDetails
-      val batchDetails = batchDetailsDao.getBatchDetailById(record.batchId)
+    // Get current BatchDetails
+    val batchDetails = batchDetailsDao.getBatchDetailById(record.batchId)
 
-      // Modify BatchDetails based on RecordType
-      if (record.recordType == RecordType.TAKE_OUT) {
-        val newRemainingQuantity =
-          batchDetails.batchRemainingQuantity - record.recordQuantityChanged
-        if (newRemainingQuantity < 0) {
-          throw IllegalStateException("Not enough quantity in batch")
-        }
-        batchDetailsDao.update(batchDetails.copy(batchRemainingQuantity = newRemainingQuantity))
-      } else if (record.recordType == RecordType.PUT_IN) {
-        val newRemainingQuantity =
-          batchDetails.batchRemainingQuantity + record.recordQuantityChanged
-        // Maybe can check that it does not exceed initial batch quantity before updating
-        batchDetailsDao.update(batchDetails.copy(batchRemainingQuantity = newRemainingQuantity))
-      } else {
-        // Handle error
-        throw IllegalStateException("Invalid Record Type")
+    // Modify BatchDetails based on RecordType
+    if (record.recordType == RecordType.TAKE_OUT) {
+      val newRemainingQuantity =
+        batchDetails.batchRemainingQuantity - record.recordQuantityChanged
+      if (newRemainingQuantity < 0) {
+        throw InsufficientQuantityException("Not enough quantity in batch")
       }
-      // Insert record last
-      recordDao.insert(record)
-
-    } catch (e: Exception) {
-      // Handle error appropriately
+      batchDetailsDao.update(batchDetails.copy(batchRemainingQuantity = newRemainingQuantity))
+    } else if (record.recordType == RecordType.PUT_IN) {
+      val newRemainingQuantity =
+        batchDetails.batchRemainingQuantity + record.recordQuantityChanged
+      // Maybe can check that it does not exceed initial batch quantity before updating
+      batchDetailsDao.update(batchDetails.copy(batchRemainingQuantity = newRemainingQuantity))
+    } else {
+      // Handle error
+      throw InvalidRecordTypeException("Invalid Record Type")
     }
+    // Insert record last
+    recordDao.insert(record)
+
   }
 
   // For soft deletion, use this
