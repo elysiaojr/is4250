@@ -27,6 +27,9 @@ interface ConsumableDao {
   @Query("SELECT * FROM consumable WHERE consumableId = :id")
   fun getConsumableById(id: Int): Consumable
 
+  @Query("SELECT * FROM consumable WHERE barcodeId = :barcodeId")
+  fun getConsumableByBarcodeId(barcodeId: String): Consumable
+
   @Query("SELECT * FROM consumable")
   fun getAllConsumables(): LiveData<List<Consumable>>
 }

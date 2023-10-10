@@ -27,6 +27,8 @@ interface BatchDetailsDao {
   @Query("SELECT * FROM batch_details WHERE batchId = :id")
   suspend fun getBatchDetailById(id: Int): BatchDetails
 
+  @Query("SELECT * FROM batch_details WHERE batchNumber = :batchNumber")
+  suspend fun getBatchDetailByBatchNumber(batchNumber: String): BatchDetails
 
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>

@@ -3,11 +3,15 @@ package com.example.scannerapp.database.entities
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 // Entity: Consumable
 // INSERT INTO consumable (consumableName, consumableBrand, consumableType, consumableSize, barcodeId, unitOfMeasurement, perUnitQuantity, minimumQuantity, isActive, isG1Barcode) VALUES ("Best Syringes", "John & Son", "Type A", "50ml", "BarcodeID01239", "BOX", 50, 10, 1, 0)
-@Entity(tableName = "consumable")
+@Entity(
+  tableName = "consumable",
+  indices = [Index(value = ["barcodeId"], unique = true)]
+)
 data class Consumable(
   @PrimaryKey(autoGenerate = true)
   var consumableId: Int = 1,

@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.exceptions.ActiveStatusException
+import com.example.scannerapp.exceptions.EnumValueDoesNotMatch
+import com.example.scannerapp.exceptions.FieldCannotBeEmptyException
 import com.example.scannerapp.exceptions.InsufficientQuantityException
 import com.example.scannerapp.exceptions.InvalidRecordTypeException
-import com.example.scannerapp.repository.BatchDetailsRepository
 import com.example.scannerapp.repository.RecordRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +20,7 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
 
   val allRecords: LiveData<List<Record>>
   private val recordRepository: RecordRepository
-  val errorMessage = MutableLiveData<String>() // To pass error message to UI
+  val errorLiveData = MutableLiveData<String>() // To pass error message to UI
 
   init {
     val recordDao = AppDatabase.getDatabase(application).recordDao()
@@ -27,35 +29,55 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
     allRecords = recordRepository.getAllRecords
   }
 
+  private fun handleException(e: Exception) {
+    when (e) {
+      is InsufficientQuantityException,
+      is InvalidRecordTypeException,
+      is FieldCannotBeEmptyException,
+      is ActiveStatusException,
+      is EnumValueDoesNotMatch -> e.message
+
+      else -> errorLiveData.postValue("An unknown error occurred")
+    }
+  }
+
   fun addRecord(record: Record) {
     viewModelScope.launch(Dispatchers.IO) {
       try {
         recordRepository.addRecord(record)
-      } catch (e: InsufficientQuantityException) {
-        errorMessage.postValue(e.message)
-      } catch (e: InvalidRecordTypeException) {
-        errorMessage.postValue(e.message)
       } catch (e: Exception) {
-        errorMessage.postValue("An unknown error occurred.")
+        handleException(e)
       }
     }
   }
 
   fun updateRecord(updatedRecord: Record) {
     viewModelScope.launch(Dispatchers.IO) {
-      recordRepository.updateRecord(updatedRecord)
+      try {
+        recordRepository.updateRecord(updatedRecord)
+      } catch (e: Exception) {
+        handleException(e)
+      }
     }
   }
 
   fun deleteRecord(recordToDelete: Record) {
     viewModelScope.launch(Dispatchers.IO) {
-      recordRepository.deleteRecord(recordToDelete)
+      try {
+        recordRepository.deleteRecord(recordToDelete)
+      } catch (e: Exception) {
+        handleException(e)
+      }
     }
   }
 
   fun getRecordById(recordId: Int) {
     viewModelScope.launch(Dispatchers.IO) {
-      recordRepository.getRecordById(recordId)
+      try {
+        recordRepository.getRecordById(recordId)
+      } catch (e: Exception) {
+        handleException(e)
+      }
     }
   }
 
