@@ -6,6 +6,7 @@ import com.example.scannerapp.database.dao.RecordDao
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Record
 import com.example.scannerapp.database.entities.RecordType
+import com.example.scannerapp.exceptions.InsufficientQuantityException
 import java.lang.IllegalStateException
 
 /*
@@ -31,7 +32,7 @@ class RecordRepository(
         val newRemainingQuantity =
           batchDetails.batchRemainingQuantity - record.recordQuantityChanged
         if (newRemainingQuantity < 0) {
-          throw IllegalStateException("Not enough quantity in batch")
+          throw InsufficientQuantityException("Not enough quantity in batch")
         }
         batchDetailsDao.update(batchDetails.copy(batchRemainingQuantity = newRemainingQuantity))
       } else if (record.recordType == RecordType.PUT_IN) {
