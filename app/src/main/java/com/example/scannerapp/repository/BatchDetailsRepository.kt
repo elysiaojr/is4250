@@ -3,6 +3,7 @@ package com.example.scannerapp.repository
 import androidx.lifecycle.LiveData
 import com.example.scannerapp.database.dao.BatchDetailsDao
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.exceptions.ActiveStatusException
 import com.example.scannerapp.exceptions.BarcodeIdExistException
 import com.example.scannerapp.exceptions.BatchNumberExistException
@@ -55,6 +56,10 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
 
   suspend fun getBatchDetailsByBatchNumber(batchNumber: String): BatchDetails {
     return batchDetailsDao.getBatchDetailByBatchNumber(batchNumber)
+  }
+
+  suspend fun getBatchDetailUOM(consumableId: Int): UnitOfMeasurement {
+    return batchDetailsDao.getBatchDetailUOM(consumableId)
   }
 
   private fun validateBatchDetails(batchDetails: BatchDetails) {

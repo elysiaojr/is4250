@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.exceptions.ActiveStatusException
 import com.example.scannerapp.exceptions.BatchNumberExistException
 import com.example.scannerapp.exceptions.ExpiryDateBeforeCreateDate
@@ -23,14 +24,14 @@ It's designed to store and manage UI-related data so that the data survives conf
  */
 class BatchDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
-  val allBatches: LiveData<List<BatchDetails>>
+  val allBatchDetails: LiveData<List<BatchDetails>>
   private val batchDetailsRepository: BatchDetailsRepository
   val errorLiveData = MutableLiveData<String>()
 
   init {
     val batchDetailsDao = AppDatabase.getDatabase(application).batchDetailsDao()
     batchDetailsRepository = BatchDetailsRepository(batchDetailsDao)
-    allBatches = batchDetailsRepository.getAllBatchDetails
+    allBatchDetails = batchDetailsRepository.getAllBatchDetails
   }
 
   private fun handleException(e: Exception) {
@@ -101,6 +102,9 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
   }
 
+  suspend fun getBatchDetailUOM(consumableId: Int): UnitOfMeasurement {
+    return batchDetailsRepository.getBatchDetailUOM(consumableId)
+  }
 
   // More functions...
 }

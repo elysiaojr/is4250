@@ -6,7 +6,7 @@
         android:icon="@drawable/remove_itemcopy"
         android:title="Records" />
     <item
-        android:id="@+id/item_batches"
+        android:id="@+id/item_batch_details"
         android:enabled="true"
         android:icon="@drawable/place_item_24px"
         android:title="Batches" />
