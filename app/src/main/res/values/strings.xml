@@ -52,4 +52,5 @@
         <item>PIECE</item>
         <item>PACK</item>
     </string-array>
+    <string name="title_activity_create_record">CreateRecordActivity</string>
 </resources>
