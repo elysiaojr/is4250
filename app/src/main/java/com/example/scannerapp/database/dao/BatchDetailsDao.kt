@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.UnitOfMeasurement
 
 /*
 DAOs are responsible for defining methods that access the DB.
@@ -16,7 +17,7 @@ We write queries here!
 @Dao
 interface BatchDetailsDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun addBatchDetails(batchDetail: BatchDetails): Long
+  suspend fun insert(batchDetail: BatchDetails)
 
   @Update
   suspend fun update(batchDetail: BatchDetails)
@@ -25,7 +26,13 @@ interface BatchDetailsDao {
   suspend fun delete(batchDetail: BatchDetails)
 
   @Query("SELECT * FROM batch_details WHERE batchId = :id")
-  suspend fun getBatchDetailById(id: Int): BatchDetails?
+  suspend fun getBatchDetailById(id: Int): BatchDetails
+
+  @Query("SELECT * FROM batch_details WHERE batchNumber = :batchNumber")
+  suspend fun getBatchDetailByBatchNumber(batchNumber: String): BatchDetails
+
+  @Query("SELECT unitOfMeasurement FROM consumable WHERE consumableId = :id")
+  suspend fun getBatchDetailUOM(id: Int): UnitOfMeasurement
 
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>

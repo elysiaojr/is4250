@@ -20,6 +20,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
+
+    private lateinit var recordsViewModel: RecordViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,6 +31,9 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
             val dialogFragment = CreateRecordDialog()
             dialogFragment.show(supportFragmentManager, "CreateRecordDialog")
         }
+        recordsViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)
+//        val newRecord = Record(recordId = 0, recordDate = "28/09/2023", recordQuantityChanged = 25,  recordRemarks = "testing", recordType = RecordType.PUT_IN, isActive = 1,batchId = 1, userId = 1)
+//        recordsViewModel.addRecord(newRecord)
     }
 
     // for navigation bar

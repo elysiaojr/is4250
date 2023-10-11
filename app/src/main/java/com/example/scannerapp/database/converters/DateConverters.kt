@@ -18,15 +18,4 @@ class DateConverters {
     return df.parse(dateString)
   }
 
-//  @TypeConverter
-//  fun fromTransactionDate(date: DateTime): String {
-//    val df = SimpleDateFormat("dd/MM/yyyy HH:mm")
-//    return df.format(date)
-//  }
-//
-//  @TypeConverter
-//  fun toTransactionDate(dateString: String): Date {
-//    val df = SimpleDateFormat("dd/MM/yyyy HH:mm")
-//    return df.parse(dateString)
-//  }
 }

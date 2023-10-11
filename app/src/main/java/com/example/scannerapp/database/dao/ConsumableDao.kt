@@ -16,7 +16,7 @@ We write queries here!
 @Dao
 interface ConsumableDao {
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun addConsumable(consumable: Consumable): Long
+  suspend fun insert(consumable: Consumable)
 
   @Update
   suspend fun update(consumable: Consumable)
@@ -25,7 +25,10 @@ interface ConsumableDao {
   suspend fun delete(consumable: Consumable)
 
   @Query("SELECT * FROM consumable WHERE consumableId = :id")
-  suspend fun getConsumableById(id: Int): Consumable?
+  fun getConsumableById(id: Int): Consumable
+
+  @Query("SELECT * FROM consumable WHERE barcodeId = :barcodeId")
+  fun getConsumableByBarcodeId(barcodeId: String): Consumable
 
   @Query("SELECT * FROM consumable")
   fun getAllConsumables(): LiveData<List<Consumable>>

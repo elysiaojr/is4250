@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:padding="16dp">
+
+  <Button
+    android:id="@+id/closeButton"
+    style="@style/IconButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    app:icon="@drawable/close_24px" />
+
+  <TextView
+    android:id="@+id/textViewAddUser"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="7.5dp"
+    android:layout_marginBottom="16dp"
+    android:text="Add Batch Details"
+    android:textSize="24sp"
+    android:textStyle="bold" />
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutBatchNumber"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Batch Number *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. ABC123">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextBatchNumber"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutCreateDate"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Create Date *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. 2023-10-11">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextCreateDate"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="date" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutExpiryDate"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Expiry Date *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. 2024-10-11">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextExpiryDate"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="date" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutReceivedQuantity"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Received Quantity *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. 100">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextReceivedQuantity"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutRemainingQuantity"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Remaining Quantity *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. 50">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextRemainingQuantity"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutConsumableId"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Consumable ID *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. 12345">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextConsumableId"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Is Active?"
+          android:layout_marginEnd="120dp"
+          android:textSize="15sp" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchStatus"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          app:thumbTint="@color/switch_thumb_enabled"
+          app:trackTint="@drawable/switch_track_color" />
+
+      </LinearLayout>
+
+      <Button
+        android:id="@+id/buttonSave"
+        style="@style/CardTextButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="parent" />
+
+    </LinearLayout>
+
+  </ScrollView>
+
+</LinearLayout>
