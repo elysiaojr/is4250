@@ -34,8 +34,6 @@ class BatchDetailsActivity : AppCompatActivity() {
     expiryDateTextView = findViewById(R.id.expiryDateTextView)
     batchReceivedQuantityTextView = findViewById(R.id.batchReceivedQuantityTextView)
     batchRemainingQuantityTextView = findViewById(R.id.batchRemainingQuantityTextView)
-    isActiveTextView = findViewById(R.id.isActiveTextView)
-    consumableIdTextView = findViewById(R.id.consumableIdTextView)
 
     // Display the batch details in the UI.
     batchDetail?.let {
@@ -72,10 +70,8 @@ class BatchDetailsActivity : AppCompatActivity() {
   private fun updateUIWithBatchData(batchDetail: BatchDetails) {
     batchNumberTextView.text = batchDetail.batchNumber
     createDateTextView.text = batchDetail.createDate
-    expiryDateTextView.text = "Expiry Date: " + batchDetail.expiryDate
+    expiryDateTextView.text = batchDetail.expiryDate
     batchReceivedQuantityTextView.text = batchDetail.batchReceivedQuantity.toString()
     batchRemainingQuantityTextView.text = batchDetail.batchRemainingQuantity.toString()
-    isActiveTextView.text = getIsActiveText(batchDetail.isActive)
-    consumableIdTextView.text = batchDetail.consumableId.toString()
   }
 }
