@@ -34,6 +34,9 @@ interface BatchDetailsDao {
   @Query("SELECT unitOfMeasurement FROM consumable WHERE consumableId = :id")
   suspend fun getBatchDetailUOM(id: Int): UnitOfMeasurement
 
+  @Query("SELECT consumable.consumableName FROM consumable WHERE consumableId = :id")
+  suspend fun getBatchDetailConsumableName(id: Int): String
+
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>
 }

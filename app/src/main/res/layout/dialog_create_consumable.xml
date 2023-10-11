@@ -1,230 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:padding="16dp">
+
+  <Button
+    android:id="@+id/closeButton"
+    style="@style/IconButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    app:icon="@drawable/close_24px" />
+
+  <TextView
+    android:id="@+id/textViewAddUser"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="7.5dp"
+    android:layout_marginBottom="16dp"
+    android:text="Add Consumable"
+    android:textSize="24sp"
+    android:textStyle="bold" />
+
+  <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="0dp"
+    android:layout_weight="1">
 
-    <Button
-        android:id="@+id/closeButton"
-        style="@style/IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        app:icon="@drawable/close_24px" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewAddUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7.5dp"
-        android:layout_marginBottom="16dp"
-        android:text="Add Consumable"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ScrollView
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutItem"
+        style="@style/TextInputLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Item *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. Syringe, Needle">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextItem"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutItem"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Item *"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. Syringe, Needle">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextItem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutBrand"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Brand *"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. Baxter, Terumo">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextBrand"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutBrand"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Brand *"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. Baxter, Terumo">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextBrand"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutType"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Type"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. Central Nozzle, sliptip, green">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextType"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutType"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Type"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. Central Nozzle, sliptip, green">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSize"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Size"
+        app:helperTextEnabled="true"
+        app:helperText='E.g. 10ml, 19gx1.5"'>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextSize"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutSize"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Size"
-                app:helperTextEnabled="true"
-                app:helperText='E.g. 10ml, 19gx1.5"'>
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextSize"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <!--            <com.google.android.material.textfield.TextInputLayout-->
+      <!--                android:id="@+id/textInputLayoutDescription"-->
+      <!--                style="@style/TextInputLayout"-->
+      <!--                android:layout_width="match_parent"-->
+      <!--                android:layout_height="wrap_content"-->
+      <!--                android:layout_marginTop="16dp"-->
+      <!--                android:hint="Additional Description"-->
+      <!--                app:helperTextEnabled="true"-->
+      <!--                app:helperText='E.g. sliptip, green, sterile'>-->
 
-            </com.google.android.material.textfield.TextInputLayout>
+      <!--                <com.google.android.material.textfield.TextInputEditText-->
+      <!--                    android:id="@+id/textInputEditTextNameDescription"-->
+      <!--                    android:layout_width="match_parent"-->
+      <!--                    android:layout_height="wrap_content" />-->
 
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/textInputLayoutDescription"-->
-<!--                style="@style/TextInputLayout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="16dp"-->
-<!--                android:hint="Additional Description"-->
-<!--                app:helperTextEnabled="true"-->
-<!--                app:helperText='E.g. sliptip, green, sterile'>-->
+      <!--            </com.google.android.material.textfield.TextInputLayout>-->
 
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/textInputEditTextNameDescription"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content" />-->
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutItemCode"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Item Code *">
 
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextNameItemCode"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutItemCode"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:hint="Item Code *">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextNameItemCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="UOM *"
+          android:layout_marginEnd="120dp"
+          android:textSize="15sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="5dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+        <androidx.appcompat.widget.AppCompatSpinner
+          android:id="@+id/spinnerUOM"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="UOM *"
-                    android:layout_marginEnd="120dp"
-                    android:textSize="15sp" />
+      </LinearLayout>
 
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spinnerUOM"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutPerUnitQuantity"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Per Unit Quantity *"
+        app:suffixText="PC">
 
-            </LinearLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextNamePerUnitQuantity"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutPerUnitQuantity"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Per Unit Quantity *"
-                app:suffixText="PC">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextNamePerUnitQuantity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutMinQuantity"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Minimum Quantity in Stock *">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextNameMinQuantity"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutMinQuantity"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Minimum Quantity in Stock *">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextNameMinQuantity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="5dp"
+        android:gravity="center_vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Status *"
+          android:textSize="15sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="5dp"
-                android:gravity="center_vertical">
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchStatus"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          app:thumbTint="@color/switch_thumb_enabled"
+          app:trackTint="@drawable/switch_track_color" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Status *"
-                    android:textSize="15sp" />
+      </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:thumbTint="@color/switch_thumb_enabled"
-                    app:trackTint="@drawable/switch_track_color" />
+      <Button
+        android:id="@+id/buttonSave"
+        style="@style/CardTextButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="parent" />
 
-            </LinearLayout>
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonSave"
-                style="@style/CardTextButton"
-                android:layout_width="236dp"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:layout_gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="parent" />
-
-        </LinearLayout>
-
-    </ScrollView>
+  </ScrollView>
 
 </LinearLayout>

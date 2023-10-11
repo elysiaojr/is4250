@@ -1,6 +1,7 @@
 package com.example.scannerapp.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -56,6 +57,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
       try {
         batchDetailsRepository.addBatchDetails(batchDetails)
       } catch (e: Exception) {
+        Log.e("BatchDetailsViewModel", "Error adding batch details", e) // Log the exception
         handleException(e)
       }
     }
@@ -104,6 +106,10 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
 
   suspend fun getBatchDetailUOM(consumableId: Int): UnitOfMeasurement {
     return batchDetailsRepository.getBatchDetailUOM(consumableId)
+  }
+
+  suspend fun getBatchDetailConsumableName(consumableId: Int): String {
+    return batchDetailsRepository.getBatchDetailConsumableName(consumableId)
   }
 
   // More functions...

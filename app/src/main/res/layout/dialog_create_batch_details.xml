@@ -52,38 +52,21 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutCreateDate"
-        style="@style/TextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Create Date *"
-        app:helperTextEnabled="true"
-        app:helperText="E.g. 2023-10-11">
-
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/textInputEditTextCreateDate"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:inputType="date" />
-
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutExpiryDate"
         style="@style/TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Expiry Date *"
         app:helperTextEnabled="true"
-        app:helperText="E.g. 2024-10-11">
+        app:helperText="dd/MM/yyyy format">
 
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/textInputEditTextExpiryDate"
+        <TextView
+          android:id="@+id/textViewExpiryDate"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:inputType="date" />
+          android:background="@drawable/edit_text_background"
+          android:padding="16dp"
+          android:text="Expiry Date" />
 
       </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,20 +107,20 @@
       </com.google.android.material.textfield.TextInputLayout>
 
       <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutConsumableId"
+        android:id="@+id/textInputLayoutConsumableName"
         style="@style/TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Consumable ID *"
         app:helperTextEnabled="true"
-        app:helperText="E.g. 12345">
+        app:helperText="E.g. ConsumableXYZ">
 
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/textInputEditTextConsumableId"
+        <Spinner
+          android:id="@+id/spinnerConsumableName"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:inputType="number" />
+          android:layout_marginTop="16dp" />
+
 
       </com.google.android.material.textfield.TextInputLayout>
 
