@@ -70,6 +70,11 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
         CreateBatchDetailsDialog() // Assuming you have a dialog for creating new BatchDetails
       dialogFragment.show(supportFragmentManager, "CreateBatchDetailsDialog")
     }
+
+    val fabBarcode = findViewById<FloatingActionButton>(R.id.fab_batch_details_barcode)
+    fabBarcode.setOnClickListener {
+
+    }
   }
 
   // For navigation bar

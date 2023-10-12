@@ -2,70 +2,70 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-  <application
-      android:allowBackup="true"
-      android:dataExtractionRules="@xml/data_extraction_rules"
-      android:fullBackupContent="@xml/backup_rules"
-      android:icon="@mipmap/ic_launcher"
-      android:label="@string/app_name"
-      android:roundIcon="@mipmap/ic_launcher_round"
-      android:supportsRtl="true"
-      android:theme="@style/Theme.ScannerApp"
-      tools:targetApi="31">
-    <activity
-        android:name=".ui.ConsumableDetailsActivity"
-        android:exported="true"
-        android:label="@string/title_activity_consumable_details"
-        android:theme="@style/Theme.ScannerApp" />
-    <activity
-        android:name=".ui.ListConsumablesActivity"
-        android:exported="true"
-        android:label="@string/title_activity_list_consumables"
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
         android:theme="@style/Theme.ScannerApp"
-        android:windowSoftInputMode="adjustPan">
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.ConsumableDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_consumable_details"
+            android:theme="@style/Theme.ScannerApp" />
+        <activity
+            android:name=".ui.ListConsumablesActivity"
+            android:exported="true"
+            android:label="@string/title_activity_list_consumables"
+            android:theme="@style/Theme.ScannerApp"
+            android:windowSoftInputMode="adjustPan">
 
-      <!-- add this intent-filter to whichever activity you want to show on launch -->
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
+            <!-- add this intent-filter to whichever activity you want to show on launch -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-    <activity
-        android:name=".ui.ListRecordsActivity"
-        android:exported="true"
-        android:windowSoftInputMode="adjustPan">
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.ListRecordsActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
 
-    </activity>
+        </activity>
 
-    <activity
-        android:name=".ui.MainActivity"
-        android:exported="true"></activity>
-    <activity
-        android:name=".ui.ListUsersActivity"
-        android:exported="true"
-        android:windowSoftInputMode="adjustPan">
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".ui.ListUsersActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
 
 
-    </activity>
-    <activity
-        android:name=".ui.UserDetailsActivity"
-        android:exported="true"
-        android:label="@string/title_activity_user_details"
-        android:theme="@style/Theme.ScannerApp" />
-    <activity
-        android:name=".ui.ListBatchDetailsActivity"
-        android:exported="true"
-        android:windowSoftInputMode="adjustPan">
-      >
+        </activity>
+        <activity
+            android:name=".ui.UserDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_user_details"
+            android:theme="@style/Theme.ScannerApp" />
+        <activity
+            android:name=".ui.ListBatchDetailsActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+            >
 
-    </activity>
-    <activity
-        android:name=".ui.BatchDetailsActivity"
-        android:exported="true"
-        android:label="@string/title_activity_batch_details"
-        android:theme="@style/Theme.ScannerApp" />
+        </activity>
+        <activity
+            android:name=".ui.BatchDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_batch_details"
+            android:theme="@style/Theme.ScannerApp" />
 
-  </application>
+    </application>
 
 </manifest>
