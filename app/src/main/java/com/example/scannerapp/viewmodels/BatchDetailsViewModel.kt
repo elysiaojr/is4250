@@ -109,7 +109,11 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   }
 
   suspend fun getBatchDetailConsumableName(consumableId: Int): String {
-    return batchDetailsRepository.getBatchDetailConsumableName(consumableId)
+    val nameString = batchDetailsRepository.getBatchDetailConsumableName(consumableId)
+    val brandString = batchDetailsRepository.getBatchDetailConsumableBrand(consumableId)
+    val typeString = batchDetailsRepository.getBatchDetailConsumableType(consumableId)
+    val sizeString = batchDetailsRepository.getBatchDetailConsumableSize(consumableId)
+    return "$nameString, $brandString, $typeString, $sizeString"
   }
 
   // More functions...

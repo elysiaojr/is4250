@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
+import com.example.scannerapp.viewmodels.ConsumableViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel

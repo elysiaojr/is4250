@@ -37,6 +37,15 @@ interface BatchDetailsDao {
   @Query("SELECT consumable.consumableName FROM consumable WHERE consumableId = :id")
   suspend fun getBatchDetailConsumableName(id: Int): String
 
+  @Query("SELECT consumable.consumableBrand FROM consumable WHERE consumableId = :id")
+  suspend fun getBatchDetailConsumableBrand(id: Int): String
+
+  @Query("SELECT consumable.consumableType FROM consumable WHERE consumableId = :id")
+  suspend fun getBatchDetailConsumableType(id: Int): String
+
+  @Query("SELECT consumable.consumableSize FROM consumable WHERE consumableId = :id")
+  suspend fun getBatchDetailConsumableSize(id: Int): String
+
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>
 }

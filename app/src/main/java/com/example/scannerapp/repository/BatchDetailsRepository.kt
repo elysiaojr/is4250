@@ -66,6 +66,18 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
     return batchDetailsDao.getBatchDetailConsumableName(consumableId)
   }
 
+  suspend fun getBatchDetailConsumableBrand(consumableId: Int): String {
+    return batchDetailsDao.getBatchDetailConsumableBrand(consumableId)
+  }
+
+  suspend fun getBatchDetailConsumableType(consumableId: Int): String {
+    return batchDetailsDao.getBatchDetailConsumableType(consumableId)
+  }
+
+  suspend fun getBatchDetailConsumableSize(consumableId: Int): String {
+    return batchDetailsDao.getBatchDetailConsumableSize(consumableId)
+  }
+
   private fun validateBatchDetails(batchDetails: BatchDetails) {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy") // Assuming this is your date format
 
