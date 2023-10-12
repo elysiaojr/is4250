@@ -63,6 +63,12 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
     val batchNumberInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextBatchNumber)
     val textViewExpiryDate = view.findViewById<TextView>(R.id.textViewExpiryDate)
 
+    // Retrieve the scanned data from the arguments (from barcode)
+    val scannedData = arguments?.getString("scannedData")
+
+    // Populate the batchNumberInput with the scanned data (from barcode)
+    batchNumberInput.setText(scannedData)
+
     batchDetailsViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
       Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
     })
