@@ -104,4 +104,7 @@ dependencies {
 
   // Fragments
   implementation("androidx.fragment:fragment-ktx:1.6.1")
+
+  // Searchable Spinner
+  implementation("com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1")
 }

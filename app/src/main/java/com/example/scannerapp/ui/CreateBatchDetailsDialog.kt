@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.NumberPicker
@@ -24,6 +25,7 @@ import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -124,39 +126,40 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
 
     val receivedQuantityInput =
       view.findViewById<TextInputEditText>(R.id.textInputEditTextReceivedQuantity)
-    val remainingQuantityInput =
-      view.findViewById<TextInputEditText>(R.id.textInputEditTextRemainingQuantity)
     val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
 
-    val spinnerConsumable = view.findViewById<Spinner>(R.id.spinnerConsumableName)
+    val searchableSpinnerConsumable = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerConsumable)
+    searchableSpinnerConsumable.setTitle("Select Consumable");
+    var consumableNames: List<String> = emptyList()
+    var selectedConsumableId: Int = -1
 
-    consumableViewModel.allConsumables.observe(viewLifecycleOwner, Observer { consumables ->
-      searchedConsumables = consumables
-      val adapter = object : ArrayAdapter<Consumable>(
-        requireContext(),
-        android.R.layout.simple_spinner_item,
-        consumables
-      ) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-          val view = super.getView(position, convertView, parent)
-          val textView = view as TextView
-          textView.text =
-            "${getItem(position)?.consumableName}, ${getItem(position)?.consumableBrand}"
-          return view
-        }
+    // Fetch the list of consumables from the ViewModel
+    consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+      // Update the consumableNames list when data is available
+      consumableNames = consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
 
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-          val view = super.getDropDownView(position, convertView, parent)
-          val textView = view as TextView
-          textView.text =
-            "${getItem(position)?.consumableName}, ${getItem(position)?.consumableBrand}"
-          return view
+      // Create an ArrayAdapter and set it to the SearchableSpinner
+      val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumableNames)
+      searchableSpinnerConsumable.adapter = adapter
+
+      searchableSpinnerConsumable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+          override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            // Get the selected consumable item
+            val selectedConsumableName = consumableNames[position]
+
+            // Find the corresponding Consumable object based on the name
+            val selectedConsumable = consumables.find { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize == selectedConsumableName }
+
+            if (selectedConsumable != null) {
+              selectedConsumableId = selectedConsumable.consumableId
+            }
+          }
+
+        override fun onNothingSelected(p0: AdapterView<*>?) {
+          // do nothing
         }
       }
-      adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-      spinnerConsumable.adapter = adapter
-    })
-
+    }
 
     val saveButton = view.findViewById<MaterialButton>(R.id.buttonSave)
 
@@ -172,20 +175,14 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
 
       val expiryDate = textViewExpiryDate.text.toString().trim()
       val receivedQuantityValue = receivedQuantityInput.text.toString().trim()
-      val remainingQuantityValue = remainingQuantityInput.text.toString().trim()
       val isActive = if (switchStatus.isChecked) 1 else 0
-      val selectedConsumable = spinnerConsumable.selectedItem as? Consumable
+      val consumableId = selectedConsumableId
 
       // Add validations here
       val expiryLocalDate =
         if (expiryDate.isNotEmpty()) LocalDate.parse(expiryDate, dateFormatter) else null
 
       when {
-        selectedConsumable == null -> Toast.makeText(
-          requireContext(),
-          "Please select a consumable.",
-          Toast.LENGTH_SHORT
-        ).show()
 
         batchNumber.isEmpty() -> Toast.makeText(
           requireContext(),
@@ -213,37 +210,24 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
 
         receivedQuantityValue.isEmpty() -> Toast.makeText(
           requireContext(),
-          "Received Quantity is required.",
+          "Quantity Received is required.",
           Toast.LENGTH_SHORT
         ).show()
 
-        remainingQuantityValue.isEmpty() -> Toast.makeText(
+        (receivedQuantityValue.toIntOrNull() ?: 0) <= 0 -> Toast.makeText(
           requireContext(),
-          "Remaining Quantity is required.",
+          "Quantity Received should be a positive value.",
           Toast.LENGTH_SHORT
         ).show()
 
-        receivedQuantityValue.toIntOrNull() ?: 0 <= 0 -> Toast.makeText(
+        consumableId == -1 ->  Toast.makeText(
           requireContext(),
-          "Received Quantity should be a positive value.",
-          Toast.LENGTH_SHORT
-        ).show()
-
-        remainingQuantityValue.toIntOrNull() ?: 0 < 0 -> Toast.makeText(
-          requireContext(),
-          "Remaining Quantity cannot be negative.",
-          Toast.LENGTH_SHORT
-        ).show()
-
-        remainingQuantityValue.toInt() > receivedQuantityValue.toInt() -> Toast.makeText(
-          requireContext(),
-          "Remaining Quantity cannot exceed Received Quantity.",
+          "Please select a Consumable.",
           Toast.LENGTH_SHORT
         ).show()
 
         else -> {
           val receivedQuantity = receivedQuantityValue.toInt()
-          val remainingQuantity = remainingQuantityValue.toInt()
 
           val newBatchDetail = BatchDetails(
             batchId = 0,
@@ -251,9 +235,9 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
             createDate = createDate,
             expiryDate = expiryDate,
             batchReceivedQuantity = receivedQuantity,
-            batchRemainingQuantity = remainingQuantity,
+            batchRemainingQuantity = receivedQuantity,
             isActive = isActive,
-            consumableId = selectedConsumable.consumableId
+            consumableId = consumableId
           )
 
           batchDetailsViewModel.addBatchDetails(newBatchDetail)
