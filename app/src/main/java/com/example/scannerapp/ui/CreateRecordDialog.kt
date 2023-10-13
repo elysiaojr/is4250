@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
@@ -41,10 +42,8 @@ import kotlin.coroutines.CoroutineContext
 
 class CreateRecordDialog : DialogFragment(), CoroutineScope {
     private val job = Job()
-    private var searchedConsumables: List<Consumable> = listOf()
-    private var searchedBatches: List<BatchDetails> = listOf()
-    private var searchedUsers: List<User> = listOf()
     private var selectedBatchId: Int = -1
+    private var hasValidScannedBatchNumber: Boolean = false
     private lateinit var userViewModel: UserViewModel
     private lateinit var batchDetailsViewModel: BatchDetailsViewModel
     private lateinit var consumableViewModel: ConsumableViewModel
@@ -73,44 +72,6 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         val closeButton = view.findViewById<Button>(R.id.closeButton)
-        val batchNumberInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextRemarks)
-
-        // Retrieve the scanned data from the arguments (from barcode)
-        val scannedData = arguments?.getString("scannedData")
-
-        // Populate the batchNumberInput with the scanned data (from barcode)
-        batchNumberInput.setText(scannedData)
-
-//        batchDetailsViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
-//            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-//        })
-
-        recordViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-        })
-
-//        batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner, Observer { batchDetails ->
-//            // You need to get the batch number inside this observer to avoid reference issues
-//            val batchNumber = batchNumberInput.text.toString().trim()
-//
-//            if (batchDetails.any { it.batchNumber == batchNumber }) {
-//                Toast.makeText(requireContext(), "Batch Detail created successfully!", Toast.LENGTH_SHORT)
-//                    .show()
-//                dismiss()
-//            }
-//        })
-
-        recordViewModel.allRecords.observe(viewLifecycleOwner, Observer { record ->
-            // You need to get the batch number inside this observer to avoid reference issues, don't know how to implement this
-//            val batchNumber = batchNumberInput.text.toString().trim()
-//
-//            if (record.any { it.recordId == batchNumber }) {
-//                Toast.makeText(requireContext(), "Record created successfully!", Toast.LENGTH_SHORT)
-//                    .show()
-//                dismiss()
-//            }
-        })
-
         val quantityInput =
             view.findViewById<TextInputEditText>(R.id.textInputEditTextQuantity)
         val remarksInput =
@@ -127,9 +88,36 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         // Batch Spinner
         val searchableSpinnerBatch = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerBatch)
         searchableSpinnerConsumable.setTitle("Select Consumable");
-//        var batchNumbers: List<String> = emptyList()
 
-        // Fetch the list of consumables from the ViewModel
+        // Retrieve the scanned data from the arguments (from barcode)
+        val scannedData = arguments?.getString("scannedData")
+        // Barcode scanner detected barcode number
+        if (scannedData?.length != 0) {
+            batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batchDetails ->
+                for (batchDetail in batchDetails) {
+                    if (batchDetail.batchNumber == scannedData) {
+                        // Batch Number exists in the database
+                        selectedBatchId = batchDetail.batchId
+                        selectedConsumableId = batchDetail.consumableId
+                        hasValidScannedBatchNumber = true
+                        break;
+                    }
+                }
+            }
+            if (!hasValidScannedBatchNumber) {
+                // Prompt user to create new batch
+            }
+        }
+
+
+        recordViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+        })
+
+        recordViewModel.allRecords.observe(viewLifecycleOwner, Observer { record ->
+        })
+
+        // Searchable Spinner: Fetch the list of consumables from the ViewModel
         consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
             // Update the consumableNames list when data is available
             consumableNames = consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
@@ -160,46 +148,13 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             }
         }
 
-
-
-
-        // Fetch the list of consumables from the ViewModel
-//        batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batches ->
-//
-//            batchNumbers = batches
-//                .filter { it.consumableId == selectedConsumableId }
-//                .map { it.batchNumber }
-//
-//            // Create an ArrayAdapter and set it to the SearchableSpinner
-//            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, batchNumbers)
-//            searchableSpinnerBatch.adapter = adapter
-//
-//            searchableSpinnerBatch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                    // Get the selected consumable item
-//                    val selectedBatchNumber = batchNumbers[position]
-//
-//                    // Find the corresponding Consumable object based on the name
-//                    val selectedBatch = batches.find { it.batchNumber == selectedBatchNumber }
-//
-//                    if (selectedBatch != null) {
-//                        selectedBatchId = selectedBatch.batchId
-//                    }
-//                }
-//
-//                override fun onNothingSelected(p0: AdapterView<*>?) {
-//                    // do nothing
-//                }
-//            }
-//        }
-
         // User Spinner
         val searchableSpinnerUser = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerUser)
         searchableSpinnerConsumable.setTitle("Select Consumable");
         var userNames: List<String> = emptyList()
         var selectedUserId: Int = -1
 
-        // Fetch the list of consumables from the ViewModel
+        // Searchable Spinner: Fetch the list of consumables from the ViewModel
         userViewModel.allUsers.observe(viewLifecycleOwner) { users ->
 
             // Update the consumableNames list when data is available
@@ -243,7 +198,7 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         }
 
         saveButton.setOnClickListener {
-            val batchNumber = batchNumberInput.text.toString().trim()
+//            val batchNumber = batchNumberInput.text.toString().trim()
 
             // Get the current date
             val currentDate = LocalDate.now()
@@ -259,20 +214,6 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             val userId = selectedUserId
 
             when {
-
-//                batchNumber.isEmpty() -> Toast.makeText(
-//                    requireContext(),
-//                    "Batch Number is required.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//
-//                batchNumber.length < 5 -> Toast.makeText(
-//                    requireContext(),
-//                    "Batch Number should be at least 5 characters long.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-
-
                 quantityValue.isEmpty() -> Toast.makeText(
                     requireContext(),
                     "Quantity Received is required.",
@@ -284,12 +225,6 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
                     "Quantity should be more than 0.",
                     Toast.LENGTH_SHORT
                 ).show()
-
-//                consumableId == -1 ->  Toast.makeText(
-//                    requireContext(),
-//                    "Please select a Consumable.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
 
                 batchId == -1 ->  Toast.makeText(
                     requireContext(),
@@ -328,33 +263,10 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
     }
 
     fun showHideSpinnerBatch(searchableSpinnerBatch: SearchableSpinner, selectedConsumableId: Int) {
-//        if (searchableSpinnerBatch.visibility == SearchableSpinner.VISIBLE) {
-//            // Clear the text inside the SearchView (Optional)
-//            view.setQuery(
-//                "",
-//                false
-//            ) // The second argument indicates whether to submit the query or not (false to clear only)
-//
-//            // Make SearchView invisible
-//            view.visibility = SearchView.INVISIBLE
-//            // Set the height of the SearchView to 0
-//            val layoutParams = view.layoutParams as ViewGroup.LayoutParams
-//            layoutParams.height = 0
-//            view.layoutParams = layoutParams
-//
-//            // Change the right drawable of the Button when hiding the SearchView
-//            searchButton.setCompoundDrawablesWithIntrinsicBounds(
-//                0,// Replace with the ID of your desired left drawable
-//                0, // Set 0 for no drawable on the top
-//                R.drawable.baseline_search_24, // Set 0 for no drawable on the right
-//                0  // Set 0 for no drawable on the bottom
-//            )
-//
-//        } else
         if (selectedConsumableId != -1) {
             var batchNumbers: List<String> = emptyList()
 
-            // Filer by SelectedConsumableId
+            // Searchable Spinner: Filer by SelectedConsumableId
             batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batches ->
 
                 batchNumbers = batches
