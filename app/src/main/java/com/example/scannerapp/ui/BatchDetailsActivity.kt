@@ -5,21 +5,30 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.viewmodels.BatchDetailsViewModel
+import com.example.scannerapp.viewmodels.ConsumableViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // This activity displays details of a batch.
 class BatchDetailsActivity : AppCompatActivity() {
 
   // Define UI elements and data models.
+  private lateinit var batchDetailsViewModel: BatchDetailsViewModel
   private lateinit var batchNumberTextView: TextView
   private lateinit var createDateTextView: TextView
   private lateinit var expiryDateTextView: TextView
   private lateinit var batchReceivedQuantityTextView: TextView
   private lateinit var batchRemainingQuantityTextView: TextView
-  private lateinit var isActiveTextView: TextView
-  private lateinit var consumableIdTextView: TextView
+  private lateinit var batchConsumableTextView: TextView
   private var batchDetail: BatchDetails? = null
+  private val activityScope = CoroutineScope(Dispatchers.Main)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -34,8 +43,7 @@ class BatchDetailsActivity : AppCompatActivity() {
     expiryDateTextView = findViewById(R.id.expiryDateTextView)
     batchReceivedQuantityTextView = findViewById(R.id.batchReceivedQuantityTextView)
     batchRemainingQuantityTextView = findViewById(R.id.batchRemainingQuantityTextView)
-    isActiveTextView = findViewById(R.id.isActiveTextView)
-    consumableIdTextView = findViewById(R.id.consumableIdTextView)
+    batchConsumableTextView = findViewById(R.id.batchConsumableTextView)
 
     // Display the batch details in the UI.
     batchDetail?.let {
@@ -72,10 +80,37 @@ class BatchDetailsActivity : AppCompatActivity() {
   private fun updateUIWithBatchData(batchDetail: BatchDetails) {
     batchNumberTextView.text = batchDetail.batchNumber
     createDateTextView.text = batchDetail.createDate
-    expiryDateTextView.text = "Expiry Date: " + batchDetail.expiryDate
-    batchReceivedQuantityTextView.text = batchDetail.batchReceivedQuantity.toString()
-    batchRemainingQuantityTextView.text = batchDetail.batchRemainingQuantity.toString()
-    isActiveTextView.text = getIsActiveText(batchDetail.isActive)
-    consumableIdTextView.text = batchDetail.consumableId.toString()
+    expiryDateTextView.text = batchDetail.expiryDate
+
+    // Get and display Consumable name
+    updateConsumableName(batchDetail.consumableId)
+    updateBatchDetailQuantities(batchDetail, batchDetail.consumableId)
+  }
+
+  // Method to
+  private fun updateConsumableName(consumableId: Int) {
+    batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+    activityScope.launch {
+      val consumableName = withContext(Dispatchers.IO) {
+        batchDetailsViewModel.getBatchDetailConsumableName(consumableId)
+      }
+      batchConsumableTextView.text = consumableName
+    }
+  }
+
+  private fun updateBatchDetailQuantities(batchDetail: BatchDetails, consumableId: Int) {
+    activityScope.launch {
+      val UOM = withContext(Dispatchers.IO) {
+        batchDetailsViewModel.getBatchDetailUOM(consumableId)
+      }
+      batchReceivedQuantityTextView.text = batchDetail.batchReceivedQuantity.toString() + " " + UOM
+      batchRemainingQuantityTextView.text =
+        batchDetail.batchRemainingQuantity.toString() + " " + UOM
+    }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    activityScope.cancel()
   }
 }

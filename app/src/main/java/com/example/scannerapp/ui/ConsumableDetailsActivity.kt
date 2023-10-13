@@ -16,7 +16,6 @@ class ConsumableDetailsActivity : AppCompatActivity(),
   EditConsumableDialog.OnConsumableUpdatedListener {
 
   // Define UI elements and data models.
-  private lateinit var consumableViewModel: ConsumableViewModel
   private lateinit var consumableNameTextView: TextView
   private lateinit var consumableBarcodeIdTextView: TextView
   private lateinit var consumableCurrentQuantityTextView: TextView
