@@ -14,14 +14,13 @@
         android:layout_gravity="end"
         app:icon="@drawable/close_24px" />
 
-
     <TextView
-        android:id="@+id/textViewAddRecord"
+        android:id="@+id/titleViewAddRecord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7.5dp"
         android:layout_marginBottom="16dp"
-        android:text="Add Record"
+        android:text="Add Take Out Details"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -35,45 +34,39 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--Consumables Search Dropdown-->
-            <include
-                layout="@layout/consumables_search_dropdown_component"
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/searchableSpinnerConsumable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="58dp"
+                android:layout_marginTop="16dp"
+                app:hintText="Consumable *"
+                android:background="@drawable/searchable_spinner_background"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutItem"
-                style="@style/TextInputLayout"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Consumable *"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. Syringe, Needle">
+                android:text="Select a Consumable to find Batch"
+                android:textColor="@macro/m3_comp_outlined_text_field_supporting_text_color"
+                android:textSize="13dp"
+                android:paddingTop="2dp"
+                android:paddingLeft="15dp"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextItem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutBrand"
-                style="@style/TextInputLayout"
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/searchableSpinnerBatch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="58dp"
                 android:layout_marginTop="16dp"
-                android:hint="Batch *"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. Baxter, Terumo">
+                app:hintText="Batch *"
+                android:background="@drawable/searchable_spinner_background"
+                android:visibility="gone" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextBrand"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/searchableSpinnerUser"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginTop="16dp"
+                app:hintText="Recorded By *"
+                android:background="@drawable/searchable_spinner_background"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutQuantity"
@@ -81,45 +74,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Quantity"
+                android:hint="Quantity *"
+                android:textColorHint="@color/black"
                 app:helperTextEnabled="true"
-                app:helperText='E.g. 1, 2'>
+                app:helperText="E.g. 1, 2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEditTextQuantity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--            <com.google.android.material.textfield.TextInputLayout-->
-            <!--                android:id="@+id/textInputLayoutDescription"-->
-            <!--                style="@style/TextInputLayout"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="16dp"-->
-            <!--                android:hint="Additional Description"-->
-            <!--                app:helperTextEnabled="true"-->
-            <!--                app:helperText='E.g. sliptip, green, sterile'>-->
-
-            <!--                <com.google.android.material.textfield.TextInputEditText-->
-            <!--                    android:id="@+id/textInputEditTextNameDescription"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content" />-->
-
-            <!--            </com.google.android.material.textfield.TextInputLayout>-->
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutBatchCode"
+                android:id="@+id/textInputRemarks"
                 style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:hint="Batch Code *">
+                android:hint="Remarks"
+                android:textColorHint="@color/black"
+                app:helperTextEnabled="true"
+                app:helperText="(Optional)">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextNameBatchCode"
+                    android:id="@+id/textInputEditTextRemarks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -136,46 +116,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recorded by *"
-                    android:layout_marginEnd="120dp"
+                    android:text="Is a Take out Record?"
+                    android:textColor="@color/black"
+
                     android:textSize="15sp" />
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinnerUser"
-                    android:layout_width="match_parent"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchRecordType"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:checked="true"
+                    app:thumbTint="@color/switch_thumb_enabled"
+                    app:trackTint="@drawable/switch_track_color" />
 
             </LinearLayout>
-
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutMinQuantity"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Additional Remarks">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextNameRemarks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginVertical="5dp"
+                android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status *"
+                    android:text="Is Active?"
+                    android:textColor="@color/black"
+                    android:layout_marginEnd="120dp"
                     android:textSize="15sp" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
@@ -183,6 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:checked="true"
                     app:thumbTint="@color/switch_thumb_enabled"
                     app:trackTint="@drawable/switch_track_color" />
 

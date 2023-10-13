@@ -1,39 +1,59 @@
 package com.example.scannerapp.ui
 
-import android.content.Context
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ListView
-import android.widget.PopupWindow
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import android.widget.NumberPicker
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
-import com.example.scannerapp.adapters.ConsumableSearchAdapter
-import com.example.scannerapp.ui.ui.ui.theme.ScannerAppTheme
+import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Consumable
+import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.database.entities.RecordType
+import com.example.scannerapp.database.entities.User
+import com.example.scannerapp.viewmodels.BatchDetailsViewModel
+import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
+import com.example.scannerapp.viewmodels.UserViewModel
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.coroutines.CoroutineContext
 
-class CreateRecordDialog : DialogFragment() {
+class CreateRecordDialog : DialogFragment(), CoroutineScope {
+    private val job = Job()
+    private var searchedConsumables: List<Consumable> = listOf()
+    private var searchedBatches: List<BatchDetails> = listOf()
+    private var searchedUsers: List<User> = listOf()
+    private var selectedBatchId: Int = -1
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var batchDetailsViewModel: BatchDetailsViewModel
+    private lateinit var consumableViewModel: ConsumableViewModel
     private lateinit var recordViewModel: RecordViewModel
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Set dialog style
         setStyle(STYLE_NORMAL, R.style.FullScreenDialog)
     }
 
@@ -46,192 +66,337 @@ class CreateRecordDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        // initialise the ViewModel
+
+        consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
+        batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
         recordViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)
-        //consumableListView = findViewById<ListView>(R.id.consumableDropdownList)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-//        // Initialize and set up views and listeners here
-//        val closeButton = view.findViewById<Button>(R.id.closeButton)
-//        val textInputEditTextItem = view.findViewById<TextInputEditText>(R.id.textInputEditTextItem)
-//        val textInputEditTextBrand =
-//            view.findViewById<TextInputEditText>(R.id.textInputEditTextBrand)
-//        val textInputEditTextType = view.findViewById<TextInputEditText>(R.id.textInputEditTextType)
-//        val textInputEditTextSize = view.findViewById<TextInputEditText>(R.id.textInputEditTextSize)
-//        val textInputEditTextNameItemCode =
-//            view.findViewById<TextInputEditText>(R.id.textInputEditTextNameItemCode)
-//        val spinnerUOM = view.findViewById<AppCompatSpinner>(R.id.spinnerUOM)
-//        val textInputEditTextNamePerUnitQuantity =
-//            view.findViewById<TextInputEditText>(R.id.textInputEditTextNamePerUnitQuantity)
-//        val textInputEditTextNameMinQuantity =
-//            view.findViewById<TextInputEditText>(R.id.textInputEditTextNameMinQuantity)
-//        val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
-//        val saveButton = view.findViewById<MaterialButton>(R.id.buttonSave)
-        val consumablesAutoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.consumablesAutoCompleteTextView) // Consumables search dropdown
+        val closeButton = view.findViewById<Button>(R.id.closeButton)
+        val batchNumberInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextRemarks)
 
-//        // Close the dialog when the close button is clicked
-//        closeButton.setOnClickListener {
-//            dismiss()
-//        }
+        // Retrieve the scanned data from the arguments (from barcode)
+        val scannedData = arguments?.getString("scannedData")
 
-//        // Retrieve the string array from resources
-//        val uomValues = resources.getStringArray(R.array.uom_values)
-//
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        val adapter =
-//            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, uomValues)
+        // Populate the batchNumberInput with the scanned data (from barcode)
+        batchNumberInput.setText(scannedData)
 
-        // Consumables search dropdown
-        val dropdownListView = view.findViewById<ListView>(R.id.consumableDropdownList)
-        val consumableSearchAdapter = ConsumableSearchAdapter(requireContext(), R.id.consumableDropdownList, emptyList())
-        val dropdownContainer = view.findViewById<FrameLayout>(R.id.dropdownContainer)
+//        batchDetailsViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
+//            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+//        })
 
-        // Create the PopupWindow
-        val popupWindow = PopupWindow(dropdownContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        recordViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+        })
 
-        dropdownListView.adapter = consumableSearchAdapter
-        consumablesAutoCompleteTextView.setAdapter(consumableSearchAdapter)
-        // Set an item click listener to handle selection
-
-        consumablesAutoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
-            val selectedConsumable = consumableSearchAdapter.getItem(position)
-            consumablesAutoCompleteTextView.setText(selectedConsumable.consumableName)
-            // Handle the selected item as needed
-        }
-
-        // Create a popup window for the ScrollView
-        val inflater
-        val dropdownContainer = inflater.inflate(R.layout.consumables_search_dropdown_component, null)
-        val scrollView = dropdownContainer.findViewById<ScrollView>(R.id.scrollView)
-        val listView = scrollView.findViewById<ListView>(R.id.consumableDropdownList)
-        // End of Consumable search dropdown
-
-
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner, Observer { batchDetails ->
+//            // You need to get the batch number inside this observer to avoid reference issues
+//            val batchNumber = batchNumberInput.text.toString().trim()
 //
-//        // Set the adapter to the Spinner
-//        spinnerUOM.adapter = adapter
-//
-//        var selectedUOM = ""
-//        spinnerUOM.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(
-//                parentView: AdapterView<*>?,
-//                selectedItemView: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                // Handle item selection here
-//                selectedUOM = uomValues[position]
-//                Log.d("SpinnerSelection", "Selected UOM: $selectedUOM")
-//            }
-//
-//            override fun onNothingSelected(parentView: AdapterView<*>?) {
-//                // Handle no selection
-//                spinnerUOM.prompt = "Select a Unit of Measurement"
-//            }
-//        }
-
-        // Handle save button click
-//        saveButton.setOnClickListener {
-//
-//            val item = textInputEditTextItem.text.toString().trim()
-//            val brand = textInputEditTextBrand.text.toString().trim()
-//            val type = textInputEditTextType.text.toString().trim()
-//            val size = textInputEditTextSize.text.toString().trim()
-//            val itemCode = textInputEditTextNameItemCode.text.toString().trim()
-//            val uom = selectedUOM.capitalize()
-//            val perUnitQuantityValue = textInputEditTextNamePerUnitQuantity.text.toString().trim()
-//            val minQuantityValue = textInputEditTextNameMinQuantity.text.toString().trim()
-//            val switchStatus = switchStatus.isChecked // true for enabled, false for disabled
-
-//            if (item.isEmpty() || brand.isEmpty() || itemCode.isEmpty() || uom.isEmpty()) {
-//
-//                // display an error message if compulsory fields are empty
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Please fill in all required fields.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//
-//            } else {
-//
-//                // Check if perUnitQuantityValue and minQuantityValue are valid integers
-//                val perUnitQuantity: Int = try {
-//                    perUnitQuantityValue.toInt()
-//                } catch (e: NumberFormatException) {
-//                    // Handle the case where perUnitQuantityValue is not a valid integer
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Please enter a valid Per Unit Quantity.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    -1 // Set a default or error value
-//                    return@setOnClickListener // Exit the function early
-//                }
-//
-//                val minQuantity: Int = try {
-//                    minQuantityValue.toInt()
-//                } catch (e: NumberFormatException) {
-//                    // Handle the case where minQuantityValue is not a valid integer
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Please enter a valid Minimum Quantity in Stock.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    -1 // Set a default or error value
-//                    return@setOnClickListener // Exit the function early
-//                }
-//
-//                val status: Int = if (switchStatus) {
-//                    1
-//                } else {
-//                    0
-//                } // 1 for enabled, 0 for disabled
-//
-//                val newConsumable = Consumable(
-//                    consumableId = 0,
-//                    consumableName = item,
-//                    consumableBrand = brand,
-//                    consumableType = type,
-//                    consumableSize = size,
-//                    barcodeId = itemCode,
-//                    unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
-//                    perUnitQuantity = perUnitQuantity,
-//                    minimumQuantity = minQuantity,
-//                    isActive = status
-//                )
-//
-//                // use the function in ViewModel to add the user
-//                //recordViewModel.addConsumable(newConsumable)
-//
-//                // display success message
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Consumable created successfully!",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//
+//            if (batchDetails.any { it.batchNumber == batchNumber }) {
+//                Toast.makeText(requireContext(), "Batch Detail created successfully!", Toast.LENGTH_SHORT)
+//                    .show()
 //                dismiss()
 //            }
+//        })
+
+        recordViewModel.allRecords.observe(viewLifecycleOwner, Observer { record ->
+            // You need to get the batch number inside this observer to avoid reference issues, don't know how to implement this
+//            val batchNumber = batchNumberInput.text.toString().trim()
+//
+//            if (record.any { it.recordId == batchNumber }) {
+//                Toast.makeText(requireContext(), "Record created successfully!", Toast.LENGTH_SHORT)
+//                    .show()
+//                dismiss()
+//            }
+        })
+
+        val quantityInput =
+            view.findViewById<TextInputEditText>(R.id.textInputEditTextQuantity)
+        val remarksInput =
+            view.findViewById<TextInputEditText>(R.id.textInputEditTextRemarks)
+        val switchRecordType = view.findViewById<MaterialSwitch>(R.id.switchRecordType)
+        val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
+
+        // Consumable Spinner
+        val searchableSpinnerConsumable = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerConsumable)
+        searchableSpinnerConsumable.setTitle("Select Consumable");
+        var consumableNames: List<String> = emptyList()
+        var selectedConsumableId: Int = -1
+
+        // Batch Spinner
+        val searchableSpinnerBatch = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerBatch)
+        searchableSpinnerConsumable.setTitle("Select Consumable");
+//        var batchNumbers: List<String> = emptyList()
+
+        // Fetch the list of consumables from the ViewModel
+        consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+            // Update the consumableNames list when data is available
+            consumableNames = consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
+
+            // Create an ArrayAdapter and set it to the SearchableSpinner
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumableNames)
+            searchableSpinnerConsumable.adapter = adapter
+
+            searchableSpinnerConsumable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    // Get the selected consumable item
+                    val selectedConsumableName = consumableNames[position]
+
+                    // Find the corresponding Consumable object based on the name
+                    val selectedConsumable = consumables.find { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize == selectedConsumableName }
+
+                    if (selectedConsumable != null) {
+                        selectedConsumableId = selectedConsumable.consumableId
+
+                        // Show the SearchableSpinner for Batch
+                        showHideSpinnerBatch(searchableSpinnerBatch = searchableSpinnerBatch, selectedConsumableId = selectedConsumableId)
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    // do nothing
+                }
+            }
+        }
+
+
+
+
+        // Fetch the list of consumables from the ViewModel
+//        batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batches ->
+//
+//            batchNumbers = batches
+//                .filter { it.consumableId == selectedConsumableId }
+//                .map { it.batchNumber }
+//
+//            // Create an ArrayAdapter and set it to the SearchableSpinner
+//            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, batchNumbers)
+//            searchableSpinnerBatch.adapter = adapter
+//
+//            searchableSpinnerBatch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                    // Get the selected consumable item
+//                    val selectedBatchNumber = batchNumbers[position]
+//
+//                    // Find the corresponding Consumable object based on the name
+//                    val selectedBatch = batches.find { it.batchNumber == selectedBatchNumber }
+//
+//                    if (selectedBatch != null) {
+//                        selectedBatchId = selectedBatch.batchId
+//                    }
+//                }
+//
+//                override fun onNothingSelected(p0: AdapterView<*>?) {
+//                    // do nothing
+//                }
+//            }
 //        }
+
+        // User Spinner
+        val searchableSpinnerUser = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerUser)
+        searchableSpinnerConsumable.setTitle("Select Consumable");
+        var userNames: List<String> = emptyList()
+        var selectedUserId: Int = -1
+
+        // Fetch the list of consumables from the ViewModel
+        userViewModel.allUsers.observe(viewLifecycleOwner) { users ->
+
+            // Update the consumableNames list when data is available
+            userNames = users.map { it.name }
+
+            // Create an ArrayAdapter and set it to the SearchableSpinner
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, userNames)
+            searchableSpinnerUser.adapter = adapter
+
+            searchableSpinnerUser.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    // Get the selected consumable item
+                    val selectedUserName = userNames[position]
+
+                    // Find the corresponding Consumable object based on the name
+                    val selectedUser = users.find { it.name == selectedUserName }
+
+                    if (selectedUser != null) {
+                        selectedUserId = selectedUser.userId
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    // do nothing
+                }
+            }
+        }
+
+        val saveButton = view.findViewById<MaterialButton>(R.id.buttonSave)
+
+        closeButton.setOnClickListener { dismiss() }
+
+        val titleView = view.findViewById<TextView>(R.id.titleViewAddRecord)
+
+        switchRecordType.setOnClickListener {
+            if (switchRecordType.isChecked) {
+                titleView.text = "Add Take-Out Record"
+            } else {
+                titleView.text = "Add Put-In Record"
+            }
+        }
+
+        saveButton.setOnClickListener {
+            val batchNumber = batchNumberInput.text.toString().trim()
+
+            // Get the current date
+            val currentDate = LocalDate.now()
+            val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val createDate = currentDate.format(dateFormatter)
+
+            val quantityValue = quantityInput.text.toString().trim()
+            val remarksValue = remarksInput.text.toString().trim()
+            val isActive = if (switchStatus.isChecked) 1 else 0
+            val isTakeOut = if (switchRecordType.isChecked) RecordType.TAKE_OUT else RecordType.PUT_IN
+            val consumableId = selectedConsumableId
+            val batchId = selectedBatchId
+            val userId = selectedUserId
+
+            when {
+
+//                batchNumber.isEmpty() -> Toast.makeText(
+//                    requireContext(),
+//                    "Batch Number is required.",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//
+//                batchNumber.length < 5 -> Toast.makeText(
+//                    requireContext(),
+//                    "Batch Number should be at least 5 characters long.",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+
+
+                quantityValue.isEmpty() -> Toast.makeText(
+                    requireContext(),
+                    "Quantity Received is required.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                (quantityValue.toIntOrNull() ?: 0) <= 0 -> Toast.makeText(
+                    requireContext(),
+                    "Quantity should be more than 0.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+//                consumableId == -1 ->  Toast.makeText(
+//                    requireContext(),
+//                    "Please select a Consumable.",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+
+                batchId == -1 ->  Toast.makeText(
+                    requireContext(),
+                    "Please select a Batch.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                userId == -1 ->  Toast.makeText(
+                    requireContext(),
+                    "Please select a user.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                else -> {
+                    val quantity = quantityValue.toInt()
+
+                    val newRecord = Record(
+                        recordId = 0,
+                        recordDate = createDate,
+                        recordQuantityChanged = quantity,
+                        recordRemarks = remarksValue,
+                        recordType = isTakeOut,
+                        isActive = isActive,
+                        batchId = batchId,
+                        userId = userId
+                    )
+
+                    recordViewModel.addRecord(newRecord)
+
+
+                    dismiss()
+                }
+            }
+        }
+
     }
-}
 
+    fun showHideSpinnerBatch(searchableSpinnerBatch: SearchableSpinner, selectedConsumableId: Int) {
+//        if (searchableSpinnerBatch.visibility == SearchableSpinner.VISIBLE) {
+//            // Clear the text inside the SearchView (Optional)
+//            view.setQuery(
+//                "",
+//                false
+//            ) // The second argument indicates whether to submit the query or not (false to clear only)
+//
+//            // Make SearchView invisible
+//            view.visibility = SearchView.INVISIBLE
+//            // Set the height of the SearchView to 0
+//            val layoutParams = view.layoutParams as ViewGroup.LayoutParams
+//            layoutParams.height = 0
+//            view.layoutParams = layoutParams
+//
+//            // Change the right drawable of the Button when hiding the SearchView
+//            searchButton.setCompoundDrawablesWithIntrinsicBounds(
+//                0,// Replace with the ID of your desired left drawable
+//                0, // Set 0 for no drawable on the top
+//                R.drawable.baseline_search_24, // Set 0 for no drawable on the right
+//                0  // Set 0 for no drawable on the bottom
+//            )
+//
+//        } else
+        if (selectedConsumableId != -1) {
+            var batchNumbers: List<String> = emptyList()
 
+            // Filer by SelectedConsumableId
+            batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batches ->
 
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+                batchNumbers = batches
+                    .filter { it.consumableId == selectedConsumableId }
+                    .map { it.batchNumber }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    ScannerAppTheme {
-        Greeting2("Android")
+                // Create an ArrayAdapter and set it to the SearchableSpinner
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, batchNumbers)
+                searchableSpinnerBatch.adapter = adapter
+
+                searchableSpinnerBatch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        // Get the selected consumable item
+                        val selectedBatchNumber = batchNumbers[position]
+
+                        // Find the corresponding Consumable object based on the name
+                        val selectedBatch = batches.find { it.batchNumber == selectedBatchNumber }
+
+                        if (selectedBatch != null) {
+                            selectedBatchId = selectedBatch.batchId
+                        }
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        // do nothing
+                    }
+                }
+            }
+
+            // Make SearchView visible
+            searchableSpinnerBatch.visibility = SearchableSpinner.VISIBLE
+            // Restore the original height (or set a specific height if needed)
+            val layoutParams = searchableSpinnerBatch.layoutParams as ViewGroup.LayoutParams
+            layoutParams.height =
+                116 // You can use specific height if needed
+            searchableSpinnerBatch.layoutParams = layoutParams
+
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel() // Cancel all coroutines
     }
 }
