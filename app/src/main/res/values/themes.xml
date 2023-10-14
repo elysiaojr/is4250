@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ScannerApp" parent="@style/Theme.AppCompat.Light">
-<!--        <item name="windowNoTitle">true</item>-->
-<!--        <item name="windowActionBar">false</item>-->
-<!--        <item name="android:windowFullscreen">true</item>-->
-<!--        <item name="android:windowContentOverlay">@null</item>-->
-    </style>
+    <style name="Theme.ScannerApp" parent="Theme.Material3.Light.NoActionBar">
+    <item name="colorPrimary">#3368B7</item></style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ScannerApp" parent="Theme.Material3.DayNight.NoActionBar"></style>
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+
 </resources>

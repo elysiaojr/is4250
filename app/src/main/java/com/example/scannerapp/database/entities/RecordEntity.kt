@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 
 
 // Entity: Record
-// INSERT into record (recordDate, recordQuantityTaken, recordRemarks, recordType, batchId, userId) VALUES (0, "19/05/2023", 0, "Test", "TAKE_OUT", 0, 0)
+// INSERT into record (recordDate, recordQuantityChanged, recordRemarks, recordType, isActive, batchId, userId) VALUES ("19/05/2023", 5, "Test", "TAKE_OUT", 1, 0, 0)
 @Entity(
   tableName = "record",
   foreignKeys = [
@@ -28,9 +28,10 @@ data class Record(
   @PrimaryKey(autoGenerate = true)
   val recordId: Int = 1,
   val recordDate: String,
-  val recordQuantityTaken: Int,
-  val recordRemarks: String,
+  val recordQuantityChanged: Int,
+  val recordRemarks: String?,
   val recordType: RecordType,
+  val isActive: Int,
   val batchId: Int,
   val userId: Int
 )

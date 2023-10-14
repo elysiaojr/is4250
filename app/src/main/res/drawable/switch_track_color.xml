@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+        <!-- Thumb color when the switch is checked (enabled) -->
+        <item android:state_checked="true" android:color="@color/switch_track_enabled" />
+        <!-- Thumb color when the switch is unchecked (disabled) -->
+        <item android:color="@color/switch_track_disabled" />
+</selector>

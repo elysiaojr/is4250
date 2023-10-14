@@ -1,0 +1,88 @@
+package com.example.scannerapp.ui
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
+import com.example.scannerapp.R
+import androidx.lifecycle.ViewModelProvider
+import com.example.scannerapp.database.entities.Consumable
+import com.example.scannerapp.viewmodels.ConsumableViewModel
+
+// This activity displays details of a consumable.
+class ConsumableDetailsActivity : AppCompatActivity(),
+  EditConsumableDialog.OnConsumableUpdatedListener {
+
+  // Define UI elements and data models.
+  private lateinit var consumableNameTextView: TextView
+  private lateinit var consumableBarcodeIdTextView: TextView
+  private lateinit var consumableCurrentQuantityTextView: TextView
+  private lateinit var consumableMinimumQuantityTextView: TextView
+  private var consumable: Consumable? = null
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_consumable_details)
+
+    // Retrieve the selected consumable from the intent.
+    consumable = intent.getParcelableExtra("consumable")
+
+    // Initialize views.
+    consumableNameTextView = findViewById(R.id.consumableNameTextView)
+    consumableBarcodeIdTextView = findViewById(R.id.consumableBarcodeIdTextView)
+    consumableCurrentQuantityTextView = findViewById(R.id.consumableCurrentQuantityTextView)
+    consumableMinimumQuantityTextView = findViewById(R.id.consumableMinimumQuantityTextView)
+
+    // Display the consumable details in the UI.
+    consumable?.let {
+      updateUIWithConsumableData(it)
+    }
+
+    // Define and set the action for the back button.
+    val backButton = findViewById<ImageView>(R.id.backButton)
+    backButton.setOnClickListener {
+      handleOnBackPressed() // Navigate back to the previous screen.
+    }
+
+    // Define and set the action for the edit button.
+    val fab = findViewById<Button>(R.id.consumableEditButton)
+    fab.setOnClickListener {
+      // Open the EditConsumableDialog to edit the consumable details.
+      val dialogFragment = consumable?.let { it1 -> EditConsumableDialog(it1) }
+      dialogFragment?.consumableUpdatedListener = this
+      dialogFragment?.show(supportFragmentManager, "EditConsumableDialog")
+    }
+  }
+
+  // Handle the back button press.
+  private fun handleOnBackPressed() {
+    super.onBackPressed()
+  }
+
+  // Convert the status of the GS1 barcode to a readable string.
+  private fun getIsGS1BarcodeText(status: Int): String {
+    return when (status) {
+      0 -> "No"
+      1 -> "Yes"
+      else -> "Unknown"
+    }
+  }
+
+  // Update the UI views with data from the Consumable object.
+  private fun updateUIWithConsumableData(consumable: Consumable) {
+    consumableNameTextView.text = consumable.consumableName
+    consumableBarcodeIdTextView.text = consumable.barcodeId
+    val currentQuantity = "${consumable.perUnitQuantity} ${consumable.unitOfMeasurement}"
+    consumableCurrentQuantityTextView.text = currentQuantity
+    val minimumQuantity = "${consumable.minimumQuantity} ${consumable.unitOfMeasurement}"
+    consumableMinimumQuantityTextView.text = minimumQuantity
+  }
+
+  // Callback function to update the UI after editing a consumable.
+  override fun onConsumableUpdated(updatedConsumable: Consumable) {
+    consumable = updatedConsumable
+    updateUIWithConsumableData(updatedConsumable)
+  }
+}

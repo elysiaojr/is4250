@@ -7,4 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    // switch
+    <color name="switch_thumb_enabled">#E3EEF5</color>
+    <color name="switch_track_enabled">#34A770</color>
+    <color name="switch_thumb_disabled">#E3EEF5</color>
+    <color name="switch_track_disabled">#C67B6A</color>
+
+    // textInput
+    <color name="text_input_background">#E3EEF5</color>
+    <color name="text_input_hint">#707F8E</color>
+
+    // button
+    <color name="button_background">#71AACC</color>
+
+
 </resources>

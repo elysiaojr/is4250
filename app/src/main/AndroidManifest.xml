@@ -12,26 +12,70 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScannerApp"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.ConsumableDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_consumable_details"
+            android:theme="@style/Theme.ScannerApp" />
+        <activity
+            android:name=".ui.ListConsumablesActivity"
+            android:exported="true"
+            android:label="@string/title_activity_list_consumables"
+            android:theme="@style/Theme.ScannerApp"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity
+            android:name=".ui.ListRecordsActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
 
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true">
 
-        <activity
-            android:name=".ui.CreateUserActivity"
-            android:exported="true" >
-            <!-- add this intent-filter to whichever activity you want to show on launch -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
+        </activity>
         <activity
             android:name=".ui.ListUsersActivity"
-            android:exported="false" >
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+
+
         </activity>
+        <activity
+            android:name=".ui.UserDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_user_details"
+            android:theme="@style/Theme.ScannerApp" />
+        <activity
+            android:name=".ui.ListBatchDetailsActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+            <!-- add this intent-filter tmo whichever activity you want to show on launch -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".ui.BatchDetailsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_batch_details"
+            android:theme="@style/Theme.ScannerApp" />
+
+        <activity
+            android:name=".ui.VerticalBarcodeScanner"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+
     </application>
 
 </manifest>
