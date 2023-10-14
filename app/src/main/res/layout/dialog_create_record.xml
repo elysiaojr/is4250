@@ -34,6 +34,42 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutConsumableTitleFromBarcodeData"
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Consumable *"
+                android:textColorHint="@color/black"
+                app:helperTextEnabled="true"
+                app:helperText="E.g. ABC123">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditTextConsumableTitleFromBarcodeData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutBatchNumber"
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Batch Number *"
+                android:textColorHint="@color/black"
+                app:helperTextEnabled="true"
+                app:helperText="E.g. ABC123">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditTextBatchNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/searchableSpinnerConsumable"
                 android:layout_width="match_parent"

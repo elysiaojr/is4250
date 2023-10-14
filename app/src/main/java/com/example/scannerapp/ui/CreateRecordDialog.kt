@@ -78,6 +78,8 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             view.findViewById<TextInputEditText>(R.id.textInputEditTextRemarks)
         val switchRecordType = view.findViewById<MaterialSwitch>(R.id.switchRecordType)
         val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
+        val batchNumberInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextBatchNumber)
+        val consumableTitleInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextConsumableTitleFromBarcodeData)
 
         // Consumable Spinner
         val searchableSpinnerConsumable = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerConsumable)
@@ -91,22 +93,42 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
 
         // Retrieve the scanned data from the arguments (from barcode)
         val scannedData = arguments?.getString("scannedData")
+        // Populate the batchNumberInput with the scanned data (from barcode)
+        batchNumberInput.setText(scannedData)
         // Barcode scanner detected barcode number
+
         if (scannedData?.length != 0) {
-            batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batchDetails ->
-                for (batchDetail in batchDetails) {
-                    if (batchDetail.batchNumber == scannedData) {
-                        // Batch Number exists in the database
-                        selectedBatchId = batchDetail.batchId
-                        selectedConsumableId = batchDetail.consumableId
-                        hasValidScannedBatchNumber = true
-                        break;
-                    }
-                }
+            searchableSpinnerBatch.visibility = SearchableSpinner.VISIBLE
+            searchableSpinnerConsumable.visibility = SearchableSpinner.VISIBLE
+
+            consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+                val selectedConsumable = consumables.find { it.consumableId == selectedConsumableId }
+                consumableTitleInput.setText(selectedConsumable?.getConsumableTitle())
+
+//                for (consumable in Consumable) {
+//                    if (batchDetail.batchNumber == scannedData) {
+//                        // Batch Number exists in the database
+//                        selectedConsumableId = batchDetail.consumableId
+//                        selectedBatchId = batchDetail.batchId
+//                        hasValidScannedBatchNumber = true
+//
+//                        // Update the searchableSpinnerConsumable selection when the data is available
+//                        updateSearchableSpinnerSelection(searchableSpinnerConsumable, selectedConsumableId)
+//                        break;
+//                    }
+//                }
             }
-            if (!hasValidScannedBatchNumber) {
-                // Prompt user to create new batch
-            }
+//            if (hasValidScannedBatchNumber) {
+//                // Prompt user to create new batch
+//                // Searchable Spinner: Fetch the list of consumables from the ViewModel
+//                consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+//                    val consumableAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumables)
+//                    searchableSpinnerConsumable.adapter = consumableAdapter
+//                    searchableSpinnerConsumable.setSelection(consumableAdapter.getPosition(consumable.consumableId == selectedConsumableId))
+//                }
+//            } else {
+//
+//            }
         }
 
 
@@ -120,37 +142,46 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         // Searchable Spinner: Fetch the list of consumables from the ViewModel
         consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
             // Update the consumableNames list when data is available
-            consumableNames = consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
-
+            consumableNames = consumables.map { it.getConsumableTitle() }
             // Create an ArrayAdapter and set it to the SearchableSpinner
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumableNames)
-            searchableSpinnerConsumable.adapter = adapter
+            val consumableAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumableNames)
+            searchableSpinnerConsumable.adapter = consumableAdapter
 
-            searchableSpinnerConsumable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    // Get the selected consumable item
-                    val selectedConsumableName = consumableNames[position]
+//            if (hasValidScannedBatchNumber) {
+////                println("selectedConsumable: " + selectedConsumableId)
+////                val selectedConsumableById = consumables.find {it.consumableId == selectedConsumableId }
+////                println("selectedConsumable: by ID " + selectedConsumableById)
+////                val selectedConsumableByIdTitle = selectedConsumableById?.getConsumableTitle()
+////                println("selectedConsumable: by ID title" + selectedConsumableByIdTitle)
+////                println("selectedConsumable: consumableAdapter.getPosition " + consumableAdapter.getPosition(selectedConsumableByIdTitle))
+////                searchableSpinnerConsumable.setSelection(consumableAdapter.getPosition(selectedConsumableByIdTitle))
+//            } else {
+                searchableSpinnerConsumable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        // Get the selected consumable item
+                        val selectedConsumableName = consumableNames[position]
 
-                    // Find the corresponding Consumable object based on the name
-                    val selectedConsumable = consumables.find { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize == selectedConsumableName }
+                        // Find the corresponding Consumable object based on the name
+                        val selectedConsumable = consumables.find { it.getConsumableTitle() == selectedConsumableName }
 
-                    if (selectedConsumable != null) {
-                        selectedConsumableId = selectedConsumable.consumableId
+                        if (selectedConsumable != null) {
+                            selectedConsumableId = selectedConsumable.consumableId
 
-                        // Show the SearchableSpinner for Batch
-                        showHideSpinnerBatch(searchableSpinnerBatch = searchableSpinnerBatch, selectedConsumableId = selectedConsumableId)
+                            // Show the SearchableSpinner for Batch
+                            showHideSpinnerBatch(searchableSpinnerBatch = searchableSpinnerBatch, selectedConsumableId = selectedConsumableId)
+                        }
                     }
-                }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    // do nothing
-                }
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        // do nothing
+                    }
+//                }
             }
         }
 
         // User Spinner
         val searchableSpinnerUser = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerUser)
-        searchableSpinnerConsumable.setTitle("Select Consumable");
+        searchableSpinnerUser.setTitle("Select User");
         var userNames: List<String> = emptyList()
         var selectedUserId: Int = -1
 
@@ -161,8 +192,8 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             userNames = users.map { it.name }
 
             // Create an ArrayAdapter and set it to the SearchableSpinner
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, userNames)
-            searchableSpinnerUser.adapter = adapter
+            val userAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, userNames)
+            searchableSpinnerUser.adapter = userAdapter
 
             searchableSpinnerUser.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -260,6 +291,22 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             }
         }
 
+    }
+    private fun updateSearchableSpinnerSelection(searchableSpinnerConsumable: SearchableSpinner, selectedConsumableId: Int) {
+        consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+            val consumableAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumables.map { it.getConsumableTitle() })
+            searchableSpinnerConsumable.adapter = consumableAdapter
+
+            val selectedConsumable = consumables.find { it.consumableId == selectedConsumableId }
+
+            if (selectedConsumable != null) {
+                val selectedConsumableTitle = selectedConsumable.getConsumableTitle()
+                val position = consumableAdapter.getPosition(selectedConsumableTitle)
+
+                // Set the selection of the searchableSpinnerConsumable
+                searchableSpinnerConsumable.setSelection(position)
+            }
+        }
     }
 
     fun showHideSpinnerBatch(searchableSpinnerBatch: SearchableSpinner, selectedConsumableId: Int) {

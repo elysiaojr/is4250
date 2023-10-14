@@ -49,7 +49,7 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
                 }
             } else {
                 // Handle the case when scanning was canceled or failed.
-                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Barcode scanning cancelled.", Toast.LENGTH_LONG).show();
             }
         }
 
