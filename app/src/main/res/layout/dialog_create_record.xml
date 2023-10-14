@@ -79,6 +79,7 @@
                 android:background="@drawable/searchable_spinner_background"/>
 
             <TextView
+                android:id="@+id/searchableSpinnerGuide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Select a Consumable to find Batch"

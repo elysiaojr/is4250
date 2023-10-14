@@ -1,8 +1,11 @@
 package com.example.scannerapp.ui
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
@@ -15,22 +18,31 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.appcompat.app.AppCompatActivity
 import com.example.scannerapp.R
+import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 import com.journeyapps.barcodescanner.ScanOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
 
-class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
-
+class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), CoroutineScope {
+    private val job = Job()
     private lateinit var recordsViewModel: RecordViewModel
+    private lateinit var batchDetailsViewModel: BatchDetailsViewModel
+    private val activityScope = CoroutineScope(Dispatchers.Main)
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private val barcodeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -40,12 +52,25 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
                 if (scanResult == null) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "Scanned: $scanResult", Toast.LENGTH_LONG).show();
-                    val dialogFragment = CreateRecordDialog()
-                    val bundle = Bundle()
-                    bundle.putString("scannedData", scanResult)
-                    dialogFragment.arguments = bundle
-                    dialogFragment.show(supportFragmentManager, "CreateRecordDialog")
+                    activityScope.launch {
+                        val batchExists = checkIfBatchNumberExists(scanResult)
+
+                        if (batchExists) {
+                            Toast.makeText(this@ListRecordsActivity, "Scanned: $scanResult", Toast.LENGTH_LONG).show()
+                            val dialogFragment = CreateRecordDialog()
+                            val bundle = Bundle()
+                            bundle.putString("scannedData", scanResult)
+                            dialogFragment.arguments = bundle
+                            dialogFragment.show(supportFragmentManager, "CreateRecordDialog")
+                        } else {
+                            Toast.makeText(this@ListRecordsActivity, "Batch with batch number $scanResult does not exist.", Toast.LENGTH_LONG).show()
+                            val dialogFragment = NoExistingBatchDialogFragment()
+                            val bundle = Bundle()
+                            bundle.putString("scannedData", scanResult)
+                            dialogFragment.arguments = bundle
+                            dialogFragment.show(supportFragmentManager, "NoExistingBatchDialogFragment")
+                        }
+                    }
                 }
             } else {
                 // Handle the case when scanning was canceled or failed.
@@ -76,7 +101,6 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
             barcodeLauncher.launch(intent)
         }
     }
-
     // Composable function for barcode scanning
     @Composable
     private fun BarcodeScanner() {
@@ -106,4 +130,29 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records) {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.item_records
     }
+
+    private suspend fun checkIfBatchNumberExists(batchDetailsBatchNumber: String): Boolean {
+//        var exists = false
+//        activityScope.launch {
+//            val consumableFromBarcodeTitle = withContext(Dispatchers.IO) {
+//                exists = batchDetailsViewModel.checkIfBatchNumberExists(batchDetailsBatchNumber)
+//            }
+//        }
+//        return exists
+        batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+        return withContext(Dispatchers.IO) {
+            batchDetailsViewModel.checkIfBatchNumberExists(batchDetailsBatchNumber)
+        }
+
+    }
 }
+
+//                    } else {
+//                        // Prompt them to either continue scanning or create new batch
+//                        Toast.makeText(this, "Scanned: $scanResult", Toast.LENGTH_LONG).show();
+//                        val dialogFragment = NoExistingBatchDialogFragment()
+//                        val bundle = Bundle()
+//                        bundle.putString("scannedData", scanResult)
+//                        dialogFragment.arguments = bundle
+//                        dialogFragment.show(supportFragmentManager, "NoExistingBatchDialogFragment")
+//                    }

@@ -50,6 +50,10 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
     batchDetailsDao.delete(batchDetails)
   }
 
+  suspend fun countOfBatchDetailsByBatchNumber(batchNumber: String): Int {
+    return batchDetailsDao.countOfBatchDetailsByBatchNumber(batchNumber)
+  }
+
   suspend fun getBatchDetailsById(batchId: Int): BatchDetails {
     return batchDetailsDao.getBatchDetailById(batchId)
   }
@@ -76,6 +80,22 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
 
   suspend fun getBatchDetailConsumableSize(consumableId: Int): String {
     return batchDetailsDao.getBatchDetailConsumableSize(consumableId)
+  }
+
+  suspend fun getBatchDetailConsumableNameByBatchNumber(batchNumber: String): String {
+    return batchDetailsDao.getBatchDetailConsumableNameByBatchNumber(batchNumber)
+  }
+
+  suspend fun getBatchDetailConsumableBrandByBatchNumber(batchNumber: String): String {
+    return batchDetailsDao.getBatchDetailConsumableBrandByBatchNumber(batchNumber)
+  }
+
+  suspend fun getBatchDetailConsumableTypeByBatchNumber(batchNumber: String): String {
+    return batchDetailsDao.getBatchDetailConsumableTypeByBatchNumber(batchNumber)
+  }
+
+  suspend fun getBatchDetailConsumableSizeByBatchNumber(batchNumber: String): String {
+    return batchDetailsDao.getBatchDetailConsumableSizeByBatchNumber(batchNumber)
   }
 
   private fun validateBatchDetails(batchDetails: BatchDetails) {

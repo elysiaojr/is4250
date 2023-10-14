@@ -25,6 +25,9 @@ interface BatchDetailsDao {
   @Delete
   suspend fun delete(batchDetail: BatchDetails)
 
+  @Query("SELECT COUNT(*) FROM batch_details WHERE batchNumber = :batchNumber")
+  suspend fun countOfBatchDetailsByBatchNumber(batchNumber: String): Int
+
   @Query("SELECT * FROM batch_details WHERE batchId = :id")
   suspend fun getBatchDetailById(id: Int): BatchDetails
 
@@ -45,6 +48,18 @@ interface BatchDetailsDao {
 
   @Query("SELECT consumable.consumableSize FROM consumable WHERE consumableId = :id")
   suspend fun getBatchDetailConsumableSize(id: Int): String
+
+  @Query("SELECT consumable.consumableName FROM consumable INNER JOIN batch_details ON consumable.consumableId = batch_details.consumableId WHERE batch_details.batchNumber = :batchNumber")
+  suspend fun getBatchDetailConsumableNameByBatchNumber(batchNumber: String): String
+
+  @Query("SELECT consumable.consumableBrand FROM consumable INNER JOIN batch_details ON consumable.consumableId = batch_details.consumableId WHERE batch_details.batchNumber = :batchNumber")
+  suspend fun getBatchDetailConsumableBrandByBatchNumber(batchNumber: String): String
+
+  @Query("SELECT consumable.consumableType FROM consumable INNER JOIN batch_details ON consumable.consumableId = batch_details.consumableId WHERE batch_details.batchNumber = :batchNumber")
+  suspend fun getBatchDetailConsumableTypeByBatchNumber(batchNumber: String): String
+
+  @Query("SELECT consumable.consumableSize FROM consumable INNER JOIN batch_details ON consumable.consumableId = batch_details.consumableId WHERE batch_details.batchNumber = :batchNumber")
+  suspend fun getBatchDetailConsumableSizeByBatchNumber(batchNumber: String): String
 
   @Query("SELECT * FROM batch_details")
   fun getAllBatchDetails(): LiveData<List<BatchDetails>>
