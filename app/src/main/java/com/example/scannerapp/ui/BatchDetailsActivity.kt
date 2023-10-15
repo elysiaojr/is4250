@@ -27,6 +27,8 @@ class BatchDetailsActivity : AppCompatActivity() {
   private lateinit var batchReceivedQuantityTextView: TextView
   private lateinit var batchRemainingQuantityTextView: TextView
   private lateinit var batchConsumableTextView: TextView
+  private lateinit var createRecordButton: Button
+
   private var batchDetail: BatchDetails? = null
   private val activityScope = CoroutineScope(Dispatchers.Main)
 
@@ -44,10 +46,19 @@ class BatchDetailsActivity : AppCompatActivity() {
     batchReceivedQuantityTextView = findViewById(R.id.batchReceivedQuantityTextView)
     batchRemainingQuantityTextView = findViewById(R.id.batchRemainingQuantityTextView)
     batchConsumableTextView = findViewById(R.id.batchConsumableTextView)
+    createRecordButton = findViewById<Button>(R.id.batchCreateRecordButton)
 
     // Display the batch details in the UI.
     batchDetail?.let {
       updateUIWithBatchData(it)
+    }
+
+    createRecordButton.setOnClickListener {
+      val dialogFragment = CreateRecordDialog()
+      val bundle = Bundle()
+      bundle.putString("scannedData", batchNumberTextView.text.toString()) // batchNumber
+      dialogFragment.arguments = bundle
+      dialogFragment.show(supportFragmentManager, "CreateRecordDialog")
     }
 
     // Define and set the action for the back button.
