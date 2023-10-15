@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
+import com.example.scannerapp.adapters.BatchDetailsListAdapter
+import com.example.scannerapp.adapters.RecordsListAdapter
+import com.example.scannerapp.ui.utils.showHide
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -38,9 +41,14 @@ import kotlin.coroutines.CoroutineContext
 
 class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), CoroutineScope {
     private val job = Job()
-    private lateinit var recordsViewModel: RecordViewModel
     private lateinit var batchDetailsViewModel: BatchDetailsViewModel
+    private lateinit var recordsViewModel: RecordViewModel
+    private lateinit var recordsListView: ListView
+    private lateinit var searchView: SearchView
+    private lateinit var searchButton: Button
+    private lateinit var adapter: RecordsListAdapter
     private val activityScope = CoroutineScope(Dispatchers.Main)
+
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
@@ -81,13 +89,43 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        recordsViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)
+        recordsListView = findViewById<ListView>(R.id.recordsList)
+        searchView = findViewById(R.id.recordsSearchView)
+        searchButton = findViewById(R.id.recordsListSearchButton)
+
+        // Create the adapter and set it initially
+        adapter = RecordsListAdapter(this, emptyList(), recordsViewModel)
+        recordsListView.adapter = adapter
+
+        // Observe the LiveData and update the adapter when data changes
+        recordsViewModel.allRecords.observe(this, Observer { records ->
+            adapter.updateData(records)
+        })
+
+        // Set up the SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
+
+        // Toggle SearchView visibility
+        searchButton.setOnClickListener {
+            showHide(searchView, searchButton)
+        }
+
         // Floating Action Button
         val fab = findViewById<FloatingActionButton>(R.id.fab_records)
         fab.setOnClickListener {
             val dialogFragment = CreateRecordDialog()
             dialogFragment.show(supportFragmentManager, "CreateRecordDialog")
         }
-        recordsViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)
 
         val fabBarcode = findViewById<FloatingActionButton>(R.id.fab_records_barcode)
         fabBarcode.setOnClickListener {
