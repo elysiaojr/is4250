@@ -200,12 +200,13 @@
         android:layout_marginVertical="18sp"
         android:background="#c0c0c0" />
 
+
     <!-- Buttons at the bottom -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="0dp">
 
       <!-- Delete Button -->
       <Button
@@ -233,5 +234,29 @@
           android:textSize="16sp"
           android:textAlignment="textStart" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:padding="16dp"
+        android:layout_marginVertical="18sp"
+        android:background="#c0c0c0" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="0dp">
+
+      <!-- Delete Button -->
+      <Button
+          android:id="@+id/batchCreateRecordButton"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:drawableLeft="@drawable/baseline_add_24_white"
+          android:text="Create Record"
+          android:textSize="16sp"
+          android:textAlignment="center" />
+    </LinearLayout>
+
   </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

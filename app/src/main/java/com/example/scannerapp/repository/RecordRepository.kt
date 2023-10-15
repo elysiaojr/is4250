@@ -39,10 +39,16 @@ class RecordRepository(
     }
   }
 
-  suspend fun addRecord(record: Record) {
-    validateRecord(record)
-    adjustBatchDetails(record)
-    recordDao.insert(record)
+  suspend fun addRecord(record: Record): Boolean {
+    return try {
+      validateRecord(record)
+      adjustBatchDetails(record)
+      recordDao.insert(record)
+      true
+    } catch (e: Exception) {
+      println("in add record (AT REPOSITORY): " + e.message)
+      throw e
+    }
   }
 
   suspend fun updateRecord(record: Record) {

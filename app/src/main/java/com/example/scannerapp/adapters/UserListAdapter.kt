@@ -43,6 +43,7 @@ class UserListAdapter(private val context: Context, private var userList: List<U
         // Set user data to views
         usernameTextView.text = user.name // Replace with user's name
 
+        // Handles navigation
         val listItemLayout = view.findViewById<ConstraintLayout>(R.id.user_list_item)
         listItemLayout.setOnClickListener {
             // Handle item click here
@@ -50,7 +51,6 @@ class UserListAdapter(private val context: Context, private var userList: List<U
             intent.putExtra("user", user) // Pass the selected user's data
             context.startActivity(intent)
         }
-
         return view
     }
 }

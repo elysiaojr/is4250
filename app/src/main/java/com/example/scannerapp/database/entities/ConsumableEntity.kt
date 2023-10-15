@@ -80,6 +80,13 @@ data class Consumable(
       return arrayOfNulls(size)
     }
   }
+
+  // New method to concatenate name, brand, type, and size
+  fun getConsumableTitle(): String {
+    val typeString = consumableType ?: ""
+    val sizeString = consumableSize ?: ""
+    return "$consumableName,  $consumableBrand, $typeString, $sizeString"
+  }
 }
 
 

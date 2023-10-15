@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search Consumables">
+
+        <AutoCompleteTextView
+            android:id="@+id/consumablesAutoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:padding="16dp" />
+
+        <!-- Icon button for clearing or selecting dropdown items -->
+        <!-- ListView for displaying the dropdown items -->
+<!--        <FrameLayout-->
+<!--            android:id="@+id/dropdownContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="invisible">-->
+            <ScrollView
+                android:id="@+id/dropdownContainer"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:layout_below="@id/consumablesAutoCompleteTextView"
+                android:padding="16dp">
+                <ListView
+                    android:id="@+id/consumableDropdownList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </ScrollView>
+<!--        </FrameLayout>-->
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

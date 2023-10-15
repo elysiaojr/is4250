@@ -67,7 +67,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:queryHint="Search Consumables..."
-      app:iconifiedByDefault="false" />
+      app:iconifiedByDefault="false"
+        android:visibility="gone"/>
 
     <ScrollView
       android:layout_width="match_parent"

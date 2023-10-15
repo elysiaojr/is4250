@@ -45,13 +45,13 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-  <string name="title_activity_list_consumables">ListConsumablesActivity</string>
-  <string name="title_activity_consumable_details">ConsumableDetailsActivity</string>
-  <string name="title_activity_batch_details">BatchDetailsActivity</string>
-
-  <string-array name="uom_values">
-    <item>BOX</item>
-    <item>PIECE</item>
-    <item>PACK</item>
-  </string-array>
+    <string name="title_activity_list_consumables">ListConsumablesActivity</string>
+    <string name="title_activity_consumable_details">ConsumableDetailsActivity</string>
+    <string name="title_activity_batch_details">BatchDetailsActivity</string>
+    <string-array name="uom_values">
+        <item>BOX</item>
+        <item>PIECE</item>
+        <item>PACK</item>
+    </string-array>
+    <string name="title_activity_create_record">CreateRecordActivity</string>
 </resources>

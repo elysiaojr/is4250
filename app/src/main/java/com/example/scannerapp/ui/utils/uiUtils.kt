@@ -2,8 +2,11 @@ package com.example.scannerapp.ui.utils
 
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.SearchView
 import com.example.scannerapp.R
+import com.example.scannerapp.viewmodels.BatchDetailsViewModel
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 
 fun showHide(view: SearchView, searchButton: Button) {
   if (view.visibility == SearchView.VISIBLE) {
@@ -46,4 +49,6 @@ fun showHide(view: SearchView, searchButton: Button) {
     )
   }
 }
+
+
 
