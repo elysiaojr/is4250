@@ -62,6 +62,10 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
     return batchDetailsDao.getBatchDetailByBatchNumber(batchNumber)
   }
 
+  suspend fun getBatchIdByBatchNumber(batchNumber: String): Int {
+    return batchDetailsDao.getBatchIdByBatchNumber(batchNumber)
+  }
+
   suspend fun getBatchDetailUOM(consumableId: Int): UnitOfMeasurement {
     return batchDetailsDao.getBatchDetailUOM(consumableId)
   }

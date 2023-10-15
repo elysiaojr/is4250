@@ -88,6 +88,7 @@
                 android:paddingTop="2dp"
                 android:paddingLeft="15dp"/>
 
+
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/searchableSpinnerBatch"
                 android:layout_width="match_parent"

@@ -132,13 +132,6 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
     }
 
     private suspend fun checkIfBatchNumberExists(batchDetailsBatchNumber: String): Boolean {
-//        var exists = false
-//        activityScope.launch {
-//            val consumableFromBarcodeTitle = withContext(Dispatchers.IO) {
-//                exists = batchDetailsViewModel.checkIfBatchNumberExists(batchDetailsBatchNumber)
-//            }
-//        }
-//        return exists
         batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
         return withContext(Dispatchers.IO) {
             batchDetailsViewModel.checkIfBatchNumberExists(batchDetailsBatchNumber)
@@ -146,13 +139,3 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
 
     }
 }
-
-//                    } else {
-//                        // Prompt them to either continue scanning or create new batch
-//                        Toast.makeText(this, "Scanned: $scanResult", Toast.LENGTH_LONG).show();
-//                        val dialogFragment = NoExistingBatchDialogFragment()
-//                        val bundle = Bundle()
-//                        bundle.putString("scannedData", scanResult)
-//                        dialogFragment.arguments = bundle
-//                        dialogFragment.show(supportFragmentManager, "NoExistingBatchDialogFragment")
-//                    }

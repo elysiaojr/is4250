@@ -21,6 +21,7 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
   val allRecords: LiveData<List<Record>>
   private val recordRepository: RecordRepository
   val errorLiveData = MutableLiveData<String>() // To pass error message to UI
+  val successLiveData = MutableLiveData<String>() // To pass error message to UI
 
   init {
     val recordDao = AppDatabase.getDatabase(application).recordDao()
@@ -35,17 +36,23 @@ class RecordViewModel(application: Application) : AndroidViewModel(application) 
       is InvalidRecordTypeException,
       is FieldCannotBeEmptyException,
       is ActiveStatusException,
-      is EnumValueDoesNotMatch -> e.message
+      is EnumValueDoesNotMatch -> {
+        errorLiveData.postValue(e.message)
+      }
 
       else -> errorLiveData.postValue("An unknown error occurred")
     }
   }
 
   fun addRecord(record: Record) {
+    println("in add record: " +  record.batchId)
     viewModelScope.launch(Dispatchers.IO) {
       try {
+        println("in add record, try: " +  record.batchId)
         recordRepository.addRecord(record)
+        successLiveData.postValue(record.batchId.toString())
       } catch (e: Exception) {
+        println("in add record, exception: " +  e.message)
         handleException(e)
       }
     }

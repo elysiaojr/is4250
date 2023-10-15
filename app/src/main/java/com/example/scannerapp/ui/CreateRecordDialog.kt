@@ -15,6 +15,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.marginTop
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
@@ -25,6 +26,7 @@ import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.Record
 import com.example.scannerapp.database.entities.RecordType
 import com.example.scannerapp.database.entities.User
+import com.example.scannerapp.exceptions.InsufficientQuantityException
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
@@ -32,6 +34,7 @@ import com.example.scannerapp.viewmodels.UserViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.textfield.TextInputLayout
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -84,7 +87,9 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         val switchRecordType = view.findViewById<MaterialSwitch>(R.id.switchRecordType)
         val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
         val batchNumberInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextBatchNumber)
+        val batchNumberInputLayout = view.findViewById<TextInputLayout>(R.id.textInputLayoutBatchNumber)
         consumableFromBarcode = view.findViewById<TextInputEditText>(R.id.textInputEditTextConsumableTitleFromBarcodeData)
+        val consumableFromBarcodeLayout = view.findViewById<TextInputLayout>(R.id.textInputLayoutConsumableTitleFromBarcodeData)
         val searchableSpinnerGuide = view.findViewById<TextView>(R.id.searchableSpinnerGuide)
 
         // Consumable Spinner
@@ -100,38 +105,23 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         // Retrieve the scanned data from the arguments (from barcode)
         val scannedData = arguments?.getString("scannedData")
 
-
-
         if (!scannedData.isNullOrBlank()) { // Barcode scanner detected barcode number
             processIfBatchNumberExists(scannedData)
-
-            makeBatchConsumableSpinnersInvisible()
-            // Make Batch spinner invisible
-            searchableSpinnerBatch.visibility = SearchableSpinner.INVISIBLE
-            val batchSpinnerLayoutParams = searchableSpinnerBatch.layoutParams as ViewGroup.LayoutParams
-            batchSpinnerLayoutParams.height = 0
-            searchableSpinnerBatch.layoutParams = batchSpinnerLayoutParams
-
-            // Make Batch spinner invisible
-            searchableSpinnerConsumable.visibility = SearchableSpinner.INVISIBLE
-            val consumableSpinnerLayoutParams = searchableSpinnerConsumable.layoutParams as ViewGroup.LayoutParams
-            consumableSpinnerLayoutParams.height = 0
-            searchableSpinnerConsumable.layoutParams = consumableSpinnerLayoutParams
-
-            searchableSpinnerGuide.visibility = TextView.INVISIBLE
-            val searchableSpinnerGuideLayoutParams = searchableSpinnerGuide.layoutParams as ViewGroup.LayoutParams
-            searchableSpinnerGuideLayoutParams.height = 0
-            searchableSpinnerGuide.layoutParams = searchableSpinnerGuideLayoutParams
-
+            makeBatchConsumableSpinnersInvisible(searchableSpinnerBatch, searchableSpinnerConsumable, searchableSpinnerGuide)
             // Populate the batchNumberInput with the scanned data (from barcode)
             batchNumberInput.setText(scannedData)
+            updateBatchDetailIdByBatchNumber(scannedData)
+        } else {
+            makeBatchConsumableTextViewsInvisible(batchNumberInputLayout, consumableFromBarcodeLayout)
         }
 
         recordViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         })
 
-        recordViewModel.allRecords.observe(viewLifecycleOwner, Observer { record ->
+        recordViewModel.successLiveData.observe(viewLifecycleOwner, Observer { recordId ->
+            Toast.makeText(requireContext(), "Record created successfully! $recordId", Toast.LENGTH_SHORT).show()
+            dismiss() // Only dismiss CreateRecordDialog here
         })
 
         // Searchable Spinner: Fetch the list of consumables from the ViewModel
@@ -214,7 +204,6 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         }
 
         saveButton.setOnClickListener {
-//            val batchNumber = batchNumberInput.text.toString().trim()
 
             // Get the current date
             val currentDate = LocalDate.now()
@@ -222,7 +211,7 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             val createDate = currentDate.format(dateFormatter)
 
             val quantityValue = quantityInput.text.toString().trim()
-            val remarksValue = remarksInput.text.toString().trim()
+            val remarksValue = remarksInput.text.toString().trim()?: ""
             val isActive = if (switchStatus.isChecked) 1 else 0
             val isTakeOut = if (switchRecordType.isChecked) RecordType.TAKE_OUT else RecordType.PUT_IN
             val consumableId = selectedConsumableId
@@ -268,14 +257,14 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
                         userId = userId
                     )
 
-                    recordViewModel.addRecord(newRecord)
-
-
-                    dismiss()
+                    try {
+                        val addSuccess = recordViewModel.addRecord(newRecord)
+                    } catch (e: Exception) {
+                       // a just-in-case Exception catch here
+                    }
                 }
             }
         }
-
     }
     private fun updateSearchableSpinnerSelection(searchableSpinnerConsumable: SearchableSpinner, selectedConsumableId: Int) {
         consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
@@ -351,15 +340,65 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         }
     }
 
-    private fun makeBatchConsumableSpinnersInvisible() {
-        
+    private fun makeBatchConsumableTextViewsInvisible(barcodeText: TextInputLayout, consumableText: TextInputLayout) {
+        // Make BatchNumber Text invisible (only visible if prefilled from barcode data)
+        barcodeText.visibility = TextView.INVISIBLE
+        val barcodeTextLayoutParams = barcodeText.layoutParams as ViewGroup.LayoutParams
+        barcodeTextLayoutParams.height = 0
+        val barcodeTextLayoutMarginParams = (barcodeText.layoutParams as ViewGroup.MarginLayoutParams).apply {
+            setMargins(0,0,0,0)
+        }
+        barcodeText.layoutParams = barcodeTextLayoutParams
+
+        // Make Consumable Text invisible (only visible if prefilled from barcode data)
+        consumableText.visibility = TextView.INVISIBLE
+        val consumableTextLayoutParams = consumableText.layoutParams as ViewGroup.LayoutParams
+        consumableTextLayoutParams.height = 0
+        val consumableTextLayoutMarginParams = (consumableText.layoutParams as ViewGroup.MarginLayoutParams).apply {
+            setMargins(0,0,0,0)
+        }
+        barcodeText.layoutParams = consumableTextLayoutParams
     }
+    private fun makeBatchConsumableSpinnersInvisible(searchableSpinnerBatch: SearchableSpinner, searchableSpinnerConsumable: SearchableSpinner, searchableSpinnerGuide: TextView) {
+        // Make Batch spinner invisible
+        searchableSpinnerBatch.visibility = SearchableSpinner.INVISIBLE
+        val batchSpinnerLayoutParams = searchableSpinnerBatch.layoutParams as ViewGroup.LayoutParams
+        batchSpinnerLayoutParams.height = 0
+        val searchableSpinnerBatchLayoutMarginParams = (searchableSpinnerBatch.layoutParams as ViewGroup.MarginLayoutParams).apply {
+            setMargins(0,0,0,0)
+        }
+        searchableSpinnerBatch.layoutParams = batchSpinnerLayoutParams
+
+        // Make Batch spinner invisible
+        searchableSpinnerConsumable.visibility = SearchableSpinner.INVISIBLE
+        val consumableSpinnerLayoutParams = searchableSpinnerConsumable.layoutParams as ViewGroup.LayoutParams
+        consumableSpinnerLayoutParams.height = 0
+        val searchableSpinnerConsumableLayoutMarginParams = (searchableSpinnerConsumable.layoutParams as ViewGroup.MarginLayoutParams).apply {
+            setMargins(0,0,0,0)
+        }
+        searchableSpinnerConsumable.layoutParams = consumableSpinnerLayoutParams
+
+        searchableSpinnerGuide.visibility = TextView.INVISIBLE
+        val searchableSpinnerGuideLayoutParams = searchableSpinnerGuide.layoutParams as ViewGroup.LayoutParams
+        searchableSpinnerGuideLayoutParams.height = 0
+        searchableSpinnerGuide.layoutParams = searchableSpinnerGuideLayoutParams
+    }
+
     private fun updateUIWithConsumableData(batchDetailsBatchNumber: String) {
         activityScope.launch {
             val consumableFromBarcodeTitle = withContext(Dispatchers.IO) {
                 batchDetailsViewModel.getBatchDetailConsumableNameByBatchNumber(batchDetailsBatchNumber)
             }
             consumableFromBarcode.text = consumableFromBarcodeTitle
+        }
+    }
+
+    private fun updateBatchDetailIdByBatchNumber(batchDetailsBatchNumber: String) {
+        activityScope.launch {
+            val batchDetailId = withContext(Dispatchers.IO) {
+                batchDetailsViewModel.getBatchIdByBatchNumber(batchDetailsBatchNumber)
+            }
+            selectedBatchId = batchDetailId
         }
     }
 

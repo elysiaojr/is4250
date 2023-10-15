@@ -108,6 +108,10 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     return batchDetailsRepository.getBatchDetailUOM(consumableId)
   }
 
+  suspend fun getBatchIdByBatchNumber(batchNumber: String): Int {
+    return batchDetailsRepository.getBatchIdByBatchNumber(batchNumber)
+  }
+
   suspend fun getBatchDetailConsumableName(consumableId: Int): String {
     val nameString = batchDetailsRepository.getBatchDetailConsumableName(consumableId)
     val brandString = batchDetailsRepository.getBatchDetailConsumableBrand(consumableId)
