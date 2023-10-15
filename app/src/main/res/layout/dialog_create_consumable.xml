@@ -168,10 +168,11 @@
         app:suffixText="PC">
 
         <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/textInputEditTextNamePerUnitQuantity"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:inputType="number" />
+            android:id="@+id/textInputEditTextNamePerUnitQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#7CCDD4D6"
+            android:inputType="number" />
 
       </com.google.android.material.textfield.TextInputLayout>
 
@@ -209,6 +210,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+            android:checked="true"
           app:thumbTint="@color/switch_thumb_enabled"
           app:trackTint="@drawable/switch_track_color" />
 
