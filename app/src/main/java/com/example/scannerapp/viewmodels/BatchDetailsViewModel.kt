@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.exceptions.ActiveStatusException
 import com.example.scannerapp.exceptions.BatchNumberExistException
@@ -28,6 +29,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   val allBatchDetails: LiveData<List<BatchDetails>>
   private val batchDetailsRepository: BatchDetailsRepository
   val errorLiveData = MutableLiveData<String>()
+  val selectedBatchDetails = MutableLiveData<BatchDetails?>()
 
   init {
     val batchDetailsDao = AppDatabase.getDatabase(application).batchDetailsDao()
