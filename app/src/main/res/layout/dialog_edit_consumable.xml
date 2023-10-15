@@ -217,8 +217,9 @@
                 style="@style/CardTextButton"
                 android:layout_width="236dp"
                 android:layout_height="wrap_content"
-                android:text="Save"
                 android:layout_gravity="center"
+                android:backgroundTint="#63A2C6"
+                android:text="Save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="parent" />
