@@ -158,28 +158,30 @@
 
       <!-- Button 1 -->
       <Button
-        android:id="@+id/consumableDeleteButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableLeft="@drawable/baseline_delete_outline_24"
-        android:text="Delete"
-        android:textSize="16sp"
-        android:textAlignment="textStart" />
+          android:id="@+id/consumableDeleteButton"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:backgroundTint="#BC6767"
+          android:drawableLeft="@drawable/baseline_delete_outline_24"
+          android:text="Delete"
+          android:textAlignment="textStart"
+          android:textSize="16sp" />
 
       <Space
         android:layout_width="10dp"
         android:layout_height="match_parent" />
       <!-- Button 2 -->
       <Button
-        android:id="@+id/consumableEditButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableLeft="@drawable/baseline_edit_24"
-        android:text="Edit"
-        android:textSize="16sp"
-        android:textAlignment="textStart" />
+          android:id="@+id/consumableEditButton"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:backgroundTint="#99B1CA"
+          android:drawableLeft="@drawable/baseline_edit_24"
+          android:text="Edit"
+          android:textAlignment="textStart"
+          android:textSize="16sp" />
 
     </LinearLayout>
 

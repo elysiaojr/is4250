@@ -212,12 +212,13 @@
       <Button
           android:id="@+id/batchDeleteButton"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:backgroundTint="#BC6767"
           android:drawableLeft="@drawable/baseline_delete_outline_24"
           android:text="Delete"
-          android:textSize="16sp"
-          android:textAlignment="textStart" />
+          android:textAlignment="textStart"
+          android:textSize="16sp" />
 
       <Space
           android:layout_width="10dp"
@@ -227,12 +228,13 @@
       <Button
           android:id="@+id/batchEditButton"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:backgroundTint="#99B1CA"
           android:drawableLeft="@drawable/baseline_edit_24"
           android:text="Edit"
-          android:textSize="16sp"
-          android:textAlignment="textStart" />
+          android:textAlignment="textStart"
+          android:textSize="16sp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -250,12 +252,13 @@
       <Button
           android:id="@+id/batchCreateRecordButton"
           android:layout_width="0dp"
-          android:layout_weight="1"
           android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:backgroundTint="#63A2C6"
           android:drawableLeft="@drawable/baseline_add_24_white"
           android:text="Create Record"
-          android:textSize="16sp"
-          android:textAlignment="center" />
+          android:textAlignment="center"
+          android:textSize="16sp" />
     </LinearLayout>
 
   </LinearLayout>

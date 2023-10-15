@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/fragment_shape">
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:background="@drawable/fragment_shape">
         <TextView
             android:id="@+id/no_existing_batch_number_title"
             android:layout_width="match_parent"
@@ -32,30 +33,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
+
             <Button
                 android:id="@+id/dialog_ok_button"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#666770"
                 android:drawableLeft="@drawable/baseline_chevron_left_24"
                 android:text="Back to Records"
-                android:textSize="16sp"
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:textSize="16sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp">
+
             <Button
                 android:id="@+id/dialog_create_new_batch_button"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#63A2C6"
                 android:drawableLeft="@drawable/baseline_add_24_white"
                 android:text="Create New Batch"
-                android:textSize="16sp"
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
