@@ -109,6 +109,30 @@
                 android:layout_column="1"
                 android:layout_marginBottom="10dp" />
 
+            <!-- Record Quantity -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Record Quantity: "
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="start|center_vertical"
+                android:gravity="start"
+                android:layout_column="0"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/recordQuantityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PUT IN"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="start"
+                android:layout_column="1"
+                android:layout_marginBottom="10dp" />
             <!-- Batch ID -->
             <TextView
                 android:layout_width="wrap_content"

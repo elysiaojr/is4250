@@ -23,6 +23,7 @@ class RecordActivity : AppCompatActivity() {
     private lateinit var recordIDTextView: TextView
     private lateinit var createDateTextView: TextView
     private lateinit var recordTypeTextView: TextView
+    private lateinit var recordQuantityTextView: TextView
     private lateinit var batchIDTextView:  TextView
     private lateinit var userIDTextView: TextView
     private lateinit var createRecordButton: Button
@@ -41,6 +42,7 @@ class RecordActivity : AppCompatActivity() {
         recordIDTextView = findViewById(R.id.recordIDTextView)
         createDateTextView = findViewById(R.id.createDateTextView)
         recordTypeTextView = findViewById(R.id.recordTypeTextView)
+        recordQuantityTextView = findViewById(R.id.recordQuantityTextView)
         batchIDTextView =  findViewById(R.id.batchIDTextView)
         userIDTextView = findViewById(R.id.userIDTextView)
         createRecordButton = findViewById(R.id.createRecordButton)
@@ -86,6 +88,9 @@ class RecordActivity : AppCompatActivity() {
         recordIDTextView.text = record.recordId.toString()
         recordTypeTextView.text = record.recordType.name
         createDateTextView.text = record.recordDate
+        recordQuantityTextView.text = record.recordQuantityChanged.toString()
+        userIDTextView.text = record.userId.toString()
+        batchIDTextView.text = record.batchId.toString()
     }
     override fun onDestroy() {
         super.onDestroy()

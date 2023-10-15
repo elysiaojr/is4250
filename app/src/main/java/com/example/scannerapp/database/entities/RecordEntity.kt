@@ -44,7 +44,7 @@ data class Record(
     parcel.readString() ?: "",
     parcel.readInt(),
     parcel.readString() ?: "",
-    parcel.readParcelable(RecordType::class.java.classLoader)!!, // Read RecordType from Parcel
+    RecordType.valueOf(parcel.readString() ?: "PUT_IN"), // Read RecordType from Parcel
     parcel.readInt(),
     parcel.readInt(),
     parcel.readInt()
