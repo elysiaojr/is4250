@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3D82A1"
+    android:backgroundTint="#3B748E">
+
+    <!-- Title -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/phone_icon"
+            android:layout_width="170dp"
+            android:layout_height="130dp"
+            android:baselineAlignBottom="false"
+            android:elevation="2dp"
+            android:translationX="-40dp"
+            android:translationY="0dp"
+            app:srcCompat="@drawable/phone_icon" />
+
+        <TextView
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="KKH Pharmacy Lab"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:translationX="120dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_buttons_layout_shape"
+        android:backgroundTint="#FDFDFD"
+        android:paddingTop="10dp"
+        android:paddingBottom="40dp"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <!-- Title -->
+        <TextView
+            android:id="@+id/buttons_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="15dp"
+            android:text="What do you want to check today?"
+            android:textSize="14sp" />
+
+        <!-- Existing Button Encapsulated within CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_records"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#D9ECFA"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttons_title">
+
+            <LinearLayout
+                android:id="@+id/button_records"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:background="#00FFFFFF"
+                android:orientation="vertical"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintDimensionRatio="w,1:1">
+
+                <TextView
+                    android:id="@+id/button_records_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Record Logbook"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/button_batches_subtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Manage take-out records"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/button_records_icon"
+                android:layout_width="170dp"
+                android:layout_height="130dp"
+                android:baselineAlignBottom="false"
+                android:elevation="2dp"
+                android:translationX="240dp"
+                android:translationY="20dp"
+                app:srcCompat="@drawable/scannerapp_recordsicon" />
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/card_view_records_space"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            app:layout_constraintTop_toBottomOf="@id/card_view_records" />
+
+        <!-- New Button Encapsulated within CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_batches"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FDE7F2"
+            app:cardBackgroundColor="#D9ECFA"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_view_records_space">
+
+            <LinearLayout
+                android:id="@+id/button_batches"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:background="#00FFFFFF"
+                android:orientation="vertical"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintDimensionRatio="w,1:1">
+
+                <TextView
+                    android:id="@+id/button_batches_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Inventory"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/button_batches_subtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Manage batches of consumables"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/button_batches_icon"
+                android:layout_width="170dp"
+                android:layout_height="130dp"
+                android:baselineAlignBottom="false"
+                android:elevation="2dp"
+                android:translationX="240dp"
+                android:translationY="20dp"
+                app:srcCompat="@drawable/scannerapp_batchicon" />
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/card_view_batches_space"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            app:layout_constraintTop_toBottomOf="@id/card_view_batches" />
+
+        <!-- New Button Encapsulated within CardView -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_consumables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#E5E2FA"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_view_batches_space">
+
+            <LinearLayout
+                android:id="@+id/button_consumables"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:background="#00FFFFFF"
+                android:orientation="vertical"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintDimensionRatio="w,1:1">
+
+                <TextView
+                    android:id="@+id/button_consumables_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Consumables"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/button_consumables_subtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="A list of consumables"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/button_batches_icon"
+                android:layout_width="170dp"
+                android:layout_height="130dp"
+                android:baselineAlignBottom="false"
+                android:elevation="2dp"
+                android:translationX="240dp"
+                android:translationY="20dp"
+                app:srcCompat="@drawable/scannerapp_consumablesicon" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
