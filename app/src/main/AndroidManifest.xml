@@ -44,6 +44,9 @@
 
 
         </activity>
+
+
+
         <activity
             android:name=".ui.UserDetailsActivity"
             android:exported="true"
@@ -61,6 +64,11 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".ui.RecordActivity"
+            android:exported="true"
+            android:label="RecordActivity"
+            android:theme="@style/Theme.ScannerApp" />
         <activity
             android:name=".ui.BatchDetailsActivity"
             android:exported="true"

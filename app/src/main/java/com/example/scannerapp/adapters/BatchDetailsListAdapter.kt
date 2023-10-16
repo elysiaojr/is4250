@@ -21,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.cancelChildren
-
 class BatchDetailsListAdapter(
   private val context: Context,
   private var batchDetailsList: List<BatchDetails>,
