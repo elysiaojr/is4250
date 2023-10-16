@@ -52,8 +52,6 @@ class CreateConsumableDialog : DialogFragment() {
     val textInputEditTextNameItemCode =
       view.findViewById<TextInputEditText>(R.id.textInputEditTextNameItemCode)
     val spinnerUOM = view.findViewById<AppCompatSpinner>(R.id.spinnerUOM)
-    val textInputEditTextNamePerUnitQuantity =
-      view.findViewById<TextInputEditText>(R.id.textInputEditTextNamePerUnitQuantity)
     val textInputEditTextNameMinQuantity =
       view.findViewById<TextInputEditText>(R.id.textInputEditTextNameMinQuantity)
     val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
@@ -104,7 +102,6 @@ class CreateConsumableDialog : DialogFragment() {
       val size = textInputEditTextSize.text.toString().trim()
       val itemCode = textInputEditTextNameItemCode.text.toString().trim()
       val uom = selectedUOM.capitalize()
-      val perUnitQuantityValue = textInputEditTextNamePerUnitQuantity.text.toString().trim()
       val minQuantityValue = textInputEditTextNameMinQuantity.text.toString().trim()
       val switchStatus = switchStatus.isChecked // true for enabled, false for disabled
 
@@ -116,30 +113,7 @@ class CreateConsumableDialog : DialogFragment() {
 
       } else {
 
-        // Check if perUnitQuantityValue and minQuantityValue are valid integers
-        val perUnitQuantity: Int = try {
-          perUnitQuantityValue.toInt()
-        } catch (e: NumberFormatException) {
-          // Handle the case where perUnitQuantityValue is not a valid integer
-          Toast.makeText(
-            requireContext(),
-            "Please enter a valid Per Unit Quantity.",
-            Toast.LENGTH_SHORT
-          ).show()
-          -1 // Set a default or error value
-          return@setOnClickListener // Exit the function early
-        }
-
-        // Check if perUnitQuantity is zero or less and display an error message
-        if (perUnitQuantity <= 0) {
-          Toast.makeText(
-            requireContext(),
-            "Per Unit Quantity must be greater than zero.",
-            Toast.LENGTH_SHORT
-          ).show()
-          return@setOnClickListener // Exit the function early
-        }
-
+        // Check if minQuantityValue are valid integers
         val minQuantity: Int = try {
           minQuantityValue.toInt()
         } catch (e: NumberFormatException) {
@@ -177,7 +151,6 @@ class CreateConsumableDialog : DialogFragment() {
           consumableSize = size,
           barcodeId = itemCode,
           unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
-          perUnitQuantity = perUnitQuantity,
           minimumQuantity = minQuantity,
           isActive = status
         )

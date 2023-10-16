@@ -65,6 +65,10 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     return consumableDao.getConsumableByBarcodeId(barcodeId)
   }
 
+  fun getAllBatchesQuantityRemaining(consumableId: Int): Int {
+    return consumableDao.getAllBatchesQuantityRemaining(consumableId)
+  }
+
   /*
    * Validates a consumable object before adding or updating in the database.
    * Checks for required fields, valid enum values, and other constraints.
@@ -81,9 +85,6 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     }
     if (consumable.unitOfMeasurement !in UnitOfMeasurement.values()) {
       throw EnumValueDoesNotMatch("Invalid unit of measurement")
-    }
-    if (consumable.perUnitQuantity <= 0) {
-      throw InsufficientQuantityException("Per Unit Quantity must be at least 1")
     }
     if (consumable.minimumQuantity <= 0) {
       throw InsufficientQuantityException("Minimum Quantity must be at least 1")

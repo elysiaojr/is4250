@@ -32,5 +32,8 @@ interface ConsumableDao {
 
   @Query("SELECT * FROM consumable")
   fun getAllConsumables(): LiveData<List<Consumable>>
+
+  @Query("SELECT SUM(b.batchRemainingQuantity) AS currentQuantity FROM consumable c JOIN batch_details b ON c.consumableId = b.consumableId WHERE c.consumableId = :consumableId")
+  fun getAllBatchesQuantityRemaining(consumableId: Int): Int
 }
 
