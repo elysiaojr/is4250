@@ -2,6 +2,10 @@ package com.example.scannerapp.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.widget.BaseAdapter
 import android.widget.Filterable
 import android.view.LayoutInflater
@@ -9,9 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.TextView
+import androidx.compose.ui.text.toLowerCase
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.ui.BatchDetailsActivity
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
@@ -20,7 +26,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+
 class BatchDetailsListAdapter(
   private val context: Context,
   private var batchDetailsList: List<BatchDetails>,
@@ -31,7 +39,7 @@ class BatchDetailsListAdapter(
 ) : BaseAdapter(), Filterable {
 
   private var unfilteredBatchDetailsList = batchDetailsList
-
+  private val activityScope = CoroutineScope(Dispatchers.Main)
   override fun getCount(): Int {
     return batchDetailsList.size
   }
@@ -46,7 +54,7 @@ class BatchDetailsListAdapter(
 
 
   // Custom method to update the data in the adapter
-  fun updateData(newList: List<BatchDetails>) {
+  fun updateBatchDetailsData(newList: List<BatchDetails>) {
     batchDetailsList = newList
     unfilteredBatchDetailsList = newList
     notifyDataSetChanged()
@@ -66,8 +74,8 @@ class BatchDetailsListAdapter(
       val unitOfMeasurement = batchDetailsViewModel.getBatchDetailUOM(batchDetail.consumableId)
 
       // Once you get the unitOfMeasurement, update the UI on the main thread
-      batchRemainingQuantityTextView.text =
-        "Remaining: ${batchDetail.batchRemainingQuantity} ${unitOfMeasurement}"
+      val uomText = "Remaining: ${batchDetail.batchRemainingQuantity} ${unitOfMeasurement}"
+      batchRemainingQuantityTextView.text = getBoldSpannable(uomText, "Remaining:")
     }
 
     adapterScope.launch {
@@ -75,11 +83,14 @@ class BatchDetailsListAdapter(
         batchDetailsViewModel.getBatchDetailConsumableName(batchDetail.consumableId)
 
       // Once you get the consumableDetails, update the UI on the main thread
-      consumableNameTextView.text = "Consumable: ${concatConsumableName}"
+      val consumableText = "${concatConsumableName}"
+      consumableNameTextView.text = consumableText
     }
 
-    batchNumberTextView.text = batchDetail.batchNumber
-    batchExpiryDateTextView.text = "Expiry Date: " + batchDetail.expiryDate
+    val batchNumberText = "Batch Number: ${batchDetail.batchNumber}"
+    batchNumberTextView.text = getBoldSpannable(batchNumberText, "Batch Number:")
+    val expiryDateText = "Expiry Date: ${batchDetail.expiryDate}"
+    batchExpiryDateTextView.text = getBoldSpannable(expiryDateText, "Expiry Date:")
 
     // Handle clicking into a BatchDetail Item
     val listItemLayout = view.findViewById<ConstraintLayout>(R.id.batch_details_list_item)
@@ -105,11 +116,12 @@ class BatchDetailsListAdapter(
         } else {
           val filterPattern = constraint.toString().toLowerCase().trim()
 
-          for (item in unfilteredBatchDetailsList) {
-            if (item.batchNumber.toLowerCase().contains(filterPattern) ||
-              item.expiryDate.toLowerCase().contains(filterPattern)
-            ) {
-              filteredList.add(item)
+          // Use runBlocking to wait for the coroutine to finish
+          runBlocking {
+            for (item in unfilteredBatchDetailsList) {
+              if (shouldAddItem(item, filterPattern)) {
+                filteredList.add(item)
+              }
             }
           }
           results.values = filteredList
@@ -118,12 +130,40 @@ class BatchDetailsListAdapter(
         return results
       }
 
+      suspend fun shouldAddItem(item: BatchDetails, filterPattern: String): Boolean {
+        val consumableName = withContext(Dispatchers.IO) {
+          batchDetailsViewModel.getBatchDetailConsumableName(item.consumableId)
+        }
+        return consumableName.toLowerCase().contains(filterPattern) ||
+          item.batchNumber.toLowerCase().contains(filterPattern) ||
+          item.expiryDate.toLowerCase().contains(filterPattern)
+      }
+
       override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-        @Suppress("UNCHECKED_CAST")
-        batchDetailsList = results?.values as List<BatchDetails>
-        notifyDataSetChanged()
+        // Add a null-check here before casting
+        if (results?.values != null) {
+          @Suppress("UNCHECKED_CAST")
+          batchDetailsList = results.values as List<BatchDetails>
+          notifyDataSetChanged()
+        }
       }
     }
+  }
+
+
+  // For bolding row headers
+  private fun getBoldSpannable(fullText: String, boldText: String): SpannableString {
+    val spannable = SpannableString(fullText)
+    val start = fullText.indexOf(boldText)
+    if (start >= 0) {
+      spannable.setSpan(
+        StyleSpan(Typeface.BOLD),
+        start,
+        start + boldText.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+      )
+    }
+    return spannable
   }
 }
 

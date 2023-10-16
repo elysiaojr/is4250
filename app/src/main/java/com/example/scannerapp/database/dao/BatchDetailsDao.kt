@@ -64,7 +64,20 @@ interface BatchDetailsDao {
   @Query("SELECT consumable.consumableSize FROM consumable INNER JOIN batch_details ON consumable.consumableId = batch_details.consumableId WHERE batch_details.batchNumber = :batchNumber")
   suspend fun getBatchDetailConsumableSizeByBatchNumber(batchNumber: String): String
 
-  @Query("SELECT * FROM batch_details")
-  fun getAllBatchDetails(): LiveData<List<BatchDetails>>
+  @Query(
+    """
+    SELECT b.*
+FROM batch_details AS b
+LEFT JOIN record AS r ON b.batchId = r.batchId
+GROUP BY b.batchId
+ORDER BY
+    CASE
+        WHEN MAX(SUBSTR(r.recordDate,7,4) || '-' || SUBSTR(r.recordDate,4,2) || '-' || SUBSTR(r.recordDate,1,2)) IS NULL THEN SUBSTR(b.createDate,7,4) || '-' || SUBSTR(b.createDate,4,2) || '-' || SUBSTR(b.createDate,1,2)
+        ELSE MAX(SUBSTR(r.recordDate,7,4) || '-' || SUBSTR(r.recordDate,4,2) || '-' || SUBSTR(r.recordDate,1,2))
+    END DESC;
+"""
+  )
+  fun getAllBatchDetailsByLatestDate(): LiveData<List<BatchDetails>>
+
 }
 

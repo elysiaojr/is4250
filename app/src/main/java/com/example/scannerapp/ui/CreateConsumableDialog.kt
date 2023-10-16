@@ -149,7 +149,7 @@ class CreateConsumableDialog : DialogFragment() {
           consumableBrand = brand,
           consumableType = type,
           consumableSize = size,
-          barcodeId = itemCode,
+          itemCode = itemCode,
           unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
           minimumQuantity = minQuantity,
           isActive = status

@@ -7,10 +7,9 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 // Entity: Consumable
-// INSERT INTO consumable (consumableName, consumableBrand, consumableType, consumableSize, barcodeId, unitOfMeasurement, perUnitQuantity, minimumQuantity, isActive, isG1Barcode) VALUES ("Best Syringes", "John & Son", "Type A", "50ml", "BarcodeID01239", "BOX", 50, 10, 1, 0)
 @Entity(
   tableName = "consumable",
-  indices = [Index(value = ["barcodeId"], unique = true)]
+  indices = [Index(value = ["itemCode"], unique = true)]
 )
 data class Consumable(
   @PrimaryKey(autoGenerate = true)
@@ -19,7 +18,7 @@ data class Consumable(
   val consumableBrand: String,
   val consumableType: String?, // optional
   val consumableSize: String?, // optional
-  val barcodeId: String,
+  val itemCode: String,
   val unitOfMeasurement: UnitOfMeasurement,
   val minimumQuantity: Int,
   val isActive: Int
@@ -44,7 +43,7 @@ data class Consumable(
     "", // Default value for consumableBrand
     null, // Default value for consumableType
     null, // Default value for consumableSize
-    "", // Default value for barcodeId
+    "", // Default value for itemCode
     UnitOfMeasurement.BOX, // Default value for unitOfMeasurement
     0, // Default value for minimumQuantity
     0  // Default value for isActive
@@ -56,7 +55,7 @@ data class Consumable(
     parcel.writeString(consumableBrand)
     parcel.writeString(consumableType)
     parcel.writeString(consumableSize)
-    parcel.writeString(barcodeId)
+    parcel.writeString(itemCode)
     parcel.writeSerializable(unitOfMeasurement)
     parcel.writeInt(minimumQuantity)
     parcel.writeInt(isActive)
