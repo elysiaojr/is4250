@@ -21,7 +21,7 @@ import androidx.room.Index
 )
 data class BatchDetails(
   @PrimaryKey(autoGenerate = true)
-  val batchId: Int = 1,
+  var batchId: Int = 1,
   val batchNumber: String,
   val createDate: String,
   val expiryDate: String,

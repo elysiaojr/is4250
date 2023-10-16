@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // This activity displays details of a batch.
-class BatchDetailsActivity : AppCompatActivity() {
+class BatchDetailsActivity : AppCompatActivity(), EditBatchDetailsDialog.OnBatchDetailsUpdatedListener {
 
   // Define UI elements and data models.
   private lateinit var batchDetailsViewModel: BatchDetailsViewModel
@@ -67,8 +68,14 @@ class BatchDetailsActivity : AppCompatActivity() {
       handleOnBackPressed() // Navigate back to the previous screen.
     }
 
-    // TODO: Implement and set the action for the edit button if needed.
-    // Example:
+    // Define and set the action for the edit button.
+    val fabEditBatch = findViewById<Button>(R.id.batchEditButton)
+    fabEditBatch.setOnClickListener {
+      // Open the EditBatchDetailsDialog to edit the batch details.
+      val dialogFragment = batchDetail?.let { it1 -> EditBatchDetailsDialog(it1) }
+      dialogFragment?.batchDetailsUpdatedListener = this
+      dialogFragment?.show(supportFragmentManager, "EditBatchDetailsDialog")
+    }
     // val fab = findViewById<Button>(R.id.batchEditButton)
     // fab.setOnClickListener { /* Handle edit click here */ }
   }
@@ -123,5 +130,10 @@ class BatchDetailsActivity : AppCompatActivity() {
   override fun onDestroy() {
     super.onDestroy()
     activityScope.cancel()
+  }
+
+  override fun onBatchDetailsUpdated(updatedBatchDetails: BatchDetails) {
+    batchDetail = updatedBatchDetails
+    updateUIWithBatchData(updatedBatchDetails)
   }
 }
