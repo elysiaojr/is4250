@@ -1,189 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ui.BatchDetailsActivity">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="16dp"
+  tools:context=".ui.BatchDetailsActivity">
 
   <!-- Back Button -->
   <ImageView
-      android:id="@+id/backButton"
-      android:layout_width="wrap_content"
-      android:layout_height="55dp"
-      android:src="@drawable/baseline_arrow_back_24"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      android:clickable="true"
-      app:maxImageSize="40dp" />
+    android:id="@+id/backButton"
+    android:layout_width="wrap_content"
+    android:layout_height="55dp"
+    android:src="@drawable/baseline_arrow_back_24"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:clickable="true"
+    app:maxImageSize="40dp" />
 
   <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/batchIcon"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:src="@drawable/outline_medication_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+      android:id="@+id/batchIcon"
+      android:layout_width="match_parent"
+      android:layout_height="55dp"
+      android:src="@drawable/outline_medication_24"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent" />
     <!-- Batch Number Display -->
     <TextView
-        android:id="@+id/batchNumberTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Batch Number"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+      android:id="@+id/batchNumberTextView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:text="Batch Number"
+      android:textAlignment="center"
+      android:textSize="18sp"
+      android:textStyle="bold" />
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:padding="16dp"
-        android:layout_marginVertical="18sp"
-        android:background="#c0c0c0" />
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:padding="16dp"
+      android:layout_marginVertical="18sp"
+      android:background="#c0c0c0" />
 
     <!-- Expiry Date Label and Value -->
     <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="1"
-        android:columnCount="2"
-        app:layout_constraintTop_toBottomOf="@+id/batchNumberTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">>
-
-      <!-- Create Date -->
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Registered Date: "
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="start|center_vertical"
-          android:gravity="start"
-          android:layout_column="0"
-          android:layout_marginBottom="10dp" />
-
-      <TextView
-          android:id="@+id/createDateTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="01/01/2025"
-          android:textStyle="bold"
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="end|center_vertical"
-          android:gravity="start"
-          android:layout_column="1"
-          android:layout_marginBottom="10dp" />
-
-      <!-- Expiry Date -->
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Expiry Date: "
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="start|center_vertical"
-          android:gravity="start"
-          android:layout_column="0"
-          android:layout_marginBottom="10dp" />
-
-      <TextView
-          android:id="@+id/expiryDateTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="01/01/2025"
-          android:textStyle="bold"
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="end|center_vertical"
-          android:gravity="start"
-          android:layout_column="1"
-          android:layout_marginBottom="10dp" />
-
-      <!-- Received Quantity -->
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Received Quantity: "
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="start|center_vertical"
-          android:gravity="start"
-          android:layout_column="0"
-          android:layout_marginBottom="10dp" />
-
-      <TextView
-          android:id="@+id/batchReceivedQuantityTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="00"
-          android:textStyle="bold"
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="end|center_vertical"
-          android:gravity="start"
-          android:layout_column="1"
-          android:layout_marginBottom="10dp" />
-
-      <!-- Remaining Quantity -->
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Remaining Quantity: "
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="start|center_vertical"
-          android:gravity="start"
-          android:layout_column="0"
-          android:layout_marginBottom="10dp" />
-
-      <TextView
-          android:id="@+id/batchRemainingQuantityTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="00"
-          android:textStyle="bold"
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="end|center_vertical"
-          android:gravity="start"
-          android:layout_column="1"
-          android:layout_marginBottom="10dp" />
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:rowCount="1"
+      android:columnCount="2"
+      app:layout_constraintTop_toBottomOf="@+id/batchNumberTextView"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent">>
 
       <!-- Consumabe -->
       <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Consumable: "
-          android:textSize="16sp"
-          android:textAlignment="viewStart"
-          android:layout_gravity="start"
-          android:gravity="start"
-          android:layout_column="0"
-          android:layout_marginBottom="10dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consumable: "
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:layout_column="0"
+        android:layout_marginBottom="10dp" />
 
 
-        <TextView
-            android:id="@+id/batchConsumableTextView"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
-            android:textAlignment="viewEnd"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+      <TextView
+        android:id="@+id/batchConsumableTextView"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="XXX"
+        android:textAlignment="viewEnd"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
+      <!-- Create Date -->
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registered Date: "
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start|center_vertical"
+        android:gravity="start"
+        android:layout_column="0"
+        android:layout_marginBottom="10dp" />
 
+      <TextView
+        android:id="@+id/createDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01/01/2025"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="start"
+        android:layout_column="1"
+        android:layout_marginBottom="10dp" />
 
+      <!-- Expiry Date -->
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expiry Date: "
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start|center_vertical"
+        android:gravity="start"
+        android:layout_column="0"
+        android:layout_marginBottom="10dp" />
+
+      <TextView
+        android:id="@+id/expiryDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01/01/2025"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="start"
+        android:layout_column="1"
+        android:layout_marginBottom="10dp" />
+
+      <!-- Remaining Quantity -->
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remaining Quantity: "
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start|center_vertical"
+        android:gravity="start"
+        android:layout_column="0"
+        android:layout_marginBottom="10dp" />
+
+      <TextView
+        android:id="@+id/batchRemainingQuantityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="start"
+        android:layout_column="1"
+        android:layout_marginBottom="10dp" />
+
+      <!-- Received Quantity -->
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Received Quantity: "
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="start|center_vertical"
+        android:gravity="start"
+        android:layout_column="0"
+        android:layout_marginBottom="10dp" />
+
+      <TextView
+        android:id="@+id/batchReceivedQuantityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textAlignment="viewStart"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="start"
+        android:layout_column="1"
+        android:layout_marginBottom="10dp" />
 
       <!-- Is Active -->
 
@@ -194,71 +191,73 @@
     </GridLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:padding="16dp"
-        android:layout_marginVertical="18sp"
-        android:background="#c0c0c0" />
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:padding="16dp"
+      android:layout_marginVertical="18sp"
+      android:background="#c0c0c0" />
 
 
     <!-- Buttons at the bottom -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="0dp">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="0dp">
 
       <!-- Delete Button -->
       <Button
-          android:id="@+id/batchDeleteButton"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:backgroundTint="#BC6767"
-          android:drawableLeft="@drawable/baseline_delete_outline_24"
-          android:text="Delete"
-          android:textAlignment="textStart"
-          android:textSize="16sp" />
+        android:id="@+id/batchDeleteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#BC6767"
+        android:drawableLeft="@drawable/baseline_delete_outline_24"
+        android:text="Delete"
+        android:textAlignment="textStart"
+        android:textSize="16sp" />
 
       <Space
-          android:layout_width="10dp"
-          android:layout_height="match_parent" />
+        android:layout_width="10dp"
+        android:layout_height="match_parent" />
 
       <!-- Edit Button -->
       <Button
-          android:id="@+id/batchEditButton"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:backgroundTint="#99B1CA"
-          android:drawableLeft="@drawable/baseline_edit_24"
-          android:text="Edit"
-          android:textAlignment="textStart"
-          android:textSize="16sp" />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:padding="16dp"
-        android:layout_marginVertical="18sp"
-        android:background="#c0c0c0" />
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/batchEditButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="0dp">
+        android:layout_weight="1"
+        android:backgroundTint="#99B1CA"
+        android:drawableLeft="@drawable/baseline_edit_24"
+        android:text="Edit"
+        android:textAlignment="textStart"
+        android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:padding="16dp"
+      android:layout_marginVertical="18sp"
+      android:background="#c0c0c0" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="0dp">
 
       <!-- Delete Button -->
       <Button
-          android:id="@+id/batchCreateRecordButton"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:backgroundTint="#63A2C6"
-          android:drawableLeft="@drawable/baseline_add_24_white"
-          android:text="Create Record"
-          android:textAlignment="center"
-          android:textSize="16sp" />
+        android:id="@+id/batchCreateRecordButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#63A2C6"
+        android:drawableLeft="@drawable/baseline_add_24_white"
+        android:text="Create Record"
+        android:textAlignment="center"
+        android:textSize="16sp" />
     </LinearLayout>
 
   </LinearLayout>

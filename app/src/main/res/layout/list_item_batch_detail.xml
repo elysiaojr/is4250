@@ -3,9 +3,9 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:clickable="true"
   android:paddingHorizontal="16dp"
   android:paddingVertical="20dp"
-  android:clickable="true"
   android:id="@+id/batch_details_list_item">
 
   <ImageView
@@ -13,9 +13,22 @@
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:src="@drawable/outline_medication_24"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent" />
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/consumableName"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="8dp"
+    android:text="Consumable Name: "
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
+    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
+    app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
     android:id="@+id/batchNumber"
@@ -23,13 +36,11 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="8dp"
-    android:text="Batch Number"
-    android:textSize="16sp"
-    android:textStyle="bold"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
+    android:text="Batch Number: "
+    android:textSize="13sp"
     app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-    app:layout_constraintBottom_toTopOf="@+id/batchExpiryDate" />
+    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
+    app:layout_constraintTop_toBottomOf="@+id/consumableName" />
 
   <TextView
     android:id="@+id/batchExpiryDate"
@@ -39,10 +50,9 @@
     android:layout_marginEnd="8dp"
     android:text="Expiry Date: 01/01/2025"
     android:textSize="13sp"
-    app:layout_constraintTop_toBottomOf="@+id/batchNumber"
-    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
     app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-    app:layout_constraintBottom_toTopOf="@+id/batchRemainingQuantity" />  <!-- This constraint ensures it's above batchRemainingQuantity -->
+    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
+    app:layout_constraintTop_toBottomOf="@+id/batchNumber" />
 
   <TextView
     android:id="@+id/batchRemainingQuantity"
@@ -52,31 +62,17 @@
     android:layout_marginEnd="8dp"
     android:text="Remaining: 10 BOX"
     android:textSize="13sp"
-    app:layout_constraintTop_toBottomOf="@+id/batchExpiryDate"
-    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
     app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-    app:layout_constraintBottom_toTopOf="@+id/consumableName" />
-
-  <TextView
-    android:id="@+id/consumableName"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="8dp"
-    android:text="Consumable Name: "
-    android:textSize="14sp"
-    app:layout_constraintTop_toBottomOf="@+id/batchRemainingQuantity"
     app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
-    app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-    app:layout_constraintBottom_toTopOf="parent" />
+    app:layout_constraintTop_toBottomOf="@+id/batchExpiryDate" />
 
   <ImageView
     android:id="@+id/chevronRightIcon"
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:src="@drawable/baseline_chevron_right_24"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent" />
+    app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

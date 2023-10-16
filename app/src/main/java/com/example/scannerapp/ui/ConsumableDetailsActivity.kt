@@ -1,15 +1,12 @@
 package com.example.scannerapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scannerapp.R
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +20,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
   // Define UI elements and data models.
   private lateinit var consumableNameTextView: TextView
-  private lateinit var consumableBarcodeIdTextView: TextView
+  private lateinit var consumableItemCodeTextView: TextView
   private lateinit var consumableCurrentQuantityTextView: TextView
   private lateinit var consumableMinimumQuantityTextView: TextView
   private lateinit var consumableViewModel: ConsumableViewModel
@@ -41,7 +38,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
     // Initialize views.
     consumableNameTextView = findViewById(R.id.consumableNameTextView)
-    consumableBarcodeIdTextView = findViewById(R.id.consumableBarcodeIdTextView)
+    consumableItemCodeTextView = findViewById(R.id.consumableItemCodeTextView)
     consumableCurrentQuantityTextView = findViewById(R.id.consumableCurrentQuantityTextView)
     consumableMinimumQuantityTextView = findViewById(R.id.consumableMinimumQuantityTextView)
 
@@ -92,7 +89,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
   // Update the UI views with data from the Consumable object.
   private fun updateUIWithConsumableData(consumable: Consumable) {
     consumableNameTextView.text = consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
-    consumableBarcodeIdTextView.text = consumable.barcodeId
+    consumableItemCodeTextView.text = consumable.itemCode
     val minimumQuantity = "${consumable.minimumQuantity} ${consumable.unitOfMeasurement}"
     consumableMinimumQuantityTextView.text = minimumQuantity
   }

@@ -5,7 +5,7 @@ import com.example.scannerapp.database.dao.ConsumableDao
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.exceptions.ActiveStatusException
-import com.example.scannerapp.exceptions.BarcodeIdExistException
+import com.example.scannerapp.exceptions.ItemCodeExistException
 import com.example.scannerapp.exceptions.EnumValueDoesNotMatch
 import com.example.scannerapp.exceptions.FieldCannotBeEmptyException
 import com.example.scannerapp.exceptions.InsufficientQuantityException
@@ -23,10 +23,10 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
    */
   suspend fun addConsumable(consumable: Consumable) {
 
-    val trimmedBarcodeId = consumable.barcodeId.trim()
+    val trimmedItemCode = consumable.itemCode.trim()
 
-    if (consumableDao.getConsumableByBarcodeId(trimmedBarcodeId) != null) {
-      throw BarcodeIdExistException("Barcode ID already exists")
+    if (consumableDao.getConsumableByItemCode(trimmedItemCode) != null) {
+      throw ItemCodeExistException("Item Code already exists")
     }
 
     validateConsumable(consumable)
@@ -39,12 +39,12 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
    * Checks for uniqueness of barcode ID.
    */
   suspend fun updateConsumable(consumable: Consumable) {
-    val trimmedBarcodeId = consumable.barcodeId.trim()
+    val trimmedItemCode = consumable.itemCode.trim()
 
-    val existingConsumable = consumableDao.getConsumableByBarcodeId(trimmedBarcodeId)
+    val existingConsumable = consumableDao.getConsumableByItemCode(trimmedItemCode)
     // Make sure the (old) consumable we are editing has the same barcode id as the (new) consumable
     if (existingConsumable != null && existingConsumable.consumableId != consumable.consumableId) {
-      throw BarcodeIdExistException("Barcode ID already exists for another consumable")
+      throw ItemCodeExistException("Barcode ID already exists for another consumable")
     }
 
     validateConsumable(consumable)
@@ -61,8 +61,8 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     return consumableDao.getConsumableById(consumableId)
   }
 
-  fun getConsumableByBarcodeId(barcodeId: String): Consumable {
-    return consumableDao.getConsumableByBarcodeId(barcodeId)
+  fun getConsumableByItemCode(itemCode: String): Consumable {
+    return consumableDao.getConsumableByItemCode(itemCode)
   }
 
   fun getAllBatchesQuantityRemaining(consumableId: Int): Int {
@@ -80,7 +80,7 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     if (consumable.consumableBrand.trim().isEmpty()) {
       throw FieldCannotBeEmptyException("Consumable Brand field cannot be empty")
     }
-    if (consumable.barcodeId.trim().isEmpty()) {
+    if (consumable.itemCode.trim().isEmpty()) {
       throw FieldCannotBeEmptyException("Barcode ID field cannot be empty")
     }
     if (consumable.unitOfMeasurement !in UnitOfMeasurement.values()) {

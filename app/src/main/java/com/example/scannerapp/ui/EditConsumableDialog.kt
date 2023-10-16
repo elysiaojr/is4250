@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
@@ -92,7 +91,7 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
     textInputEditTextBrand.setText(consumable.consumableBrand)
     textInputEditTextType.setText(consumable.consumableType)
     textInputEditTextSize.setText(consumable.consumableSize)
-    textInputEditTextNameItemCode.setText(consumable.barcodeId)
+    textInputEditTextNameItemCode.setText(consumable.itemCode)
     textInputEditTextNameMinQuantity.setText(consumable.minimumQuantity.toString())
     switchStatus.isChecked = consumable.isActive == 1 // Set the switch based on user status
     selectedUOM = consumable.unitOfMeasurement.toString()
@@ -196,7 +195,7 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
           consumableBrand = brand,
           consumableType = type,
           consumableSize = size,
-          barcodeId = itemCode,
+          itemCode = itemCode,
           unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
           minimumQuantity = minQuantity,
           isActive = status
