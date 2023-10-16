@@ -60,6 +60,7 @@ class BatchDetailsListAdapter(
     val batchNumberTextView = view.findViewById<TextView>(R.id.batchNumber)
     val batchExpiryDateTextView = view.findViewById<TextView>(R.id.batchExpiryDate)
     val batchRemainingQuantityTextView = view.findViewById<TextView>(R.id.batchRemainingQuantity)
+    val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
 
     adapterScope.launch {
       val unitOfMeasurement = batchDetailsViewModel.getBatchDetailUOM(batchDetail.consumableId)
@@ -67,6 +68,14 @@ class BatchDetailsListAdapter(
       // Once you get the unitOfMeasurement, update the UI on the main thread
       batchRemainingQuantityTextView.text =
         "Remaining: ${batchDetail.batchRemainingQuantity} ${unitOfMeasurement}"
+    }
+
+    adapterScope.launch {
+      val concatConsumableName =
+        batchDetailsViewModel.getBatchDetailConsumableName(batchDetail.consumableId)
+
+      // Once you get the consumableDetails, update the UI on the main thread
+      consumableNameTextView.text = "Consumable: ${concatConsumableName}"
     }
 
     batchNumberTextView.text = batchDetail.batchNumber

@@ -88,39 +88,59 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     )
-    val currentYear = LocalDate.now().year
-    val numberOfYears = 50  // for example, you can adjust this as needed
-    val years = Array(numberOfYears) { i -> "${i + currentYear}" }
 
     textViewExpiryDate.setOnClickListener {
+      // 1. Generate the year and month lists
+      val currentYear = LocalDate.now().year
+      val currentMonth = LocalDate.now().monthValue
+      val years = (currentYear..currentYear + 20).map { it.toString() }.toTypedArray()
+
+      // 2. Create and show the custom dialog with two Spinners
       val dialogView =
         LayoutInflater.from(requireContext()).inflate(R.layout.month_year_picker_layout, null)
       val monthSpinner: Spinner = dialogView.findViewById(R.id.monthSpinner)
       val yearSpinner: Spinner = dialogView.findViewById(R.id.yearSpinner)
 
-      monthSpinner.adapter =
-        ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months)
       yearSpinner.adapter =
         ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
+      yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+          val selectedYear = years[position].toInt()
+          val displayMonths = if (selectedYear == currentYear) {
+            months.sliceArray(currentMonth - 1 until months.size)
+          } else {
+            months
+          }
+          monthSpinner.adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, displayMonths)
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+          // No action needed
+        }
+      }
 
       val builder = AlertDialog.Builder(requireContext())
       builder.setTitle("Choose month and year")
       builder.setView(dialogView)
       builder.setPositiveButton("OK") { _, _ ->
         val selectedYear = yearSpinner.selectedItem.toString().toInt()
-        val selectedMonth = months.indexOf(monthSpinner.selectedItem.toString())
+        val selectedMonth = monthSpinner.selectedItem.toString().let { selectedMonthName ->
+          months.indexOf(selectedMonthName) + 1
+        }
 
-        // Now show day picker
+        // Show the date picker
         val datePickerDialog = DatePickerDialog(
           requireContext(),
-          { _, _, monthOfYear, dayOfMonth ->
-            val selectedDate = LocalDate.of(selectedYear, monthOfYear + 1, dayOfMonth)
+          { _, year, month, dayOfMonth ->
+            val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
             textViewExpiryDate.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
           },
           selectedYear,
-          selectedMonth,
+          selectedMonth - 1,
           1
         )
+
         val datePicker = datePickerDialog.datePicker
         datePicker.minDate = System.currentTimeMillis() - 1000
         datePickerDialog.show()
@@ -134,7 +154,8 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
       view.findViewById<TextInputEditText>(R.id.textInputEditTextReceivedQuantity)
     val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
 
-    val searchableSpinnerConsumable = view.findViewById<SearchableSpinner>(R.id.searchableSpinnerConsumable)
+    val searchableSpinnerConsumable =
+      view.findViewById<SearchableSpinner>(R.id.searchableSpinnerConsumable)
     searchableSpinnerConsumable.setTitle("Select Consumable");
     var consumableNames: List<String> = emptyList()
     var selectedConsumableId: Int = -1
@@ -142,29 +163,41 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
     // Fetch the list of consumables from the ViewModel
     consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
       // Update the consumableNames list when data is available
-      consumableNames = consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
+      consumableNames =
+        consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
 
       // Create an ArrayAdapter and set it to the SearchableSpinner
-      val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, consumableNames)
+      val adapter = ArrayAdapter(
+        requireContext(),
+        android.R.layout.simple_spinner_dropdown_item,
+        consumableNames
+      )
       searchableSpinnerConsumable.adapter = adapter
 
-      searchableSpinnerConsumable.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-          override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+      searchableSpinnerConsumable.onItemSelectedListener =
+        object : AdapterView.OnItemSelectedListener {
+          override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+          ) {
             // Get the selected consumable item
             val selectedConsumableName = consumableNames[position]
 
             // Find the corresponding Consumable object based on the name
-            val selectedConsumable = consumables.find { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize == selectedConsumableName }
+            val selectedConsumable =
+              consumables.find { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize == selectedConsumableName }
 
             if (selectedConsumable != null) {
               selectedConsumableId = selectedConsumable.consumableId
             }
           }
 
-        override fun onNothingSelected(p0: AdapterView<*>?) {
-          // do nothing
+          override fun onNothingSelected(p0: AdapterView<*>?) {
+            // do nothing
+          }
         }
-      }
     }
 
     val saveButton = view.findViewById<MaterialButton>(R.id.buttonSave)
@@ -226,7 +259,7 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
           Toast.LENGTH_SHORT
         ).show()
 
-        consumableId == -1 ->  Toast.makeText(
+        consumableId == -1 -> Toast.makeText(
           requireContext(),
           "Please select a Consumable.",
           Toast.LENGTH_SHORT

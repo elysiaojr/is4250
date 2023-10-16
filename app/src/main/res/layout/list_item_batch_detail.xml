@@ -55,8 +55,20 @@
     app:layout_constraintTop_toBottomOf="@+id/batchExpiryDate"
     app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
     app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-    app:layout_constraintBottom_toBottomOf="parent" />
+    app:layout_constraintBottom_toTopOf="@+id/consumableName" />
 
+  <TextView
+    android:id="@+id/consumableName"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="8dp"
+    android:text="Consumable Name: "
+    android:textSize="14sp"
+    app:layout_constraintTop_toBottomOf="@+id/batchRemainingQuantity"
+    app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
+    app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
+    app:layout_constraintBottom_toTopOf="parent" />
 
   <ImageView
     android:id="@+id/chevronRightIcon"
