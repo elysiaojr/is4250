@@ -91,7 +91,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
   // Update the UI views with data from the Consumable object.
   private fun updateUIWithConsumableData(consumable: Consumable) {
-    consumableNameTextView.text = consumable.consumableName
+    consumableNameTextView.text = consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
     consumableBarcodeIdTextView.text = consumable.barcodeId
     val minimumQuantity = "${consumable.minimumQuantity} ${consumable.unitOfMeasurement}"
     consumableMinimumQuantityTextView.text = minimumQuantity

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.UnitOfMeasurement
+import com.example.scannerapp.dataclass.SortOrderEnum
 import com.example.scannerapp.exceptions.ActiveStatusException
 import com.example.scannerapp.exceptions.BarcodeIdExistException
 import com.example.scannerapp.exceptions.EnumValueDoesNotMatch
@@ -100,5 +101,6 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
     return consumableRepository.getAllBatchesQuantityRemaining(consumableId)
   }
   // More functions...
+
 
 }
