@@ -76,8 +76,6 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
     textInputEditTextSize = view.findViewById(R.id.textInputEditTextSize)
     textInputEditTextNameItemCode = view.findViewById(R.id.textInputEditTextNameItemCode)
     spinnerUOM = view.findViewById(R.id.spinnerUOM)
-    textInputEditTextNamePerUnitQuantity =
-      view.findViewById(R.id.textInputEditTextNamePerUnitQuantity)
     textInputEditTextNameMinQuantity = view.findViewById(R.id.textInputEditTextNameMinQuantity)
     switchStatus = view.findViewById(R.id.switchStatus)
     saveButton = view.findViewById(R.id.buttonSave)
@@ -95,7 +93,6 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
     textInputEditTextType.setText(consumable.consumableType)
     textInputEditTextSize.setText(consumable.consumableSize)
     textInputEditTextNameItemCode.setText(consumable.barcodeId)
-    textInputEditTextNamePerUnitQuantity.setText(consumable.perUnitQuantity.toString())
     textInputEditTextNameMinQuantity.setText(consumable.minimumQuantity.toString())
     switchStatus.isChecked = consumable.isActive == 1 // Set the switch based on user status
     selectedUOM = consumable.unitOfMeasurement.toString()
@@ -226,7 +223,6 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
           consumableSize = size,
           barcodeId = itemCode,
           unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
-          perUnitQuantity = perUnitQuantity,
           minimumQuantity = minQuantity,
           isActive = status
         )

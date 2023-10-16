@@ -21,7 +21,6 @@ data class Consumable(
   val consumableSize: String?, // optional
   val barcodeId: String,
   val unitOfMeasurement: UnitOfMeasurement,
-  val perUnitQuantity: Int,
   val minimumQuantity: Int,
   val isActive: Int
 ) : Parcelable {
@@ -33,7 +32,6 @@ data class Consumable(
     parcel.readString() ?: "",
     parcel.readString() ?: "",
     parcel.readSerializable() as UnitOfMeasurement,
-    parcel.readInt(),
     parcel.readInt(),
     parcel.readInt(),
     // Initialize other properties here
@@ -48,7 +46,6 @@ data class Consumable(
     null, // Default value for consumableSize
     "", // Default value for barcodeId
     UnitOfMeasurement.BOX, // Default value for unitOfMeasurement
-    0, // Default value for perUnitQuantity
     0, // Default value for minimumQuantity
     0  // Default value for isActive
   )
@@ -61,7 +58,6 @@ data class Consumable(
     parcel.writeString(consumableSize)
     parcel.writeString(barcodeId)
     parcel.writeSerializable(unitOfMeasurement)
-    parcel.writeInt(perUnitQuantity)
     parcel.writeInt(minimumQuantity)
     parcel.writeInt(isActive)
     // Write other properties to the parcel
