@@ -100,4 +100,5 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
   }
   // More functions...
 
+
 }
