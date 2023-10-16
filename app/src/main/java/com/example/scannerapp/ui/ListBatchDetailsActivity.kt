@@ -24,6 +24,7 @@ import com.example.scannerapp.adapters.BatchDetailsListAdapter // Assuming you h
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.ui.utils.showHide
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel // Assuming you have a ViewModel for BatchDetails
+import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
@@ -67,12 +68,16 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     searchButton = findViewById(R.id.batchDetailsListSearchButton)
 
     // Create the adapter and set it initially
-    adapter = BatchDetailsListAdapter(this, emptyList(), batchDetailsViewModel)
+    adapter = BatchDetailsListAdapter(
+      this,
+      emptyList(),
+      batchDetailsViewModel,
+    )
     batchDetailsListView.adapter = adapter
 
     // Observe the LiveData and update the adapter when data changes
     batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
-      adapter.updateData(batchDetails)
+      adapter.updateBatchDetailsData(batchDetails)
     })
 
     // Set up the SearchView

@@ -5,7 +5,6 @@ import com.example.scannerapp.database.dao.BatchDetailsDao
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.exceptions.ActiveStatusException
-import com.example.scannerapp.exceptions.BarcodeIdExistException
 import com.example.scannerapp.exceptions.BatchNumberExistException
 import com.example.scannerapp.exceptions.ExpiryDateBeforeCreateDate
 import com.example.scannerapp.exceptions.FieldCannotBeEmptyException
@@ -19,7 +18,8 @@ Repositories are responsible for abstracting the source of data for your app.
 Most business logic are here.
  */
 class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
-  val getAllBatchDetails: LiveData<List<BatchDetails>> = batchDetailsDao.getAllBatchDetails()
+  val getAllBatchDetails: LiveData<List<BatchDetails>> =
+    batchDetailsDao.getAllBatchDetailsByLatestDate()
 
   suspend fun addBatchDetails(batchDetails: BatchDetails) {
     val trimmedBatchNumber = batchDetails.batchNumber.trim()
