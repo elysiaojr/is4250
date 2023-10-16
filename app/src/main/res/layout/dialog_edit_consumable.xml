@@ -170,7 +170,10 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEditTextNamePerUnitQuantity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#CFD2D5"
+                    android:clickable="false"
+                    android:focusable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
