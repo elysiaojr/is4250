@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- circular_button_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#D9ECFA" />  <!-- Set the background color -->
+    <corners android:radius="1000dp" />  <!-- Set a large radius to make it a circle -->
+</shape>

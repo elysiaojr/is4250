@@ -8,6 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    // main landing archives switch
+    <color name="dark_archives">#FFB8CCDB</color>
+    <color name="light_archives">#FFD9ECFA</color>
+
     // switch
     <color name="switch_thumb_enabled">#E3EEF5</color>
     <color name="switch_track_enabled">#34A770</color>

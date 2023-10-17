@@ -49,8 +49,8 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity
 
         R.id.item_settings -> {
           // Respond to navigation item 4 click
-          if (javaClass != ListUsersActivity::class.java) {
-            startActivity(Intent(this, ListUsersActivity::class.java))
+          if (javaClass != MainLandingActivity::class.java) {
+            startActivity(Intent(this, MainLandingActivity::class.java))
             // navigationView.selectedItemId = R.id.item_settings
           }
           true
