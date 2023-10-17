@@ -90,6 +90,18 @@ class ConsumableDetailsActivity : AppCompatActivity(),
   private fun updateUIWithConsumableData(consumable: Consumable) {
     consumableNameTextView.text = consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
     consumableItemCodeTextView.text = consumable.itemCode
+
+    consumable?.let {
+      // Fetch and update the remaining quantity
+      activityScope.launch {
+        val remainingQuantity = withContext(Dispatchers.IO) {
+          consumableViewModel.getAllBatchesQuantityRemaining(it.consumableId)
+        }
+        consumableCurrentQuantityTextView.text = "$remainingQuantity ${it.unitOfMeasurement}"
+
+      }
+    }
+
     val minimumQuantity = "${consumable.minimumQuantity} ${consumable.unitOfMeasurement}"
     consumableMinimumQuantityTextView.text = minimumQuantity
   }

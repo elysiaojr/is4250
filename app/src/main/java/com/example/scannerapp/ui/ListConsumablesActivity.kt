@@ -54,7 +54,9 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
 
     // Observe the LiveData and update the adapter when data changes
     consumableViewModel.allConsumables.observe(this, Observer { consumables ->
-      adapter.updateData(consumables)
+      // Sort the list in ascending alphabetical order (the default option)
+      val sortedConsumables = consumables.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
+      adapter.updateData(sortedConsumables)
     })
 
     // Set up the SearchView
@@ -163,10 +165,10 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
                 (!remainingQuantity || remainingQuantityCheck(consumable))
       }
 
-      // Sort the filtered list based on the current sorting order
+      // Sort the filtered list based on the current sorting order in a case-insensitive manner
       filteredList = when (currentSortOrder) {
-        SortOrderEnum.ASCENDING -> filteredList.sortedBy { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
-        SortOrderEnum.DESCENDING -> filteredList.sortedByDescending { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
+        SortOrderEnum.ASCENDING -> filteredList.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
+        SortOrderEnum.DESCENDING -> filteredList.sortedWith(compareByDescending (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
       }
 
       adapter.updateData(filteredList)
