@@ -202,13 +202,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       Log.d("currentsortorder", currentSortOrder.toString())
       Log.d("sortedlist", list.toString())
 
-      // Apply filters to the list
       filteredList = list.filter { batchDetail ->
-        (active && batchDetail.isActive == 1) ||
-                (inactive && batchDetail.isActive == 0) ||
-                (nonEmpty && batchDetail.batchRemainingQuantity != 0) ||
-                (empty && batchDetail.batchRemainingQuantity == 0) ||
-                (expired && expiredBatchCheck(batchDetail))
+        (active || batchDetail.isActive == 0) &&
+                (inactive || batchDetail.isActive == 1) &&
+                (nonEmpty || batchDetail.batchRemainingQuantity == 0) &&
+                (empty || batchDetail.batchRemainingQuantity != 0) &&
+                (expired || !expiredBatchCheck(batchDetail))
       }
 
       // Sort the filtered list based on the current sorting order in a case-insensitive manner
