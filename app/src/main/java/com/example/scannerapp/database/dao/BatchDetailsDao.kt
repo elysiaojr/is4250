@@ -79,5 +79,40 @@ ORDER BY
   )
   fun getAllBatchDetailsByLatestDate(): LiveData<List<BatchDetails>>
 
+
+//  @Query(
+//    """
+//    SELECT b.*
+//    FROM batch_details AS b
+//    LEFT JOIN consumable AS c ON b.consumableId = c.consumableId
+//    GROUP BY b.batchId
+//    ORDER BY
+//        DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) ASC
+//    """
+//  )
+//  fun getAllBatchDetailsByExpiryDate(): LiveData<List<BatchDetails>>
+//
+//
+//  @Query(
+//    """
+//    SELECT b.*
+//    FROM batch_details AS b
+//    LEFT JOIN consumable AS c ON b.consumableId = c.consumableId
+//    ORDER BY c.consumableName ASC
+//    """
+//  )
+//  fun getAllBatchDetailsByConsumableNameAsc(): LiveData<List<BatchDetails>>
+//
+//
+//  @Query(
+//    """
+//    SELECT b.*
+//    FROM batch_details AS b
+//    LEFT JOIN consumable AS c ON b.consumableId = c.consumableId
+//    ORDER BY c.consumableName DESC
+//    """
+//  )
+//  fun getAllBatchDetailsByConsumableNameDesc(): LiveData<List<BatchDetails>>
+
 }
 

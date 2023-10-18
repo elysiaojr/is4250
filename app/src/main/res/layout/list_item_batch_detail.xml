@@ -12,7 +12,7 @@
     android:id="@+id/batchDetailsIcon"
     android:layout_width="24dp"
     android:layout_height="24dp"
-    android:src="@drawable/outline_medication_24"
+    android:src="@drawable/package_2_24px"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />

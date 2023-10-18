@@ -169,6 +169,9 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
       filteredList = when (currentSortOrder) {
         SortOrderEnum.ASCENDING -> filteredList.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
         SortOrderEnum.DESCENDING -> filteredList.sortedWith(compareByDescending (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
+        else -> {
+          filteredList.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
+        }
       }
 
       adapter.updateData(filteredList)
