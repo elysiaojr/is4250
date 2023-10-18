@@ -14,7 +14,8 @@ class RecordRepository(
 ) {
 
   val getAllRecords: LiveData<List<Record>> = recordDao.getAllRecords()
-  val getAllBatchDetails: LiveData<List<BatchDetails>> = batchDetailsDao.getAllBatchDetails()
+  val getAllBatchDetails: LiveData<List<BatchDetails>> =
+    batchDetailsDao.getAllBatchDetailsByLatestDate()
 
   private suspend fun adjustBatchDetails(record: Record) {
     val batchDetails = batchDetailsDao.getBatchDetailById(record.batchId)

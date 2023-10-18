@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
@@ -76,8 +75,6 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
     textInputEditTextSize = view.findViewById(R.id.textInputEditTextSize)
     textInputEditTextNameItemCode = view.findViewById(R.id.textInputEditTextNameItemCode)
     spinnerUOM = view.findViewById(R.id.spinnerUOM)
-    textInputEditTextNamePerUnitQuantity =
-      view.findViewById(R.id.textInputEditTextNamePerUnitQuantity)
     textInputEditTextNameMinQuantity = view.findViewById(R.id.textInputEditTextNameMinQuantity)
     switchStatus = view.findViewById(R.id.switchStatus)
     saveButton = view.findViewById(R.id.buttonSave)
@@ -94,8 +91,7 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
     textInputEditTextBrand.setText(consumable.consumableBrand)
     textInputEditTextType.setText(consumable.consumableType)
     textInputEditTextSize.setText(consumable.consumableSize)
-    textInputEditTextNameItemCode.setText(consumable.barcodeId)
-    textInputEditTextNamePerUnitQuantity.setText(consumable.perUnitQuantity.toString())
+    textInputEditTextNameItemCode.setText(consumable.itemCode)
     textInputEditTextNameMinQuantity.setText(consumable.minimumQuantity.toString())
     switchStatus.isChecked = consumable.isActive == 1 // Set the switch based on user status
     selectedUOM = consumable.unitOfMeasurement.toString()
@@ -148,8 +144,6 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
       val size = textInputEditTextSize.text.toString().trim()
       val itemCode = textInputEditTextNameItemCode.text.toString().trim()
       val uom = selectedUOM.capitalize()
-      val perUnitQuantityValue =
-        textInputEditTextNamePerUnitQuantity.text.toString().trim()
       val minQuantityValue = textInputEditTextNameMinQuantity.text.toString().trim()
       val switchStatus = switchStatus.isChecked // true for enabled, false for disabled
 
@@ -165,30 +159,7 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
 
       } else {
 
-        // Check if perUnitQuantityValue and minQuantityValue are valid integers
-        val perUnitQuantity: Int = try {
-          perUnitQuantityValue.toInt()
-        } catch (e: NumberFormatException) {
-          // Handle the case where perUnitQuantityValue is not a valid integer
-          Toast.makeText(
-            requireContext(),
-            "Please enter a valid Per Unit Quantity.",
-            Toast.LENGTH_SHORT
-          ).show()
-          -1 // Set a default or error value
-          return@setOnClickListener // Exit the function early
-        }
-
-        // Check if perUnitQuantity is zero or less and display an error message
-        if (perUnitQuantity <= 0) {
-          Toast.makeText(
-            requireContext(),
-            "Per Unit Quantity must be greater than zero.",
-            Toast.LENGTH_SHORT
-          ).show()
-          return@setOnClickListener // Exit the lambda early
-        }
-
+        // Check if minQuantityValue is valid integers
         val minQuantity: Int = try {
           minQuantityValue.toInt()
         } catch (e: NumberFormatException) {
@@ -224,9 +195,8 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
           consumableBrand = brand,
           consumableType = type,
           consumableSize = size,
-          barcodeId = itemCode,
+          itemCode = itemCode,
           unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
-          perUnitQuantity = perUnitQuantity,
           minimumQuantity = minQuantity,
           isActive = status
         )

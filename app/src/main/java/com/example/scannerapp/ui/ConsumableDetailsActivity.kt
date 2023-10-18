@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scannerapp.R
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.ConsumableViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // This activity displays details of a consumable.
 class ConsumableDetailsActivity : AppCompatActivity(),
@@ -17,27 +20,40 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
   // Define UI elements and data models.
   private lateinit var consumableNameTextView: TextView
-  private lateinit var consumableBarcodeIdTextView: TextView
+  private lateinit var consumableItemCodeTextView: TextView
   private lateinit var consumableCurrentQuantityTextView: TextView
   private lateinit var consumableMinimumQuantityTextView: TextView
+  private lateinit var consumableViewModel: ConsumableViewModel
+  private val activityScope = CoroutineScope(Dispatchers.Main)
   private var consumable: Consumable? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_consumable_details)
 
+    consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
+
     // Retrieve the selected consumable from the intent.
     consumable = intent.getParcelableExtra("consumable")
 
     // Initialize views.
     consumableNameTextView = findViewById(R.id.consumableNameTextView)
-    consumableBarcodeIdTextView = findViewById(R.id.consumableBarcodeIdTextView)
+    consumableItemCodeTextView = findViewById(R.id.consumableItemCodeTextView)
     consumableCurrentQuantityTextView = findViewById(R.id.consumableCurrentQuantityTextView)
     consumableMinimumQuantityTextView = findViewById(R.id.consumableMinimumQuantityTextView)
 
     // Display the consumable details in the UI.
     consumable?.let {
       updateUIWithConsumableData(it)
+
+      // Fetch and update the remaining quantity
+      activityScope.launch {
+        val remainingQuantity = withContext(Dispatchers.IO) {
+          consumableViewModel.getAllBatchesQuantityRemaining(it.consumableId)
+        }
+        consumableCurrentQuantityTextView.text = "$remainingQuantity ${it.unitOfMeasurement}"
+
+      }
     }
 
     // Define and set the action for the back button.
@@ -72,10 +88,20 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
   // Update the UI views with data from the Consumable object.
   private fun updateUIWithConsumableData(consumable: Consumable) {
-    consumableNameTextView.text = consumable.consumableName
-    consumableBarcodeIdTextView.text = consumable.barcodeId
-    val currentQuantity = "${consumable.perUnitQuantity} ${consumable.unitOfMeasurement}"
-    consumableCurrentQuantityTextView.text = currentQuantity
+    consumableNameTextView.text = consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
+    consumableItemCodeTextView.text = consumable.itemCode
+
+    consumable?.let {
+      // Fetch and update the remaining quantity
+      activityScope.launch {
+        val remainingQuantity = withContext(Dispatchers.IO) {
+          consumableViewModel.getAllBatchesQuantityRemaining(it.consumableId)
+        }
+        consumableCurrentQuantityTextView.text = "$remainingQuantity ${it.unitOfMeasurement}"
+
+      }
+    }
+
     val minimumQuantity = "${consumable.minimumQuantity} ${consumable.unitOfMeasurement}"
     consumableMinimumQuantityTextView.text = minimumQuantity
   }

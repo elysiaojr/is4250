@@ -5,7 +5,6 @@ import com.example.scannerapp.database.dao.BatchDetailsDao
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.exceptions.ActiveStatusException
-import com.example.scannerapp.exceptions.BarcodeIdExistException
 import com.example.scannerapp.exceptions.BatchNumberExistException
 import com.example.scannerapp.exceptions.ExpiryDateBeforeCreateDate
 import com.example.scannerapp.exceptions.FieldCannotBeEmptyException
@@ -19,7 +18,14 @@ Repositories are responsible for abstracting the source of data for your app.
 Most business logic are here.
  */
 class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
-  val getAllBatchDetails: LiveData<List<BatchDetails>> = batchDetailsDao.getAllBatchDetails()
+  val getAllBatchDetails: LiveData<List<BatchDetails>> =
+    batchDetailsDao.getAllBatchDetailsByLatestDate()
+//  val getAllBatchDetailsByExpiryDate: LiveData<List<BatchDetails>> =
+//    batchDetailsDao.getAllBatchDetailsByExpiryDate()
+//  val getAllBatchDetailsByConsumableNameAsc: LiveData<List<BatchDetails>> =
+//    batchDetailsDao.getAllBatchDetailsByConsumableNameAsc()
+//  val getAllBatchDetailsByConsumableNameDesc: LiveData<List<BatchDetails>> =
+//    batchDetailsDao.getAllBatchDetailsByConsumableNameDesc()
 
   suspend fun addBatchDetails(batchDetails: BatchDetails) {
     val trimmedBatchNumber = batchDetails.batchNumber.trim()
@@ -138,6 +144,7 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
       throw ActiveStatusException("Active field can only be active (1) or not active (0)")
     }
   }
+
 
   // More functions...
 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.scannerapp.database.AppDatabase
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.exceptions.ActiveStatusException
-import com.example.scannerapp.exceptions.BarcodeIdExistException
+import com.example.scannerapp.exceptions.ItemCodeExistException
 import com.example.scannerapp.exceptions.EnumValueDoesNotMatch
 import com.example.scannerapp.exceptions.FieldCannotBeEmptyException
 import com.example.scannerapp.exceptions.InsufficientQuantityException
@@ -35,7 +35,7 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
 
   private fun handleException(e: Exception) {
     when (e) {
-      is BarcodeIdExistException,
+      is ItemCodeExistException,
       is FieldCannotBeEmptyException,
       is InsufficientQuantityException,
       is ActiveStatusException,
@@ -85,16 +85,20 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
     }
   }
 
-  fun getConsumableByBarcodeId(barcodeId: String) {
+  fun getConsumableByItemCode(itemCode: String) {
     viewModelScope.launch(Dispatchers.IO) {
       try {
-        consumableRepository.getConsumableByBarcodeId(barcodeId)
+        consumableRepository.getConsumableByItemCode(itemCode)
       } catch (e: Exception) {
         handleException(e)
       }
     }
   }
 
+  suspend fun getAllBatchesQuantityRemaining(consumableId: Int): Int {
+    return consumableRepository.getAllBatchesQuantityRemaining(consumableId)
+  }
   // More functions...
+
 
 }

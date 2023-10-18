@@ -63,7 +63,7 @@
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Barcode No.:"
+        android:text="Item Code:"
         android:textSize="16sp"
         android:textAlignment="viewStart"
         android:layout_gravity="start|center_vertical"
@@ -73,7 +73,7 @@
 
       <!-- Column 2: "Active" -->
       <TextView
-        android:id="@+id/consumableBarcodeIdTextView"
+        android:id="@+id/consumableItemCodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="000000"

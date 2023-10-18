@@ -1,0 +1,110 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="271dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/closeButton"
+        style="@style/IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        app:icon="@drawable/close_24px" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textViewFilterConsumable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7.5dp"
+            android:text="Filter"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/button_background"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/activeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Active Consumables" />
+
+    <CheckBox
+        android:id="@+id/inactiveCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inactive Consumables" />
+
+    <CheckBox
+        android:id="@+id/remainingQuantityCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shortage (Remaining qty less than min qty)" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="#000000" />
+
+    <TextView
+        android:id="@+id/textViewSortConsumables"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7.5dp"
+        android:text="Sort"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/sortRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp">
+
+        <RadioButton
+            android:id="@+id/radioSortAZ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A to Z" />
+
+        <RadioButton
+            android:id="@+id/radioSortZA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Z to A" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonApply"
+        style="@style/CardTextButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:text="Apply"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="parent" />
+
+</LinearLayout>

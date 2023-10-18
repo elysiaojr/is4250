@@ -30,11 +30,17 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   private val batchDetailsRepository: BatchDetailsRepository
   val errorLiveData = MutableLiveData<String>()
   val selectedBatchDetails = MutableLiveData<BatchDetails?>()
+//  val allBatchDetailsByExpiryDate: LiveData<List<BatchDetails>>
+//  val allBatchDetailsByConsumableNameAsc: LiveData<List<BatchDetails>>
+//  val allBatchDetailsByConsumableNameDesc: LiveData<List<BatchDetails>>
 
   init {
     val batchDetailsDao = AppDatabase.getDatabase(application).batchDetailsDao()
     batchDetailsRepository = BatchDetailsRepository(batchDetailsDao)
     allBatchDetails = batchDetailsRepository.getAllBatchDetails
+//    allBatchDetailsByExpiryDate = batchDetailsRepository.getAllBatchDetailsByExpiryDate
+//    allBatchDetailsByConsumableNameAsc = batchDetailsRepository.getAllBatchDetailsByConsumableNameAsc
+//    allBatchDetailsByConsumableNameDesc = batchDetailsRepository.getAllBatchDetailsByConsumableNameDesc
   }
 
   private fun handleException(e: Exception) {
@@ -139,4 +145,5 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     return batchDetailsRepository.countOfBatchDetailsByBatchNumber(batchNumber) > 0
   }
   // More functions...
+
 }

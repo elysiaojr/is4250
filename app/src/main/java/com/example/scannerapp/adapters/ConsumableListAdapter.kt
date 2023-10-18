@@ -2,8 +2,11 @@ package com.example.scannerapp.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.widget.BaseAdapter
-import android.widget.ImageButton
 import android.widget.Filterable
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +18,6 @@ import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.ui.ConsumableDetailsActivity
 import android.util.Log
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class ConsumableListAdapter(
   private val context: Context,
@@ -50,14 +51,14 @@ class ConsumableListAdapter(
     val view = inflater.inflate(R.layout.list_item_consumable, null)
 
     val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
-    val consumableBarcodeIdTextView = view.findViewById<TextView>(R.id.consumableBarcodeId)
+    val consumableItemCodeTextView = view.findViewById<TextView>(R.id.consumableItemCode)
 
     // Set user data to views
     val consumableTitleDisplay =
       consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
     consumableNameTextView.text = consumableTitleDisplay// Replace with user's name
-    val barcodeIdDisplay = "No. " + consumable.barcodeId
-    consumableBarcodeIdTextView.text = barcodeIdDisplay
+    val itemCodeDisplay = "Item Code: " + consumable.itemCode
+    consumableItemCodeTextView.text = getBoldSpannable(itemCodeDisplay, "Item Code: ")
 
     // Handle clicking into a Consumable Item
     val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
@@ -110,6 +111,20 @@ class ConsumableListAdapter(
         notifyDataSetChanged()
       }
     }
+  }
+
+  private fun getBoldSpannable(fullText: String, boldText: String): SpannableString {
+    val spannable = SpannableString(fullText)
+    val start = fullText.indexOf(boldText)
+    if (start >= 0) {
+      spannable.setSpan(
+        StyleSpan(Typeface.BOLD),
+        start,
+        start + boldText.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+      )
+    }
+    return spannable
   }
 
 }

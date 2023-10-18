@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ListView
@@ -21,6 +22,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.adapters.BatchDetailsListAdapter // Assuming you have an adapter like the ConsumableListAdapter
+import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.dataclass.BatchDetailsFilterSortState
+import com.example.scannerapp.dataclass.ConsumableFilterSortState
+import com.example.scannerapp.dataclass.SortOrderEnum
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.ui.utils.showHide
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel // Assuming you have a ViewModel for BatchDetails
@@ -32,9 +37,11 @@ import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_details),
   CoroutineScope {
@@ -47,6 +54,10 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
   private val activityScope = CoroutineScope(Dispatchers.Main)
   override val coroutineContext: CoroutineContext
     get() = Dispatchers.Main + job
+
+  private lateinit var filteredList: List<BatchDetails>
+  private var batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = SortOrderEnum.ASCENDING)
+  private var currentSortOrder: SortOrderEnum = SortOrderEnum.LAST_TAKEOUT
 
   private val barcodeLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -94,12 +105,16 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     searchButton = findViewById(R.id.batchDetailsListSearchButton)
 
     // Create the adapter and set it initially
-    adapter = BatchDetailsListAdapter(this, emptyList(), batchDetailsViewModel)
+    adapter = BatchDetailsListAdapter(
+      this,
+      emptyList(),
+      batchDetailsViewModel,
+    )
     batchDetailsListView.adapter = adapter
 
     // Observe the LiveData and update the adapter when data changes
-    batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
-      adapter.updateData(batchDetails)
+    batchDetailsViewModel.allBatchDetails.observe(this, Observer { consumables ->
+      adapter.updateBatchDetailsData(consumables)
     })
 
     // Set up the SearchView
@@ -137,12 +152,18 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
 
       val intent = integrator.createScanIntent()
       barcodeLauncher.launch(intent)
+    }
 
-//      val scanOptions = ScanOptions() // Customize scan options as needed
-//
-//      val intent = Intent(this, CaptureActivity::class.java)
-//      intent.action = "com.google.zxing.client.android.SCAN"
-//      barcodeLauncher.launch(intent)
+    // Initialize the filter state
+    batchDetailsFilterSort = BatchDetailsFilterSortState(active = true, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
+
+    // Apply the filter to the default state
+    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+
+    // filter button
+    val filterButton = findViewById<Button>(R.id.batchDetailsListFilterButton)
+    filterButton.setOnClickListener {
+      showFilterSortDialog()
     }
   }
 
@@ -191,6 +212,107 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       dialogFragment.show(supportFragmentManager, "ExistingBatchDialogFragment")
     }
   }
+  // handle the filter/sort dialog
+  private fun showFilterSortDialog() {
+    val dialogFragment = FilterSortBatchDetailsDialog.newInstance(batchDetailsFilterSort, currentSortOrder)
+    dialogFragment.onFilterSortAppliedListener = object : FilterSortBatchDetailsDialog.OnFilterSortAppliedListener {
+      override suspend fun onFilterSortApplied(
+        active: Boolean,
+        inactive: Boolean,
+        nonEmpty: Boolean,
+        empty: Boolean,
+        expired: Boolean,
+        sortOrder: SortOrderEnum
+      ) {
+        updateList(active, inactive, nonEmpty, empty, expired)
+        currentSortOrder = sortOrder // Update the sorting order
+        //saveLastSelectedSortOrder(sortOrder) // Save the last selected sorting order
+        batchDetailsFilterSort = BatchDetailsFilterSortState(active, inactive, nonEmpty, empty, expired, sortOrder) // Update the filter state
+      }
+    }
+    dialogFragment.show(supportFragmentManager, "FilterSortDialogFragment")
+  }
+
+
+  private fun updateList(active: Boolean, inactive: Boolean, nonEmpty: Boolean, empty: Boolean, expired: Boolean) {
+    CoroutineScope(Dispatchers.Main).launch {
+      val list =  batchDetailsViewModel.allBatchDetails.value.orEmpty()
+
+      Log.d("currentsortorder", currentSortOrder.toString())
+      Log.d("sortedlist", list.toString())
+
+      filteredList = list.filter { batchDetail ->
+        (active && batchDetail.isActive == 1) ||
+                (inactive && batchDetail.isActive == 0) ||
+                (nonEmpty && batchDetail.batchRemainingQuantity != 0) ||
+                (empty && batchDetail.batchRemainingQuantity == 0) ||
+                (expired && expiredBatchCheck(batchDetail))
+      }
+
+      // Sort the filtered list based on the current sorting order in a case-insensitive manner
+      filteredList = when (currentSortOrder) {
+        SortOrderEnum.ASCENDING -> sortBatchDetailsAscending(filteredList)
+        SortOrderEnum.DESCENDING -> sortBatchDetailsDescending(filteredList)
+        SortOrderEnum.LAST_TAKEOUT -> filteredList
+        SortOrderEnum.FIRST_EXPIRY -> sortBatchDetailsByExpiryDateAscending(filteredList)
+      }
+
+      adapter.updateBatchDetailsData(filteredList)
+    }
+  }
+
+  private suspend fun sortBatchDetailsAscending(filteredList: List<BatchDetails>): List<BatchDetails> {
+    val comparator = compareBy<Pair<String, BatchDetails>> { it.first.lowercase() }
+
+    val batchDetailsWithNames = filteredList.map { batchDetail ->
+      batchDetailsViewModel.getBatchDetailConsumableName(batchDetail.consumableId) to batchDetail
+    }
+
+    val sortedBatches = batchDetailsWithNames.sortedWith(comparator)
+
+    return sortedBatches.map { it.second }
+  }
+
+  private suspend fun sortBatchDetailsDescending(filteredList: List<BatchDetails>): List<BatchDetails> {
+    val comparator = compareByDescending<Pair<String, BatchDetails>> { it.first.lowercase() }
+
+    val batchDetailsWithNames = filteredList.map { batchDetail ->
+      batchDetailsViewModel.getBatchDetailConsumableName(batchDetail.consumableId) to batchDetail
+    }
+
+    val sortedBatches = batchDetailsWithNames.sortedWith(comparator)
+
+    return sortedBatches.map { it.second }
+  }
+
+  private fun sortBatchDetailsByExpiryDateAscending(batchDetailsList: List<BatchDetails>): List<BatchDetails> {
+    val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+    return batchDetailsList.sortedWith(Comparator { batch1, batch2 ->
+      val date1 = LocalDate.parse(batch1.expiryDate, dateFormat)
+      val date2 = LocalDate.parse(batch2.expiryDate, dateFormat)
+      date1.compareTo(date2)
+    })
+  }
+
+  private fun expiredBatchCheck(batchDetails: BatchDetails): Boolean {
+    val currentDate = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+    val expiryDate = LocalDate.parse(batchDetails.expiryDate, formatter)
+
+    return expiryDate.isBefore(currentDate)
+  }
+
+
+//  // Function to save the last selected sorting order
+//  private fun saveLastSelectedSortOrder(sortOrder: SortOrderEnum) {
+//    // Use SharedPreferences to store the last selected sorting order
+//    val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+//    val editor = sharedPreferences.edit()
+//    editor.putString("lastSelectedSortOrderBatchDetails", sortOrder.name)
+//    editor.apply()
+//  }
 }
 
 //              val bundle = Bundle()
@@ -222,3 +344,5 @@ fun GreetingPreview() {
     Greeting("Android")
   }
 }
+
+

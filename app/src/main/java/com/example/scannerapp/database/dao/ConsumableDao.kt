@@ -27,10 +27,13 @@ interface ConsumableDao {
   @Query("SELECT * FROM consumable WHERE consumableId = :id")
   fun getConsumableById(id: Int): Consumable
 
-  @Query("SELECT * FROM consumable WHERE barcodeId = :barcodeId")
-  fun getConsumableByBarcodeId(barcodeId: String): Consumable
+  @Query("SELECT * FROM consumable WHERE itemCode = :itemCode")
+  fun getConsumableByItemCode(itemCode: String): Consumable
 
   @Query("SELECT * FROM consumable")
   fun getAllConsumables(): LiveData<List<Consumable>>
+
+  @Query("SELECT SUM(b.batchRemainingQuantity) AS currentQuantity FROM consumable c JOIN batch_details b ON c.consumableId = b.consumableId WHERE c.consumableId = :consumableId")
+  fun getAllBatchesQuantityRemaining(consumableId: Int): Int
 }
 

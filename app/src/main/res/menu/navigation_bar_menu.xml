@@ -11,13 +11,13 @@
         android:enabled="true"
         android:icon="@drawable/task"
         android:iconTint="@color/mid_records"
-        android:title="Records" />
+        android:title="Logbook" />
     <item
         android:id="@+id/item_batch_details"
         android:enabled="true"
         android:icon="@drawable/boxes"
         android:iconTint="@color/mid_batches"
-        android:title="Batches" />
+        android:title="Inventory" />
     <item
         android:id="@+id/item_consumables"
         android:enabled="true"
