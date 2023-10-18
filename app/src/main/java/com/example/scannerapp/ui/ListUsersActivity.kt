@@ -10,13 +10,13 @@ import com.example.scannerapp.adapters.UserListAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import com.example.scannerapp.database.entities.User
 import com.example.scannerapp.viewmodels.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 
@@ -46,7 +46,7 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
         })
 
         // Show the dialog when the fab is clicked
-        val createUserFAB = findViewById<FloatingActionButton>(R.id.fab)
+        val createUserFAB = findViewById<CardView>(R.id.fab)
         createUserFAB.setOnClickListener {
             showCreateUserDialog()
         }

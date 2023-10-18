@@ -17,9 +17,9 @@ import com.example.scannerapp.adapters.ConsumableListAdapter
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.animation.ObjectAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.cardview.widget.CardView
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.dataclass.ConsumableFilterSortState
 import com.example.scannerapp.dataclass.SortOrderEnum
@@ -77,7 +77,7 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     }
 
     // Floating Action Button: Create
-    val fab = findViewById<FloatingActionButton>(R.id.fab_consumables)
+    val fab = findViewById<CardView>(R.id.fab_consumables)
     fab.setOnClickListener {
       val dialogFragment = CreateConsumableDialog()
       dialogFragment.show(supportFragmentManager, "CreateConsumableDialog")
