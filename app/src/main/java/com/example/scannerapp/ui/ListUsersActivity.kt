@@ -2,7 +2,6 @@ package com.example.scannerapp.ui
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -17,10 +16,8 @@ import com.example.scannerapp.database.entities.User
 import com.example.scannerapp.viewmodels.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textfield.TextInputEditText
 
 class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
@@ -29,7 +26,7 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_users)
+//        setContentView(R.layout.activity_list_users)
 
         // initialise the ViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
@@ -56,16 +53,16 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
     }
 
     // for navigation bar
-    override fun setActiveNavigationItem() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.item_settings
-    }
-
-    // for navigation bar
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, ListUsersActivity::class.java)
         }
+    }
+
+    // for navigation bar
+    override fun setActiveNavigationItem() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.item_settings
     }
 
     private fun showCreateUserDialog() {

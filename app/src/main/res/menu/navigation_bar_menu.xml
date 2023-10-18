@@ -27,6 +27,7 @@
     <item
         android:id="@+id/item_settings"
         android:enabled="true"
+        android:visible="false"
         android:icon="@drawable/vaccines_24px"
         android:iconTint="@color/delete"
         android:title="Settings" />
