@@ -95,7 +95,7 @@ class FilterSortBatchDetailsDialog : DialogFragment() {
         resetButton.setOnClickListener {
             // Reset the checkboxes
             activeCheckBox.isChecked = true
-            inactiveCheckBox.isChecked = true
+            inactiveCheckBox.isChecked = false
             nonEmptyCheckBox.isChecked = false
             emptyCheckBox.isChecked = false
             expiredCheckBox.isChecked = false
