@@ -1,5 +1,6 @@
 package com.example.scannerapp.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -78,9 +79,18 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
         }
         archivesMode = !archivesMode
     }
+
     // for navigation bar
     override fun setActiveNavigationItem() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.main_landing
     }
+
+    // for navigation bar
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainLandingActivity::class.java)
+        }
+    }
+
 }

@@ -35,11 +35,7 @@
             android:name=".ui.MainLandingActivity"
             android:exported="true">
             <!-- add this intent-filter tmo whichever activity you want to show on launch -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.MainActivity"
@@ -50,8 +46,11 @@
             android:name=".ui.ListUsersActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.UserDetailsActivity"

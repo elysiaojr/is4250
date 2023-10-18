@@ -23,7 +23,7 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textfield.TextInputEditText
 
-class ListUsersActivity : AppCompatActivity() {
+class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
     private lateinit var userViewModel: UserViewModel
     private lateinit var backButton: ImageView
 
@@ -37,7 +37,7 @@ class ListUsersActivity : AppCompatActivity() {
         backButton = findViewById<ImageView>(R.id.back_icon)
 
         backButton.setOnClickListener {
-            showCreateUserDialog()
+            startActivity(Intent(this, MainLandingActivity::class.java))
         }
 
         // Observe the LiveData and update the adapter when data changes
@@ -53,6 +53,12 @@ class ListUsersActivity : AppCompatActivity() {
         createUserFAB.setOnClickListener {
             showCreateUserDialog()
         }
+    }
+
+    // for navigation bar
+    override fun setActiveNavigationItem() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.item_settings
     }
 
     // for navigation bar

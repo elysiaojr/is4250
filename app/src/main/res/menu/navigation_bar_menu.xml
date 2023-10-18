@@ -24,4 +24,11 @@
         android:icon="@drawable/vaccines_24px"
         android:iconTint="@color/delete"
         android:title="Consumables" />
+    <item
+        android:id="@+id/item_settings"
+        android:enabled="true"
+        android:icon="@drawable/vaccines_24px"
+        android:iconTint="@color/delete"
+        android:title="Settings" />
+    <!--        android:visible="false"-->
 </menu>
