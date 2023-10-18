@@ -131,7 +131,7 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     }
 
     // Initialize the filter state
-    batchDetailsFilterSort = BatchDetailsFilterSortState(active = true, inactive = true, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
+    batchDetailsFilterSort = BatchDetailsFilterSortState(active = true, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
 
     // Apply the filter to the default state
     updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
@@ -203,11 +203,11 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       Log.d("sortedlist", list.toString())
 
       filteredList = list.filter { batchDetail ->
-        (active || batchDetail.isActive == 0) &&
-                (inactive || batchDetail.isActive == 1) &&
-                (nonEmpty || batchDetail.batchRemainingQuantity == 0) &&
-                (empty || batchDetail.batchRemainingQuantity != 0) &&
-                (expired || !expiredBatchCheck(batchDetail))
+        (active && batchDetail.isActive == 1) ||
+                (inactive && batchDetail.isActive == 0) ||
+                (nonEmpty && batchDetail.batchRemainingQuantity != 0) ||
+                (empty && batchDetail.batchRemainingQuantity == 0) ||
+                (expired && expiredBatchCheck(batchDetail))
       }
 
       // Sort the filtered list based on the current sorting order in a case-insensitive manner
