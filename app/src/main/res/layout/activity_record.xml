@@ -26,7 +26,7 @@
         <ImageView
             android:id="@+id/recordIcon"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="50dp"
             android:src="@drawable/outline_medication_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -210,6 +210,7 @@
                 android:id="@+id/recordDeleteButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:backgroundTint="@color/delete"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/baseline_delete_outline_24"
                 android:text="Delete"
@@ -226,6 +227,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/mid_records_white_text_button"
                 android:drawableLeft="@drawable/baseline_edit_24"
                 android:text="Edit"
                 android:textSize="16sp"
@@ -237,6 +239,17 @@
             android:padding="16dp"
             android:layout_marginVertical="18sp"
             android:background="#c0c0c0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Do you wish to create a new record for this same batch?"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:textAlignment="viewStart"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:layout_column="0"
+            android:layout_marginBottom="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -249,6 +262,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/mid_records_white_text_button"
                 android:drawableLeft="@drawable/baseline_add_24_white"
                 android:text="Create Record"
                 android:textSize="16sp"

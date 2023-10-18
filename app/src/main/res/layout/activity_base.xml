@@ -9,9 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/navigation_bar_menu"
+        app:backgroundTint="@color/white"
         app:elevation="8dp"
-        app:backgroundTint="@color/white"/>
+        app:itemIconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/navigation_bar_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

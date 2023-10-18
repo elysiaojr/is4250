@@ -112,6 +112,7 @@
       android:contentDescription="@null"
       android:padding="16dp"
       app:maxImageSize="40dp"
+      app:backgroundTint="@color/mid_batches"
       app:layout_constraintBottom_toTopOf="@+id/fab_batch_details"
       app:layout_constraintEnd_toEndOf="parent" />
 
@@ -124,6 +125,7 @@
     android:contentDescription="@null"
     android:padding="16dp"
     app:maxImageSize="40dp"
+      app:backgroundTint="@color/mid_batches"
     app:layout_constraintBottom_toTopOf="@+id/guideline"
     app:layout_constraintEnd_toEndOf="parent" />
 

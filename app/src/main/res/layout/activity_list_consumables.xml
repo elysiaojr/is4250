@@ -112,6 +112,7 @@
     android:contentDescription="@null"
     android:padding="16dp"
     app:maxImageSize="40dp"
+      app:backgroundTint="@color/mid_consumables"
     app:layout_constraintBottom_toTopOf="@+id/guideline"
     app:layout_constraintEnd_toEndOf="parent" />
 
