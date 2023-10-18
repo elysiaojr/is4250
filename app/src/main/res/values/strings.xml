@@ -49,9 +49,11 @@
     <string name="title_activity_consumable_details">ConsumableDetailsActivity</string>
     <string name="title_activity_batch_details">BatchDetailsActivity</string>
     <string-array name="uom_values">
+        <item>BAG</item>
         <item>BOX</item>
-        <item>PIECE</item>
+        <item>CT</item>
         <item>PACK</item>
+        <item>PC</item>
     </string-array>
     <string name="title_activity_create_record">CreateRecordActivity</string>
 </resources>

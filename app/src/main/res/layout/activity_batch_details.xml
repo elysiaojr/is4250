@@ -27,7 +27,7 @@
       android:id="@+id/batchIcon"
       android:layout_width="match_parent"
       android:layout_height="55dp"
-      android:src="@drawable/outline_medication_24"
+      android:src="@drawable/package_2_24px"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintBottom_toBottomOf="parent" />

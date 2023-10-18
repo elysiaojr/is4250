@@ -86,5 +86,5 @@ data class Consumable(
 
 
 enum class UnitOfMeasurement {
-  BOX, PIECE, PACK
+  BOX, PC, PACK, CT, BAG
 }
