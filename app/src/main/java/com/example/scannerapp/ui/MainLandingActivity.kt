@@ -16,6 +16,7 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
     private lateinit var batchesCardView: CardView
     private lateinit var consumablesCardView: CardView
     private lateinit var archivesButton: View
+    private lateinit var settingsButton: View
     private lateinit var buttonsTitle: TextView
     private var archivesMode = false
 
@@ -44,7 +45,7 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
         }
 
         // Settings circular button
-        val settingsButton = findViewById<ConstraintLayout>(R.id.settings_button)
+        settingsButton = findViewById<ConstraintLayout>(R.id.settings_button)
         settingsButton.setOnClickListener {
             val intent = Intent(this, ListUsersActivity::class.java)
             startActivity(intent)
@@ -80,6 +81,6 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
     // for navigation bar
     override fun setActiveNavigationItem() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.item_settings
+        bottomNavigationView.selectedItemId = R.id.main_landing
     }
 }

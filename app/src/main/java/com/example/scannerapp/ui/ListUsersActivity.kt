@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import com.example.scannerapp.R
 import com.example.scannerapp.adapters.UserListAdapter
 import android.widget.ListView
@@ -22,16 +23,22 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.textfield.TextInputEditText
 
-class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
+class ListUsersActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
+    private lateinit var backButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_list_users)
 
         // initialise the ViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
         val userListView = findViewById<ListView>(R.id.userlist)
+        backButton = findViewById<ImageView>(R.id.back_icon)
+
+        backButton.setOnClickListener {
+            showCreateUserDialog()
+        }
 
         // Observe the LiveData and update the adapter when data changes
         userViewModel.allUsers.observe(this, Observer { users ->
@@ -53,12 +60,6 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
         fun getIntent(context: Context): Intent {
             return Intent(context, ListUsersActivity::class.java)
         }
-    }
-
-    // for navigation bar
-    override fun setActiveNavigationItem() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.item_settings
     }
 
     private fun showCreateUserDialog() {

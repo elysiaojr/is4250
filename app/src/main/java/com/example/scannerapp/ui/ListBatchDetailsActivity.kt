@@ -29,13 +29,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 import com.journeyapps.barcodescanner.ScanOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
-class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_details) {
+class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_details),
+  CoroutineScope {
+  private val job = Job()
   private lateinit var batchDetailsViewModel: BatchDetailsViewModel
   private lateinit var batchDetailsListView: ListView
   private lateinit var searchView: SearchView
   private lateinit var searchButton: Button
   private lateinit var adapter: BatchDetailsListAdapter
+  private val activityScope = CoroutineScope(Dispatchers.Main)
+  override val coroutineContext: CoroutineContext
+    get() = Dispatchers.Main + job
 
   private val barcodeLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -45,12 +56,28 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
         if (scanResult == null) {
           Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
         } else {
-          Toast.makeText(this, "Scanned: $scanResult", Toast.LENGTH_LONG).show();
-          val dialogFragment = CreateBatchDetailsDialog()
-          val bundle = Bundle()
-          bundle.putString("scannedData", scanResult)
-          dialogFragment.arguments = bundle
-          dialogFragment.show(supportFragmentManager, "CreateBatchDetailsDialog")
+          activityScope.launch {
+            val batchExists = checkIfBatchNumberExists(scanResult)
+            if (batchExists) {
+              Toast.makeText(this@ListBatchDetailsActivity, "Batch $scanResult has already been recorded.", Toast.LENGTH_LONG).show()
+              openEditBatchDetailsDialog(scanResult)
+            //              val dialogFragment = ExistingBatchDialogFragment()
+//              val bundle = Bundle()
+//              bundle.putString("scannedData", scanResult)
+//              dialogFragment.arguments = bundle
+//              dialogFragment.show(supportFragmentManager, "ExistingBatchDialogFragment")
+//              intent.putExtra("batchDetail", batchDetail)
+//              context.startActivity(intent)
+
+            } else {
+              Toast.makeText(this@ListBatchDetailsActivity, "Scanned: $scanResult", Toast.LENGTH_LONG).show();
+              val dialogFragment = CreateBatchDetailsDialog()
+              val bundle = Bundle()
+              bundle.putString("scannedData", scanResult)
+              dialogFragment.arguments = bundle
+              dialogFragment.show(supportFragmentManager, "CreateBatchDetailsDialog")
+            }
+          }
         }
       } else {
         // Handle the case when scanning was canceled or failed.
@@ -148,7 +175,30 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
     bottomNavigationView.selectedItemId = R.id.item_batch_details
   }
+
+  private suspend fun checkIfBatchNumberExists(batchDetailsBatchNumber: String): Boolean {
+    batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+    return withContext(Dispatchers.IO) {
+      batchDetailsViewModel.checkIfBatchNumberExists(batchDetailsBatchNumber)
+    }
+  }
+
+  private suspend fun openEditBatchDetailsDialog(batchDetailsBatchNumber: String) {
+    batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+
+    return withContext(Dispatchers.IO) {
+      val dialogFragment = ExistingBatchDialogFragment(batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(batchDetailsBatchNumber))
+      dialogFragment.show(supportFragmentManager, "ExistingBatchDialogFragment")
+    }
+  }
 }
+
+//              val bundle = Bundle()
+//              bundle.putString("scannedData", scanResult)
+//              dialogFragment.arguments = bundle
+//              dialogFragment.show(supportFragmentManager, "ExistingBatchDialogFragment")
+//              intent.putExtra("batchDetail", batchDetail)
+//              context.startActivity(intent)
 
 private fun rotateButtonIcon(button: Button, degrees: Float) {
   val rotation = ObjectAnimator.ofFloat(button, "rotation", degrees)

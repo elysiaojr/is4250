@@ -34,6 +34,9 @@ interface BatchDetailsDao {
   @Query("SELECT * FROM batch_details WHERE batchNumber = :batchNumber")
   suspend fun getBatchDetailByBatchNumber(batchNumber: String): BatchDetails
 
+  @Query("SELECT * FROM batch_details WHERE batchNumber = :batchNumber")
+  suspend fun getBatchDetailsLiveDataByBatchNumber(batchNumber: String): BatchDetails
+
   @Query("SELECT batch_details.batchId FROM batch_details WHERE batchNumber = :batchNumber")
   suspend fun getBatchIdByBatchNumber(batchNumber: String): Int
 

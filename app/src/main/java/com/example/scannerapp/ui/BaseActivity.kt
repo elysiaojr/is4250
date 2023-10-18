@@ -47,7 +47,7 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity
           true
         }
 
-        R.id.item_settings -> {
+        R.id.main_landing -> {
           // Respond to navigation item 4 click
           if (javaClass != MainLandingActivity::class.java) {
             startActivity(Intent(this, MainLandingActivity::class.java))
@@ -55,6 +55,15 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity
           }
           true
         }
+
+//        R.id.item_settings -> {
+//          // Respond to navigation item 4 click
+//          if (javaClass != ListUsersActivity::class.java) {
+//            startActivity(Intent(this, ListUsersActivity::class.java))
+//            // navigationView.selectedItemId = R.id.item_settings
+//          }
+//          true
+//        }
 
         else -> false
       }

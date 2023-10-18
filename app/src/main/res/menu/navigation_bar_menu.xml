@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/main_landing"
+        android:enabled="true"
+        android:icon="@drawable/outline_home_24"
+        android:title="Home" />
+    <item
         android:id="@+id/item_records"
         android:enabled="true"
         android:icon="@drawable/remove_itemcopy"
@@ -15,9 +20,4 @@
         android:enabled="true"
         android:icon="@drawable/vaccines_24px"
         android:title="Consumables" />
-    <item
-        android:id="@+id/item_settings"
-        android:enabled="true"
-        android:icon="@drawable/settings"
-        android:title="Settings" />
 </menu>

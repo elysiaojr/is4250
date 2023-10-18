@@ -62,7 +62,6 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
                 } else {
                     activityScope.launch {
                         val batchExists = checkIfBatchNumberExists(scanResult)
-
                         if (batchExists) {
                             Toast.makeText(this@ListRecordsActivity, "Scanned: $scanResult", Toast.LENGTH_LONG).show()
                             val dialogFragment = CreateRecordDialog()
@@ -174,6 +173,5 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
         return withContext(Dispatchers.IO) {
             batchDetailsViewModel.checkIfBatchNumberExists(batchDetailsBatchNumber)
         }
-
     }
 }

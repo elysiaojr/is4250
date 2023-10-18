@@ -106,6 +106,11 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     }
   }
 
+  // Function to fetch BatchDetails by batch number
+  suspend fun getBatchDetailsLiveDataByBatchNumber(batchNumber: String): BatchDetails {
+    return batchDetailsRepository.getBatchDetailsLiveDataByBatchNumber(batchNumber)
+  }
+
   suspend fun getBatchDetailUOM(consumableId: Int): UnitOfMeasurement {
     return batchDetailsRepository.getBatchDetailUOM(consumableId)
   }
