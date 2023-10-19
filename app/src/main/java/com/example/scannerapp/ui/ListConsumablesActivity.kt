@@ -19,7 +19,10 @@ import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.animation.ObjectAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.dataclass.ConsumableFilterSortState
 import com.example.scannerapp.dataclass.SortOrderEnum
@@ -36,6 +39,11 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
   private lateinit var adapter: ConsumableListAdapter
   private lateinit var searchButton: Button
   private lateinit var filteredList: List<Consumable>
+  private lateinit var archivesButton: ConstraintLayout
+  private lateinit var archivesButtonIcon: ImageView
+  private lateinit var title: TextView
+
+  private var showArchives = false
   private val activityScope = CoroutineScope(Dispatchers.Main)
   private var consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = SortOrderEnum.ASCENDING)
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
@@ -47,6 +55,9 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     consumableListView = findViewById<ListView>(R.id.consumablelist)
     searchView = findViewById(R.id.consumablesSearchView)
     searchButton = findViewById(R.id.consumableListSearchButton)
+    archivesButton = findViewById(R.id.archives_button)
+    archivesButtonIcon = findViewById(R.id.archives_button_icon)
+    title = findViewById(R.id.title)
 
     // Create the adapter and set it initially
     adapter = ConsumableListAdapter(this, emptyList())
@@ -76,6 +87,12 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
       showHide(searchView, searchButton)
     }
 
+    // Toggle Archives Button
+    archivesButton.setOnClickListener{
+      print("toggling")
+      toggleArchives()
+    }
+
     // Floating Action Button: Create
     val fab = findViewById<CardView>(R.id.fab_consumables)
     fab.setOnClickListener {
@@ -84,7 +101,7 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     }
 
     // Initialize the filter state
-    consumableFilterState = ConsumableFilterSortState(active = true, inactive = true, remainingQuantity = false, sortOrder = currentSortOrder)
+    consumableFilterState = ConsumableFilterSortState(active = true, inactive = false, remainingQuantity = false, sortOrder = currentSortOrder)
 
     // Apply the filter to the default state
     updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
@@ -115,6 +132,20 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     rotation.duration = 300 // Adjust the duration as needed
     rotation.interpolator = AccelerateDecelerateInterpolator()
     rotation.start()
+  }
+
+  private fun toggleArchives() {
+    showArchives = if (showArchives) {
+      title.text = "Manage Consumables"
+      archivesButtonIcon.setImageResource(R.drawable.archives_icon)
+      updateList(active = true, inactive = false, consumableFilterState.remainingQuantity)
+      false
+    } else {
+      archivesButtonIcon.setImageResource(R.drawable.baseline_chevron_right_24)
+      title.text = "Consumables Archives"
+      updateList(active = false, inactive = true, consumableFilterState.remainingQuantity)
+      true
+    }
   }
 
   @Composable

@@ -11,6 +11,9 @@
     // Object delete button
     <color name="delete">#FFBC6767</color>
 
+    // Search bar button
+    <color name="search_bar">#A9EFECEC</color>
+
     // main landing archives switch
     <color name="dark_archives">#FFB8CCDB</color>
     <color name="light_archives">#FFD9ECFA</color>
@@ -21,7 +24,7 @@
     <color name="mid_records_white_text_button">#FF63A2C6</color> // For FAB
 
     // Batches colours
-    <color name="light_batches">#FF81AFD1</color>
+    <color name="light_batches">#FFFDE7F2</color>
     <color name="mid_batches">#FFFAD9EA</color> // For FAB
     <color name="mid_batches_edit">#FFE1B4CB</color>
 
