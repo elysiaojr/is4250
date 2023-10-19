@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.DialogFragment
@@ -20,13 +19,14 @@ class FilterSortConsumableDialog : DialogFragment() {
     var onFilterSortAppliedListener: OnFilterSortAppliedListener? = null
     private val activityScope = CoroutineScope(Dispatchers.Main)
     private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
+    private var currentFilterStatus: Int = 1
+    private var currentFilterQuantity: Int = 1
 
 
     interface OnFilterSortAppliedListener {
         suspend fun onFilterSortApplied(
-            active: Boolean,
-            inactive: Boolean,
-            remainingQuantity: Boolean,
+            status: Int,
+            quantity: Int,
             sortOrder: SortOrderEnum
         )
     }
@@ -34,9 +34,14 @@ class FilterSortConsumableDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.dialog_filter_sort_consumables, container, false)
         val closeButton = view.findViewById<Button>(R.id.closeButton)
-        val activeCheckBox = view.findViewById<CheckBox>(R.id.activeCheckBox)
-        val inactiveCheckBox = view.findViewById<CheckBox>(R.id.inactiveCheckBox)
-        val remainingQuantityCheckBox = view.findViewById<CheckBox>(R.id.remainingQuantityCheckBox)
+
+        val filterStatusRadioGroup = view.findViewById<RadioGroup>(R.id.filterStatusRadioGroup)
+        val activeRadioButton = view.findViewById<RadioButton>(R.id.activeRadioButton)
+        val inactiveRadioButton = view.findViewById<RadioButton>(R.id.inactiveRadioButton)
+        val filterQuantityRadioGroup = view.findViewById<RadioGroup>(R.id.filterQuantityRadioGroup)
+        val sufficientRadioButton = view.findViewById<RadioButton>(R.id.sufficientRadioButton)
+        val shortageRadioButton = view.findViewById<RadioButton>(R.id.shortageRadioButton)
+
         val applyButton = view.findViewById<Button>(R.id.buttonApply)
         val resetButton = view.findViewById<Button>(R.id.buttonReset)
         val sortRadioGroup = view.findViewById<RadioGroup>(R.id.sortRadioGroup)
@@ -47,9 +52,17 @@ class FilterSortConsumableDialog : DialogFragment() {
 
         val args = arguments
         if (args != null) {
-            activeCheckBox.isChecked = args.getBoolean("active", false)
-            inactiveCheckBox.isChecked = args.getBoolean("inactive", false)
-            remainingQuantityCheckBox.isChecked = args.getBoolean("remainingQuantity", false)
+            currentFilterStatus = args.getInt("status")
+            when (currentFilterStatus) {
+                1 -> activeRadioButton.isChecked = true
+                0 -> inactiveRadioButton.isChecked = true
+            }
+
+            currentFilterQuantity = args.getInt("quantity")
+            when (currentFilterQuantity) {
+                1 -> sufficientRadioButton.isChecked = true
+                0 -> shortageRadioButton.isChecked = true
+            }
 
             // Retrieve the last selected sorting order and set the corresponding radio button as checked.
             currentSortOrder = args.getSerializable("sortOrder") as SortOrderEnum
@@ -61,9 +74,17 @@ class FilterSortConsumableDialog : DialogFragment() {
         }
 
         applyButton.setOnClickListener {
-            val active = activeCheckBox.isChecked
-            val inactive = inactiveCheckBox.isChecked
-            val remainingQuantity = remainingQuantityCheckBox.isChecked
+            val filterStatus = when (filterStatusRadioGroup.checkedRadioButtonId) {
+                R.id.activeRadioButton -> 1
+                R.id.inactiveRadioButton -> 0
+                else -> {1}
+            }
+
+            val filterQuantity = when (filterQuantityRadioGroup.checkedRadioButtonId) {
+                R.id.sufficientRadioButton -> 1
+                R.id.shortageRadioButton -> 0
+                else -> {1}
+            }
 
             // Determine the selected sorting option
             val sortOrder = when (sortRadioGroup.checkedRadioButtonId) {
@@ -73,19 +94,15 @@ class FilterSortConsumableDialog : DialogFragment() {
             }
 
             CoroutineScope(Dispatchers.Main).launch {
-                onFilterSortAppliedListener?.onFilterSortApplied(active, inactive, remainingQuantity, sortOrder)
+                onFilterSortAppliedListener?.onFilterSortApplied(filterStatus, filterQuantity, sortOrder)
             }
             dismiss()
         }
 
         resetButton.setOnClickListener {
-            // Reset the checkboxes
-            activeCheckBox.isChecked = true
-            inactiveCheckBox.isChecked = true
-            remainingQuantityCheckBox.isChecked = false
-            val active = activeCheckBox.isChecked
-            val inactive = inactiveCheckBox.isChecked
-            val remainingQuantity = remainingQuantityCheckBox.isChecked
+            // Reset the filters
+            activeRadioButton.isChecked = true
+            sufficientRadioButton.isChecked = true
 
             // Reset the sort order to ascending A to Z
             radioSortAZ.isChecked = true
@@ -108,9 +125,8 @@ class FilterSortConsumableDialog : DialogFragment() {
         fun newInstance(consumableFilterState: ConsumableFilterSortState, sortOrder: SortOrderEnum): FilterSortConsumableDialog {
             val fragment = FilterSortConsumableDialog()
             val args = Bundle()
-            args.putBoolean("active", consumableFilterState.active)
-            args.putBoolean("inactive", consumableFilterState.inactive)
-            args.putBoolean("remainingQuantity", consumableFilterState.remainingQuantity)
+            args.putInt("status", consumableFilterState.status)
+            args.putInt("quantity", consumableFilterState.quantity)
             args.putSerializable("sortOrder", sortOrder)
             fragment.arguments = args
             return fragment

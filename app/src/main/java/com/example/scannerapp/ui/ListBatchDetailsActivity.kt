@@ -56,7 +56,10 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     get() = Dispatchers.Main + job
 
   private lateinit var filteredList: List<BatchDetails>
-  private var batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = SortOrderEnum.ASCENDING)
+  private var batchDetailsFilterSort = BatchDetailsFilterSortState(status = 1, empty = 1, expired = 1, sortOrder = SortOrderEnum.ASCENDING)
+  private var currentFilterStatus: Int = 1
+  private var currentFilterEmpty: Int = 1
+  private var currentFilterExpired: Int = 1
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.LAST_TAKEOUT
 
   private val barcodeLauncher =
@@ -155,10 +158,10 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     }
 
     // Initialize the filter state
-    batchDetailsFilterSort = BatchDetailsFilterSortState(active = true, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
+    batchDetailsFilterSort = BatchDetailsFilterSortState(status = currentFilterStatus, empty = currentFilterEmpty, expired = currentFilterExpired, sortOrder = currentSortOrder)
 
     // Apply the filter to the default state
-    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+    updateList(batchDetailsFilterSort.status, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
 
     // filter button
     val filterButton = findViewById<Button>(R.id.batchDetailsListFilterButton)
@@ -217,37 +220,41 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     val dialogFragment = FilterSortBatchDetailsDialog.newInstance(batchDetailsFilterSort, currentSortOrder)
     dialogFragment.onFilterSortAppliedListener = object : FilterSortBatchDetailsDialog.OnFilterSortAppliedListener {
       override suspend fun onFilterSortApplied(
-        active: Boolean,
-        inactive: Boolean,
-        nonEmpty: Boolean,
-        empty: Boolean,
-        expired: Boolean,
+        status: Int,
+        empty: Int,
+        expired: Int,
         sortOrder: SortOrderEnum
       ) {
-        updateList(active, inactive, nonEmpty, empty, expired)
+        updateList(status, empty, expired)
         currentSortOrder = sortOrder // Update the sorting order
         //saveLastSelectedSortOrder(sortOrder) // Save the last selected sorting order
-        batchDetailsFilterSort = BatchDetailsFilterSortState(active, inactive, nonEmpty, empty, expired, sortOrder) // Update the filter state
+        batchDetailsFilterSort = BatchDetailsFilterSortState(status, empty, expired, sortOrder) // Update the filter state
       }
     }
     dialogFragment.show(supportFragmentManager, "FilterSortDialogFragment")
   }
 
 
-  private fun updateList(active: Boolean, inactive: Boolean, nonEmpty: Boolean, empty: Boolean, expired: Boolean) {
+  private fun updateList(status: Int, empty: Int, expired: Int) {
     CoroutineScope(Dispatchers.Main).launch {
       val list =  batchDetailsViewModel.allBatchDetails.value.orEmpty()
 
       Log.d("currentsortorder", currentSortOrder.toString())
       Log.d("sortedlist", list.toString())
+      Log.d("status", status.toString())
+      Log.d("empty", empty.toString())
+      Log.d("expired", expired.toString())
 
       filteredList = list.filter { batchDetail ->
-        (active && batchDetail.isActive == 1) ||
-                (inactive && batchDetail.isActive == 0) ||
-                (nonEmpty && batchDetail.batchRemainingQuantity != 0) ||
-                (empty && batchDetail.batchRemainingQuantity == 0) ||
-                (expired && expiredBatchCheck(batchDetail))
+        (status == 0 || batchDetail.isActive == 1) &&
+                (status == 1 || batchDetail.isActive == 0) &&
+                (empty == 0 || batchDetail.batchRemainingQuantity != 0) &&
+                (empty == 1 || batchDetail.batchRemainingQuantity == 0) &&
+                (expired == 0 || !expiredBatchCheck(batchDetail)) &&
+                (expired == 1 || expiredBatchCheck(batchDetail))
       }
+
+      Log.d("filteredlist", filteredList.toString())
 
       // Sort the filtered list based on the current sorting order in a case-insensitive manner
       filteredList = when (currentSortOrder) {
