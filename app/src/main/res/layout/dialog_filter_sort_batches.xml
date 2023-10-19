@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="Reset All"
             android:textAlignment="viewEnd"
-            android:textColor="@color/button_background"
+            android:textColor="@color/dark_batches"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
@@ -59,6 +59,7 @@
                 android:id="@+id/activeRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/Widget.App.RadioButton_batches"
                 android:text="Active" />
 
             <RadioButton
@@ -66,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="54dp"
+                style="@style/Widget.App.RadioButton_batches"
                 android:text="Inactive" />
 
         </RadioGroup>
@@ -107,6 +109,7 @@
         android:id="@+id/nonEmptyRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.App.RadioButton_batches"
         android:text="Non-empty" />
 
     <RadioButton
@@ -114,6 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        style="@style/Widget.App.RadioButton_batches"
         android:text="Empty" />
 
     </RadioGroup>
@@ -129,6 +133,7 @@
             android:id="@+id/notExpiredRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="Not expired" />
 
         <RadioButton
@@ -136,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="Expired" />
 
     </RadioGroup>
@@ -174,30 +180,35 @@
             android:id="@+id/radioSortLatestTakeout"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="Last Takeout" />
 
         <RadioButton
             android:id="@+id/radioSortFirstExpiry"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="First Expiry" />
 
         <RadioButton
             android:id="@+id/radioSortAZ"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="A to Z" />
 
         <RadioButton
             android:id="@+id/radioSortZA"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="Z to A" />
     </RadioGroup>
 
     <Button
         android:id="@+id/buttonApply"
         style="@style/CardTextButton"
+        android:backgroundTint="@color/dark_batches"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:text="Apply"
