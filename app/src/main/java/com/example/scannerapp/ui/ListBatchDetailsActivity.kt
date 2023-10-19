@@ -115,6 +115,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     archivesButtonIcon = findViewById(R.id.archives_button_icon)
     title = findViewById(R.id.title)
 
+    // Initialize the filter state
+    batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
+
+    // Apply the filter to the default state
+    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+
     // Create the adapter and set it initially
     adapter = BatchDetailsListAdapter(
       this,
@@ -124,8 +130,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     batchDetailsListView.adapter = adapter
 
     // Observe the LiveData and update the adapter when data changes
-    batchDetailsViewModel.allBatchDetails.observe(this, Observer { consumables ->
-      adapter.updateBatchDetailsData(consumables)
+    batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
+      // For initial rendering, show filtered batch details only
+      val activeBatchDetails = batchDetails.filter { batchDetail ->
+        batchDetail.isActive == 1
+      }
+      adapter.updateBatchDetailsData(activeBatchDetails)
     })
 
     // Set up the SearchView
@@ -170,12 +180,6 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       val intent = integrator.createScanIntent()
       barcodeLauncher.launch(intent)
     }
-
-    // Initialize the filter state
-    batchDetailsFilterSort = BatchDetailsFilterSortState(active = true, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
-
-    // Apply the filter to the default state
-    updateList(batchDetailsFilterSort.active, inactive = false, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
 
     // filter button
     val filterButton = findViewById<Button>(R.id.batchDetailsListFilterButton)
@@ -262,11 +266,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       Log.d("sortedlist", list.toString())
 
       filteredList = list.filter { batchDetail ->
-        (active && batchDetail.isActive == 1) ||
-                (inactive && batchDetail.isActive == 0) ||
+        ((!showArchives && batchDetail.isActive == 1) ||
+                (showArchives && batchDetail.isActive == 0)) && (
+                (!nonEmpty && !empty && !expired) ||
                 (nonEmpty && batchDetail.batchRemainingQuantity != 0) ||
                 (empty && batchDetail.batchRemainingQuantity == 0) ||
-                (expired && expiredBatchCheck(batchDetail))
+                (expired && expiredBatchCheck(batchDetail)))
       }
 
       // Sort the filtered list based on the current sorting order in a case-insensitive manner
