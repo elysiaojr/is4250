@@ -39,11 +39,11 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
   private lateinit var adapter: ConsumableListAdapter
   private lateinit var searchButton: Button
   private lateinit var filteredList: List<Consumable>
+  private var showArchives = false
   private lateinit var archivesButton: ConstraintLayout
   private lateinit var archivesButtonIcon: ImageView
   private lateinit var title: TextView
 
-  private var showArchives = false
   private val activityScope = CoroutineScope(Dispatchers.Main)
   private var consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = SortOrderEnum.ASCENDING)
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
