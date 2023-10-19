@@ -43,8 +43,8 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
   private lateinit var archivesButton: ConstraintLayout
   private lateinit var archivesButtonIcon: ImageView
   private lateinit var title: TextView
-
   private val activityScope = CoroutineScope(Dispatchers.Main)
+
   private var consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = SortOrderEnum.ASCENDING)
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
 
@@ -59,6 +59,12 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     archivesButtonIcon = findViewById(R.id.archives_button_icon)
     title = findViewById(R.id.title)
 
+    // Initialize the filter state
+    consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = currentSortOrder)
+
+    // Apply the filter to the default state
+    updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
+
     // Create the adapter and set it initially
     adapter = ConsumableListAdapter(this, emptyList())
     consumableListView.adapter = adapter
@@ -67,7 +73,11 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     consumableViewModel.allConsumables.observe(this, Observer { consumables ->
       // Sort the list in ascending alphabetical order (the default option)
       val sortedConsumables = consumables.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
-      adapter.updateData(sortedConsumables)
+      // For initial rendering, show active batch details only
+      val activeConsumables = sortedConsumables.filter { consumable ->
+        consumable.isActive == 1
+      }
+      adapter.updateData(activeConsumables)
     })
 
     // Set up the SearchView
@@ -89,7 +99,6 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
 
     // Toggle Archives Button
     archivesButton.setOnClickListener{
-      print("toggling")
       toggleArchives()
     }
 
@@ -99,12 +108,6 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
       val dialogFragment = CreateConsumableDialog()
       dialogFragment.show(supportFragmentManager, "CreateConsumableDialog")
     }
-
-    // Initialize the filter state
-    consumableFilterState = ConsumableFilterSortState(active = true, inactive = false, remainingQuantity = false, sortOrder = currentSortOrder)
-
-    // Apply the filter to the default state
-    updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
 
     // filter button
     val filterButton = findViewById<Button>(R.id.consumableListFilterButton)
@@ -191,8 +194,11 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
 
       // filter the list
       filteredList = allConsumables.filter { consumable ->
-        (active || consumable.isActive == 0) &&
-                (inactive || consumable.isActive == 1) &&
+//        ((!showArchives && consumable.isActive == 1) ||
+//                (showArchives && consumable.isActive == 0)) &&
+//                (remainingQuantity || remainingQuantityCheck(consumable))
+        (!showArchives || consumable.isActive == 0) &&
+                (showArchives || consumable.isActive == 1) &&
                 (!remainingQuantity || remainingQuantityCheck(consumable))
       }
 

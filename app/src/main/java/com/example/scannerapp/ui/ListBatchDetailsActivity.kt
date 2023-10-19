@@ -131,7 +131,7 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
 
     // Observe the LiveData and update the adapter when data changes
     batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
-      // For initial rendering, show filtered batch details only
+      // For initial rendering, show active batch details only
       val activeBatchDetails = batchDetails.filter { batchDetail ->
         batchDetail.isActive == 1
       }
@@ -157,7 +157,6 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
 
     // Toggle Archives Button
     archivesButton.setOnClickListener{
-      print("toggling")
       toggleArchives()
     }
 
