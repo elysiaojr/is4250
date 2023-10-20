@@ -33,9 +33,9 @@
             android:id="@+id/buttonReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset"
+            android:text="Reset All"
             android:textAlignment="viewEnd"
-            android:textColor="@color/button_background"
+            android:textColor="@color/dark_batches"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
@@ -58,18 +58,21 @@
         android:id="@+id/nonEmptyCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.App.CheckBox_batches"
         android:text="Non-empty Batches" />
 
     <CheckBox
         android:id="@+id/emptyCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.App.CheckBox_batches"
         android:text="Empty Batches" />
 
     <CheckBox
         android:id="@+id/expiredCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.App.CheckBox_batches"
         android:text="Expired Batches" />
 
     <View
@@ -100,24 +103,28 @@
             android:id="@+id/radioSortLatestTakeout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="Last Takeout" />
 
         <RadioButton
             android:id="@+id/radioSortFirstExpiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="First Expiry" />
 
         <RadioButton
             android:id="@+id/radioSortAZ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="A to Z" />
 
         <RadioButton
             android:id="@+id/radioSortZA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.App.RadioButton_batches"
             android:text="Z to A" />
     </RadioGroup>
 
@@ -131,6 +138,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        android:backgroundTint="@color/dark_batches"
         app:layout_constraintStart_toEndOf="parent" />
 
 </LinearLayout>

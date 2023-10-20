@@ -29,12 +29,14 @@
     <color name="mid_batches">#FFFAD9EA</color> // For FAB
     <color name="mid_batches_edit">#FFE1B4CB</color>
     <color name="very_light_batches">#99FAD9EA</color> // for navbar
+    <color name="dark_batches">#d98db4</color> // for checkboxes
 
     // Consumable colourss
     <color name="light_consumables">#FFE5E2FA</color>
     <color name="mid_consumables">#FFDBD7F7</color> // For FAB
     <color name="mid_consumables_white_text_button">#FFB3ADDC</color> // For FAB
     <color name="very_light_consumables">#99E5E2FA</color> // for navbar
+    <color name="dark_consumables">#7f73c9</color> // For checkboxes
 
     // switch
     <color name="switch_thumb_enabled">#E3EEF5</color>
