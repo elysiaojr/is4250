@@ -43,6 +43,7 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
         consumablesCardView.setOnClickListener {
             val intent = Intent(this, ListConsumablesActivity::class.java)
             startActivity(intent)
+
         }
 
         // Settings circular button
@@ -54,11 +55,6 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
 
         // Archives circular button
         buttonsTitle = findViewById<TextView>(R.id.buttons_title)
-        archivesButton = findViewById<ConstraintLayout>(R.id.archives_button)
-        archivesButton.setOnClickListener {
-            handleSwitchArchives()
-        }
-
     }
 
     private fun handleSwitchArchives() {
@@ -69,6 +65,7 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
             recordsCardView.setCardBackgroundColor(Color.parseColor("#D9ECFA"));
             batchesCardView.setCardBackgroundColor(Color.parseColor("#FDE7F2"));
             consumablesCardView.setCardBackgroundColor(Color.parseColor("#E5E2FA"));
+            archivesMode = false;
         } else {
             buttonsTitle.text = "Archives"
 
@@ -76,8 +73,8 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
             recordsCardView.setCardBackgroundColor(Color.parseColor("#B8CCDB"));
             batchesCardView.setCardBackgroundColor(Color.parseColor("#D6BCC9"));
             consumablesCardView.setCardBackgroundColor(Color.parseColor("#B9B6CF"));
+            archivesMode = true;
         }
-        archivesMode = !archivesMode
     }
 
     // for navigation bar

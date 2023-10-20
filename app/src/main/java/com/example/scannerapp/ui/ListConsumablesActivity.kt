@@ -32,14 +32,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables) {
+class ListConsumablesActivity(showArchives: Boolean = false) : BaseActivity(R.layout.activity_list_consumables) {
   private lateinit var consumableViewModel: ConsumableViewModel
   private lateinit var consumableListView: ListView
   private lateinit var searchView: SearchView
   private lateinit var adapter: ConsumableListAdapter
   private lateinit var searchButton: Button
   private lateinit var filteredList: List<Consumable>
-  private var showArchives = false
+  private var showArchives = showArchives
   private lateinit var archivesButton: ConstraintLayout
   private lateinit var archivesButtonIcon: ImageView
   private lateinit var title: TextView
@@ -75,7 +75,7 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
       val sortedConsumables = consumables.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
       // For initial rendering, show active batch details only
       val activeConsumables = sortedConsumables.filter { consumable ->
-        consumable.isActive == 1
+          consumable.isActive == 1
       }
       adapter.updateData(activeConsumables)
     })
