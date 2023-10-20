@@ -4,7 +4,7 @@
         android:right="0dp"
         android:left="0dp"
         android:top="0dp"
-        android:bottom="15dp">
+        android:bottom="0dp">
         <shape android:shape="rectangle">
             <solid android:color="#FFFFFF" /> <!-- Background color for the layout -->
             <corners android:topLeftRadius="40dp" android:topRightRadius="40dp" />

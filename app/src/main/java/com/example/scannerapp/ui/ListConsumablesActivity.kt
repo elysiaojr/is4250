@@ -17,9 +17,12 @@ import com.example.scannerapp.adapters.ConsumableListAdapter
 import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.animation.ObjectAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.dataclass.ConsumableFilterSortState
 import com.example.scannerapp.dataclass.SortOrderEnum
@@ -36,7 +39,12 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
   private lateinit var adapter: ConsumableListAdapter
   private lateinit var searchButton: Button
   private lateinit var filteredList: List<Consumable>
+  private var showArchives = false
+  private lateinit var archivesButton: ConstraintLayout
+  private lateinit var archivesButtonIcon: ImageView
+  private lateinit var title: TextView
   private val activityScope = CoroutineScope(Dispatchers.Main)
+
   private var consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = SortOrderEnum.ASCENDING)
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
 
@@ -47,6 +55,15 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     consumableListView = findViewById<ListView>(R.id.consumablelist)
     searchView = findViewById(R.id.consumablesSearchView)
     searchButton = findViewById(R.id.consumableListSearchButton)
+    archivesButton = findViewById(R.id.archives_button)
+    archivesButtonIcon = findViewById(R.id.archives_button_icon)
+    title = findViewById(R.id.title)
+
+    // Initialize the filter state
+    consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = currentSortOrder)
+
+    // Apply the filter to the default state
+    updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
 
     // Create the adapter and set it initially
     adapter = ConsumableListAdapter(this, emptyList())
@@ -56,7 +73,11 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     consumableViewModel.allConsumables.observe(this, Observer { consumables ->
       // Sort the list in ascending alphabetical order (the default option)
       val sortedConsumables = consumables.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
-      adapter.updateData(sortedConsumables)
+      // For initial rendering, show active batch details only
+      val activeConsumables = sortedConsumables.filter { consumable ->
+        consumable.isActive == 1
+      }
+      adapter.updateData(activeConsumables)
     })
 
     // Set up the SearchView
@@ -76,18 +97,17 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
       showHide(searchView, searchButton)
     }
 
+    // Toggle Archives Button
+    archivesButton.setOnClickListener{
+      toggleArchives()
+    }
+
     // Floating Action Button: Create
-    val fab = findViewById<FloatingActionButton>(R.id.fab_consumables)
+    val fab = findViewById<CardView>(R.id.fab_consumables)
     fab.setOnClickListener {
       val dialogFragment = CreateConsumableDialog()
       dialogFragment.show(supportFragmentManager, "CreateConsumableDialog")
     }
-
-    // Initialize the filter state
-    consumableFilterState = ConsumableFilterSortState(active = true, inactive = true, remainingQuantity = false, sortOrder = currentSortOrder)
-
-    // Apply the filter to the default state
-    updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
 
     // filter button
     val filterButton = findViewById<Button>(R.id.consumableListFilterButton)
@@ -115,6 +135,20 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     rotation.duration = 300 // Adjust the duration as needed
     rotation.interpolator = AccelerateDecelerateInterpolator()
     rotation.start()
+  }
+
+  private fun toggleArchives() {
+    showArchives = if (showArchives) {
+      title.text = "Manage Consumables"
+      archivesButtonIcon.setImageResource(R.drawable.archives_icon)
+      updateList(active = true, inactive = false, consumableFilterState.remainingQuantity)
+      false
+    } else {
+      archivesButtonIcon.setImageResource(R.drawable.baseline_chevron_right_24)
+      title.text = "Consumables Archives"
+      updateList(active = false, inactive = true, consumableFilterState.remainingQuantity)
+      true
+    }
   }
 
   @Composable
@@ -160,8 +194,11 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
 
       // filter the list
       filteredList = allConsumables.filter { consumable ->
-        (active || consumable.isActive == 0) &&
-                (inactive || consumable.isActive == 1) &&
+//        ((!showArchives && consumable.isActive == 1) ||
+//                (showArchives && consumable.isActive == 0)) &&
+//                (remainingQuantity || remainingQuantityCheck(consumable))
+        (!showArchives || consumable.isActive == 0) &&
+                (showArchives || consumable.isActive == 1) &&
                 (!remainingQuantity || remainingQuantityCheck(consumable))
       }
 

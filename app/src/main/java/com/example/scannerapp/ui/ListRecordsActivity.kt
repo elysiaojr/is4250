@@ -12,6 +12,7 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
+import androidx.cardview.widget.CardView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -27,7 +28,6 @@ import com.example.scannerapp.ui.utils.showHide
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 import com.journeyapps.barcodescanner.ScanOptions
@@ -120,13 +120,13 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
         }
 
         // Floating Action Button
-        val fab = findViewById<FloatingActionButton>(R.id.fab_records)
+        val fab = findViewById<CardView>(R.id.fab_records)
         fab.setOnClickListener {
             val dialogFragment = CreateRecordDialog()
             dialogFragment.show(supportFragmentManager, "CreateRecordDialog")
         }
 
-        val fabBarcode = findViewById<FloatingActionButton>(R.id.fab_records_barcode)
+        val fabBarcode = findViewById<CardView>(R.id.fab_records_barcode)
         fabBarcode.setOnClickListener {
             val integrator = IntentIntegrator(this)
             integrator.captureActivity = VerticalBarcodeScanner::class.java

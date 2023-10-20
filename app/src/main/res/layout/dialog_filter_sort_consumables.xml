@@ -44,13 +44,15 @@
         android:id="@+id/activeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Active Consumables" />
+        android:text="Active Consumables"
+        android:visibility="gone"/>
 
     <CheckBox
         android:id="@+id/inactiveCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Inactive Consumables" />
+        android:text="Inactive Consumables"
+        android:visibility="gone"/>
 
     <CheckBox
         android:id="@+id/remainingQuantityCheckBox"

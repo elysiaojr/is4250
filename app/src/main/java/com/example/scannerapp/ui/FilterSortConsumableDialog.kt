@@ -20,7 +20,8 @@ class FilterSortConsumableDialog : DialogFragment() {
     var onFilterSortAppliedListener: OnFilterSortAppliedListener? = null
     private val activityScope = CoroutineScope(Dispatchers.Main)
     private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
-
+    private lateinit var activeCheckBox : CheckBox
+    private lateinit var inactiveCheckBox : CheckBox
 
     interface OnFilterSortAppliedListener {
         suspend fun onFilterSortApplied(
@@ -34,8 +35,8 @@ class FilterSortConsumableDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.dialog_filter_sort_consumables, container, false)
         val closeButton = view.findViewById<Button>(R.id.closeButton)
-        val activeCheckBox = view.findViewById<CheckBox>(R.id.activeCheckBox)
-        val inactiveCheckBox = view.findViewById<CheckBox>(R.id.inactiveCheckBox)
+        activeCheckBox = view.findViewById<CheckBox>(R.id.activeCheckBox)
+        inactiveCheckBox = view.findViewById<CheckBox>(R.id.inactiveCheckBox)
         val remainingQuantityCheckBox = view.findViewById<CheckBox>(R.id.remainingQuantityCheckBox)
         val applyButton = view.findViewById<Button>(R.id.buttonApply)
         val resetButton = view.findViewById<Button>(R.id.buttonReset)
@@ -116,5 +117,4 @@ class FilterSortConsumableDialog : DialogFragment() {
             return fragment
         }
     }
-
 }

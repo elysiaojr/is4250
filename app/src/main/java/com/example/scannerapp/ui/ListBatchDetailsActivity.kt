@@ -7,10 +7,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
+import androidx.cardview.widget.CardView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -18,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
@@ -30,7 +34,6 @@ import com.example.scannerapp.ui.ui.theme.ScannerAppTheme
 import com.example.scannerapp.ui.utils.showHide
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel // Assuming you have a ViewModel for BatchDetails
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
 import com.journeyapps.barcodescanner.ScanOptions
@@ -52,6 +55,11 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
   private lateinit var searchButton: Button
   private lateinit var adapter: BatchDetailsListAdapter
   private val activityScope = CoroutineScope(Dispatchers.Main)
+  private var showArchives = false
+  private lateinit var archivesButton: ConstraintLayout
+  private lateinit var archivesButtonIcon: ImageView
+  private lateinit var title: TextView
+
   override val coroutineContext: CoroutineContext
     get() = Dispatchers.Main + job
 
@@ -103,6 +111,15 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     batchDetailsListView = findViewById<ListView>(R.id.batchDetailsList)
     searchView = findViewById(R.id.batchDetailsSearchView)
     searchButton = findViewById(R.id.batchDetailsListSearchButton)
+    archivesButton = findViewById(R.id.archives_button)
+    archivesButtonIcon = findViewById(R.id.archives_button_icon)
+    title = findViewById(R.id.title)
+
+    // Initialize the filter state
+    batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
+
+    // Apply the filter to the default state
+    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
 
     // Create the adapter and set it initially
     adapter = BatchDetailsListAdapter(
@@ -113,8 +130,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     batchDetailsListView.adapter = adapter
 
     // Observe the LiveData and update the adapter when data changes
-    batchDetailsViewModel.allBatchDetails.observe(this, Observer { consumables ->
-      adapter.updateBatchDetailsData(consumables)
+    batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
+      // For initial rendering, show active batch details only
+      val activeBatchDetails = batchDetails.filter { batchDetail ->
+        batchDetail.isActive == 1
+      }
+      adapter.updateBatchDetailsData(activeBatchDetails)
     })
 
     // Set up the SearchView
@@ -134,15 +155,20 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       showHide(searchView, searchButton)
     }
 
+    // Toggle Archives Button
+    archivesButton.setOnClickListener{
+      toggleArchives()
+    }
+
     // Floating Action Button (if you have one for adding new BatchDetails)
-    val fab = findViewById<FloatingActionButton>(R.id.fab_batch_details)
+    val fab = findViewById<CardView>(R.id.fab_batch_details)
     fab.setOnClickListener {
       val dialogFragment =
         CreateBatchDetailsDialog() // Assuming you have a dialog for creating new BatchDetails
       dialogFragment.show(supportFragmentManager, "CreateBatchDetailsDialog")
     }
 
-    val fabBarcode = findViewById<FloatingActionButton>(R.id.fab_batch_details_barcode)
+    val fabBarcode = findViewById<CardView>(R.id.fab_batch_details_barcode)
     fabBarcode.setOnClickListener {
       val integrator = IntentIntegrator(this)
       integrator.captureActivity = VerticalBarcodeScanner::class.java
@@ -153,12 +179,6 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       val intent = integrator.createScanIntent()
       barcodeLauncher.launch(intent)
     }
-
-    // Initialize the filter state
-    batchDetailsFilterSort = BatchDetailsFilterSortState(active = true, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
-
-    // Apply the filter to the default state
-    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
 
     // filter button
     val filterButton = findViewById<Button>(R.id.batchDetailsListFilterButton)
@@ -209,6 +229,9 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
 
     return withContext(Dispatchers.IO) {
       val dialogFragment = ExistingBatchDialogFragment(batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(batchDetailsBatchNumber))
+      val bundle = Bundle()
+      bundle.putString("scannedData", batchDetailsBatchNumber)
+      dialogFragment.arguments = bundle
       dialogFragment.show(supportFragmentManager, "ExistingBatchDialogFragment")
     }
   }
@@ -242,11 +265,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
       Log.d("sortedlist", list.toString())
 
       filteredList = list.filter { batchDetail ->
-        (active && batchDetail.isActive == 1) ||
-                (inactive && batchDetail.isActive == 0) ||
+        ((!showArchives && batchDetail.isActive == 1) ||
+                (showArchives && batchDetail.isActive == 0)) && (
+                (!nonEmpty && !empty && !expired) ||
                 (nonEmpty && batchDetail.batchRemainingQuantity != 0) ||
                 (empty && batchDetail.batchRemainingQuantity == 0) ||
-                (expired && expiredBatchCheck(batchDetail))
+                (expired && expiredBatchCheck(batchDetail)))
       }
 
       // Sort the filtered list based on the current sorting order in a case-insensitive manner
@@ -302,6 +326,20 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     val expiryDate = LocalDate.parse(batchDetails.expiryDate, formatter)
 
     return expiryDate.isBefore(currentDate)
+  }
+
+  private fun toggleArchives() {
+    showArchives = if (showArchives) {
+      title.text = "Manage Batches"
+      archivesButtonIcon.setImageResource(R.drawable.archives_icon)
+      updateList(active = true, inactive = false, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+      false
+    } else {
+      archivesButtonIcon.setImageResource(R.drawable.baseline_chevron_right_24)
+      title.text = "Batches Archives"
+      updateList(active = false, inactive = true, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+      true
+    }
   }
 
 
