@@ -22,16 +22,19 @@
     <color name="light_records">#FFD9ECFA</color>
     <color name="mid_records">#FFC4E0F5</color> // For FAB
     <color name="mid_records_white_text_button">#FF63A2C6</color> // For FAB
+    <color name="very_light_records">#99C4E0F5</color> // for navbar
 
     // Batches colours
     <color name="light_batches">#FFFDE7F2</color>
     <color name="mid_batches">#FFFAD9EA</color> // For FAB
     <color name="mid_batches_edit">#FFE1B4CB</color>
+    <color name="very_light_batches">#99FAD9EA</color> // for navbar
 
     // Consumable colourss
     <color name="light_consumables">#FFE5E2FA</color>
     <color name="mid_consumables">#FFDBD7F7</color> // For FAB
     <color name="mid_consumables_white_text_button">#FFB3ADDC</color> // For FAB
+    <color name="very_light_consumables">#99E5E2FA</color> // for navbar
 
     // switch
     <color name="switch_thumb_enabled">#E3EEF5</color>
@@ -48,6 +51,7 @@
 
     // navigation bar active indicator
     <color name="nav_bar_active_indicator">#E3EEF5</color>
+    <color name="nav_bar_grey">#f2f2f2</color>
 
 
 </resources>

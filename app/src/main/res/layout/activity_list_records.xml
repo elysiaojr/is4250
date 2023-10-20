@@ -144,6 +144,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/navigation_bar_menu"
         app:elevation="8dp"
+        app:itemRippleColor="@color/nav_bar_grey"
+        app:itemActiveIndicatorStyle="@style/Widget.App.NavBarActiveIndicator_records"
         app:backgroundTint="@color/white"/>
     </LinearLayout>
 

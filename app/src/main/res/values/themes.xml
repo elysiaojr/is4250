@@ -5,12 +5,23 @@
         <item name="colorPrimary">#3368B7</item>
         <item name="colorSecondaryContainer">@color/nav_bar_active_indicator</item>
     </style>
+
     <!-- Base application theme. -->
     <style name="Base.Theme.ScannerApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorSecondaryContainer">@color/nav_bar_active_indicator</item>
+    <item name="colorSecondaryContainer">@color/nav_bar_grey</item>
     </style>
-    <!-- Customize your light theme here. -->
-    <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Widget.App.NavBarActiveIndicator_consumables" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/very_light_consumables</item>
+    </style>
+
+    <style name="Widget.App.NavBarActiveIndicator_batches" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/very_light_batches</item>
+    </style>
+
+    <style name="Widget.App.NavBarActiveIndicator_records" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/very_light_records</item>
+    </style>
 
 
 </resources>
