@@ -4,21 +4,25 @@
         android:id="@+id/main_landing"
         android:enabled="true"
         android:icon="@drawable/outline_home_24"
+        android:iconTint="@color/mid_records"
         android:title="Home" />
     <item
         android:id="@+id/item_records"
         android:enabled="true"
         android:icon="@drawable/task"
+        android:iconTint="@color/mid_records"
         android:title="Logbook" />
     <item
         android:id="@+id/item_batch_details"
         android:enabled="true"
         android:icon="@drawable/boxes"
+        android:iconTint="@color/mid_batches"
         android:title="Inventory" />
     <item
         android:id="@+id/item_consumables"
         android:enabled="true"
         android:icon="@drawable/vaccines_24px"
+        android:iconTint="@color/delete"
         android:title="Consumables" />
     <item
         android:id="@+id/item_settings"

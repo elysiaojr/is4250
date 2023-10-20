@@ -20,7 +20,6 @@
         android:textStyle="bold"
         android:textAlignment="center"
         android:padding="16dp"
-        android:background="@color/mid_records"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -93,8 +92,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/navigation_bar_menu"
         app:elevation="8dp"
-        app:itemRippleColor="@color/nav_bar_grey"
-        app:itemActiveIndicatorStyle="@style/Widget.App.NavBarActiveIndicator_records"
         app:backgroundTint="@color/white"/>
     </LinearLayout>
 

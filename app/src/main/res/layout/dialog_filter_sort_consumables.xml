@@ -33,87 +33,30 @@
             android:id="@+id/buttonReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset All"
+            android:text="Reset"
             android:textAlignment="viewEnd"
-            android:textColor="@color/dark_consumables"
+            android:textColor="@color/button_background"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/buttons_title"
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/activeCheckBox"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7.5dp"
-        android:text="Look for consumables that are:"
-        android:textSize="14sp" />
+        android:text="Active Consumables" />
 
-    <RadioGroup
-        android:id="@+id/filterStatusRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
+    <CheckBox
+        android:id="@+id/inactiveCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inactive Consumables" />
 
-        <RadioButton
-            android:id="@+id/activeRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.App.RadioButton_consumables"
-            android:text="Active" />
-
-        <RadioButton
-            android:id="@+id/inactiveRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
-            style="@style/Widget.App.RadioButton_consumables"
-            android:text="Inactive" />
-
-    </RadioGroup>
-
-    <RadioGroup
-        android:id="@+id/filterQuantityRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/sufficientRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:useMaterialThemeColors="false"
-            style="@style/Widget.App.RadioButton_consumables"
-            android:text="Sufficient" />
-
-        <RadioButton
-            android:id="@+id/shortageRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            style="@style/Widget.App.RadioButton_consumables"
-            android:text="Shortage" />
-
-    </RadioGroup>
-
-
-    <!--    <CheckBox-->
-<!--        android:id="@+id/activeCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Active Consumables" />-->
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/inactiveCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Inactive Consumables" />-->
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/remainingQuantityCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Shortage (Remaining qty less than min qty)" />-->
+    <CheckBox
+        android:id="@+id/remainingQuantityCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shortage (Remaining qty less than min qty)" />
 
     <View
         android:layout_width="match_parent"
@@ -142,22 +85,19 @@
         <RadioButton
             android:id="@+id/radioSortAZ"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            style="@style/Widget.App.RadioButton_consumables"
+            android:layout_height="wrap_content"
             android:text="A to Z" />
 
         <RadioButton
             android:id="@+id/radioSortZA"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            style="@style/Widget.App.RadioButton_consumables"
+            android:layout_height="wrap_content"
             android:text="Z to A" />
     </RadioGroup>
 
     <Button
         android:id="@+id/buttonApply"
         style="@style/CardTextButton"
-        android:backgroundTint="@color/dark_consumables"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:text="Apply"
