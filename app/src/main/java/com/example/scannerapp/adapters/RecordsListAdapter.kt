@@ -17,7 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.database.entities.RecordType
 import com.example.scannerapp.ui.RecordActivity
+import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 //import com.example.scannerapp.ui.RecordsActivity
 import com.example.scannerapp.viewmodels.RecordViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
@@ -32,6 +34,7 @@ class RecordsListAdapter(
   private val context: Context,
   private var recordsList: List<Record>,
   private val recordsViewModel: RecordViewModel,
+  private val batchDetailsViewModel: BatchDetailsViewModel,
   private val adapterJob: CompletableJob = Job(),
   private val adapterScope: CoroutineScope = CoroutineScope(Dispatchers.Main + adapterJob)
 ) : BaseAdapter(), Filterable {
@@ -63,15 +66,44 @@ class RecordsListAdapter(
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val view = inflater.inflate(R.layout.list_item_record, null)
 
-    val recordTextView = view.findViewById<TextView>(R.id.recordNumber)
+    val recordTypeTextView = view.findViewById<TextView>(R.id.recordType)
+    val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
+    val batchNumberTextView = view.findViewById<TextView>(R.id.batchNumber)
+    val expiryDateTextView = view.findViewById<TextView>(R.id.expiryDate)
     val recordDateTextView = view.findViewById<TextView>(R.id.recordDate)
+
 
     // What to update for Records
 //        adapterScope.launch {
 //            val unitOfMeasurement = recordsViewModel
 //        }
 
-    recordTextView.text = record.recordId.toString()
+    val recordType: String = if (record.recordType.equals(RecordType.TAKE_OUT)) {
+      "Take Out"
+    } else {
+      "Return"
+    }
+    recordTypeTextView.text = recordType
+
+    adapterScope.launch {
+      val batchNumber = batchDetailsViewModel.getBatchDetailsNameById(record.batchId)
+      val consumableName = batchDetailsViewModel.getBatchDetailConsumableNameByBatchNumber(batchNumber)
+      val consumableText = "Consumable Name: " + consumableName
+      consumableNameTextView.text = getBoldSpannable(consumableText, "Consumable Name:")
+    }
+
+    adapterScope.launch {
+      val batchNumber = batchDetailsViewModel.getBatchDetailsNameById(record.batchId)
+      val batchNameText = "Batch Number: " + batchNumber
+      batchNumberTextView.text = getBoldSpannable(batchNameText, "Batch Number:")
+    }
+
+    adapterScope.launch {
+      val batchExpiryDate = batchDetailsViewModel.getBatchExpiryDateById(record.batchId)
+      val expiryDateText = "Expiry Date: " + batchExpiryDate
+      expiryDateTextView.text = getBoldSpannable(expiryDateText, "Expiry Date:")
+    }
+
     val recordDateText = "Record Date: " + record.recordDate
     recordDateTextView.text = getBoldSpannable(recordDateText, "Record Date:")
 

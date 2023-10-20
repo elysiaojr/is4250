@@ -33,7 +33,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
         <!-- record ID Display -->
         <TextView
-            android:id="@+id/recordIDTextView"
+            android:id="@+id/recordTypeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -55,9 +55,35 @@
             android:layout_height="wrap_content"
             android:rowCount="1"
             android:columnCount="2"
-            app:layout_constraintTop_toBottomOf="@+id/recordIDTextView"
+            app:layout_constraintTop_toBottomOf="@+id/recordTypeTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">>
+
+
+            <!-- Record ID -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Record ID: "
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="start|center_vertical"
+                android:gravity="start"
+                android:layout_column="0"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/recordIDTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PUT IN"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="start"
+                android:layout_column="1"
+                android:layout_marginBottom="10dp" />
 
             <!-- Record Date -->
             <TextView
@@ -84,36 +110,11 @@
                 android:layout_column="1"
                 android:layout_marginBottom="10dp" />
 
-            <!-- Record Type -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Record Type: "
-                android:textSize="16sp"
-                android:textAlignment="viewStart"
-                android:layout_gravity="start|center_vertical"
-                android:gravity="start"
-                android:layout_column="0"
-                android:layout_marginBottom="10dp" />
-
-            <TextView
-                android:id="@+id/recordTypeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PUT IN"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textAlignment="viewStart"
-                android:layout_gravity="end|center_vertical"
-                android:gravity="start"
-                android:layout_column="1"
-                android:layout_marginBottom="10dp" />
-
             <!-- Record Quantity -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Record Quantity: "
+                android:text="Quantity: "
                 android:textSize="16sp"
                 android:textAlignment="viewStart"
                 android:layout_gravity="start|center_vertical"
@@ -137,7 +138,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Batch ID: "
+                android:text="Batch Number: "
                 android:textSize="16sp"
                 android:textAlignment="viewStart"
                 android:layout_gravity="start|center_vertical"
@@ -162,7 +163,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User ID: "
+                android:text="User: "
                 android:textSize="16sp"
                 android:textAlignment="viewStart"
                 android:layout_gravity="start|center_vertical"
@@ -180,14 +181,7 @@
                 android:textAlignment="viewStart"
                 android:layout_gravity="end|center_vertical"
                 android:gravity="start"
-                android:layout_column="1"
                 android:layout_marginBottom="10dp" />
-            <!-- Is Active -->
-
-
-            <!-- Consumable ID -->
-
-
         </GridLayout>
 
         <View
@@ -196,8 +190,6 @@
             android:padding="16dp"
             android:layout_marginVertical="18sp"
             android:background="#c0c0c0" />
-
-
         <!-- Buttons at the bottom -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -205,23 +197,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="0dp">
 
-            <!-- Delete Button -->
-            <Button
-                android:id="@+id/recordDeleteButton"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/delete"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/baseline_delete_outline_24"
-                android:text="Delete"
-                android:textSize="16sp"
-                android:textAlignment="textStart" />
-
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="match_parent" />
-
-            <!-- Edit Button -->
             <Button
                 android:id="@+id/recordEditButton"
                 android:layout_width="0dp"
@@ -229,9 +204,10 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/mid_records_white_text_button"
                 android:drawableLeft="@drawable/baseline_edit_24"
-                android:text="Edit"
+                android:text="Edit Record"
                 android:textSize="16sp"
-                android:textAlignment="textStart" />
+                android:gravity="center"/>
+
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -239,35 +215,5 @@
             android:padding="16dp"
             android:layout_marginVertical="18sp"
             android:background="#c0c0c0" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Do you wish to create a new record for this same batch?"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            android:textAlignment="viewStart"
-            android:layout_gravity="start"
-            android:gravity="start"
-            android:layout_column="0"
-            android:layout_marginBottom="10dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="0dp">
-
-            <!-- Delete Button -->
-            <Button
-                android:id="@+id/createRecordButton"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/mid_records_white_text_button"
-                android:drawableLeft="@drawable/baseline_add_24_white"
-                android:text="Create Record"
-                android:textSize="16sp"
-                android:textAlignment="center" />
-        </LinearLayout>
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

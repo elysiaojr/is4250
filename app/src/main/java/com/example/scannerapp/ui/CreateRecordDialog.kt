@@ -197,9 +197,9 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
 
         switchRecordType.setOnClickListener {
             if (switchRecordType.isChecked) {
-                titleView.text = "Add Take-Out Record"
+                titleView.text = "Add Take Out Record"
             } else {
-                titleView.text = "Add Put-In Record"
+                titleView.text = "Add Return Record"
             }
         }
 

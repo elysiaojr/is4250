@@ -69,5 +69,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
   }
 
+  suspend fun getUserNameById(userId: Int): String {
+    return userRepository.getUserNameById(userId)
+  }
   // More functions...
 }

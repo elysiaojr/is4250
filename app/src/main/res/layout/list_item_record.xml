@@ -18,18 +18,52 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
-        android:id="@+id/recordNumber"
+        android:id="@+id/recordType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="8dp"
-        android:text="Record Number"
+        android:text="Record Type"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/recordIcon"
-        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-        app:layout_constraintBottom_toTopOf="@+id/recordDate" />
+        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon" />
+
+    <TextView
+        android:id="@+id/consumableName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp"
+        android:text="Consumable Name: "
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@+id/recordType"
+        app:layout_constraintStart_toEndOf="@+id/recordIcon"
+        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
+    <TextView
+        android:id="@+id/batchNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp"
+        android:text="Expiry Date: 01/01/2025"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@+id/consumableName"
+        app:layout_constraintStart_toEndOf="@+id/recordIcon"
+        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
+
+    <TextView
+        android:id="@+id/expiryDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp"
+        android:text="Expiry Date: 01/01/2025"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@+id/batchNumber"
+        app:layout_constraintStart_toEndOf="@+id/recordIcon"
+        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
 
     <TextView
         android:id="@+id/recordDate"
@@ -37,9 +71,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="8dp"
-        android:text="Expiry Date: 01/01/2025"
+        android:text="Record Date: 01/01/2025"
         android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@+id/recordNumber"
+        app:layout_constraintTop_toBottomOf="@+id/expiryDate"
         app:layout_constraintStart_toEndOf="@+id/recordIcon"
         app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
 
