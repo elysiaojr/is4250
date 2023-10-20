@@ -1,8 +1,10 @@
 package com.example.scannerapp.dataclass
 
 data class BatchDetailsFilterSortState(
-    val status: Int,
-    val empty: Int,
-    val expired: Int,
+    val active: Boolean,
+    val inactive: Boolean,
+    val nonEmpty: Boolean,
+    val empty: Boolean,
+    val expired: Boolean,
     val sortOrder: SortOrderEnum
 )

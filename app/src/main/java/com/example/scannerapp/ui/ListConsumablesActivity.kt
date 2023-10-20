@@ -37,7 +37,7 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
   private lateinit var searchButton: Button
   private lateinit var filteredList: List<Consumable>
   private val activityScope = CoroutineScope(Dispatchers.Main)
-  private var consumableFilterState = ConsumableFilterSortState(status = 1, quantity = 1, sortOrder = SortOrderEnum.ASCENDING)
+  private var consumableFilterState = ConsumableFilterSortState(active = false, inactive = false, remainingQuantity = false, sortOrder = SortOrderEnum.ASCENDING)
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.ASCENDING
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,10 +84,10 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     }
 
     // Initialize the filter state
-    consumableFilterState = ConsumableFilterSortState(status = 1, quantity = 1, sortOrder = currentSortOrder)
+    consumableFilterState = ConsumableFilterSortState(active = true, inactive = true, remainingQuantity = false, sortOrder = currentSortOrder)
 
     // Apply the filter to the default state
-    updateList(consumableFilterState.status, consumableFilterState.quantity)
+    updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
 
     // filter button
     val filterButton = findViewById<Button>(R.id.consumableListFilterButton)
@@ -138,14 +138,15 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
     val dialogFragment = FilterSortConsumableDialog.newInstance(consumableFilterState, currentSortOrder)
     dialogFragment.onFilterSortAppliedListener = object : FilterSortConsumableDialog.OnFilterSortAppliedListener {
       override suspend fun onFilterSortApplied(
-        status: Int,
-        quantity: Int,
+        active: Boolean,
+        inactive: Boolean,
+        remainingQuantity: Boolean,
         sortOrder: SortOrderEnum
       ) {
-        updateList(status, quantity)
+        updateList(active, inactive, remainingQuantity)
         currentSortOrder = sortOrder // Update the sorting order
         saveLastSelectedSortOrder(sortOrder) // Save the last selected sorting order
-        consumableFilterState = ConsumableFilterSortState(status, quantity, sortOrder) // Update the filter state
+        consumableFilterState = ConsumableFilterSortState(active, inactive, remainingQuantity, sortOrder) // Update the filter state
       }
     }
     dialogFragment.show(supportFragmentManager, "FilterSortDialogFragment")
@@ -153,16 +154,15 @@ class ListConsumablesActivity : BaseActivity(R.layout.activity_list_consumables)
 
 
   // update list based on filters and sorting order
-  private fun updateList(status: Int, quantity: Int) {
+  private fun updateList(active: Boolean, inactive: Boolean, remainingQuantity: Boolean) {
     CoroutineScope(Dispatchers.Main).launch {
       val allConsumables = consumableViewModel.allConsumables.value.orEmpty()
 
       // filter the list
       filteredList = allConsumables.filter { consumable ->
-        (status == 1 || consumable.isActive == 0) &&
-                (status == 0 || consumable.isActive == 1) &&
-                (quantity == 1 || remainingQuantityCheck(consumable)) &&
-                (quantity == 0 || !remainingQuantityCheck(consumable))
+        (active || consumable.isActive == 0) &&
+                (inactive || consumable.isActive == 1) &&
+                (!remainingQuantity || remainingQuantityCheck(consumable))
       }
 
       // Sort the filtered list based on the current sorting order in a case-insensitive manner

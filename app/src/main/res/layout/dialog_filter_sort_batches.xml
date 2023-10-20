@@ -33,124 +33,42 @@
             android:id="@+id/buttonReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset All"
+            android:text="Reset"
             android:textAlignment="viewEnd"
-            android:textColor="@color/dark_batches"
+            android:textColor="@color/button_background"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/buttons_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7.5dp"
-        android:text="Look for batches that are:"
-        android:textSize="14sp" />
-
-        <RadioGroup
-            android:id="@+id/filterStatusRadioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
-
-            <RadioButton
-                android:id="@+id/activeRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.App.RadioButton_batches"
-                android:text="Active" />
-
-            <RadioButton
-                android:id="@+id/inactiveRadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="54dp"
-                style="@style/Widget.App.RadioButton_batches"
-                android:text="Inactive" />
-
-        </RadioGroup>
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/activeCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Active" />-->
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/inactiveCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginLeft="45dp"-->
-<!--        android:text="Inactive" />-->
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/nonEmptyCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Non-empty" />-->
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/emptyCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginLeft="15dp"-->
-<!--        android:text="Empty" />-->
-
-
-    <RadioGroup
-        android:id="@+id/filterEmptyRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
-
-    <RadioButton
-        android:id="@+id/nonEmptyRadioButton"
+    <CheckBox
+        android:id="@+id/activeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.App.RadioButton_batches"
-        android:text="Non-empty" />
+        android:text="Active Batches" />
 
-    <RadioButton
-        android:id="@+id/emptyRadioButton"
+    <CheckBox
+        android:id="@+id/inactiveCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        style="@style/Widget.App.RadioButton_batches"
-        android:text="Empty" />
+        android:text="Inactive Batches" />
 
-    </RadioGroup>
+    <CheckBox
+        android:id="@+id/nonEmptyCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Non-empty Batches" />
 
-    <RadioGroup
-        android:id="@+id/filterExpiryRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
+    <CheckBox
+        android:id="@+id/emptyCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Empty Batches" />
 
-
-        <RadioButton
-            android:id="@+id/notExpiredRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.App.RadioButton_batches"
-            android:text="Not expired" />
-
-        <RadioButton
-            android:id="@+id/expiredRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            style="@style/Widget.App.RadioButton_batches"
-            android:text="Expired" />
-
-    </RadioGroup>
-
-<!--    <CheckBox-->
-<!--        android:id="@+id/expiredCheckBox"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:text="Expired" />-->
+    <CheckBox
+        android:id="@+id/expiredCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expired Batches" />
 
     <View
         android:layout_width="match_parent"
@@ -179,36 +97,31 @@
         <RadioButton
             android:id="@+id/radioSortLatestTakeout"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            style="@style/Widget.App.RadioButton_batches"
+            android:layout_height="wrap_content"
             android:text="Last Takeout" />
 
         <RadioButton
             android:id="@+id/radioSortFirstExpiry"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            style="@style/Widget.App.RadioButton_batches"
+            android:layout_height="wrap_content"
             android:text="First Expiry" />
 
         <RadioButton
             android:id="@+id/radioSortAZ"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            style="@style/Widget.App.RadioButton_batches"
+            android:layout_height="wrap_content"
             android:text="A to Z" />
 
         <RadioButton
             android:id="@+id/radioSortZA"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            style="@style/Widget.App.RadioButton_batches"
+            android:layout_height="wrap_content"
             android:text="Z to A" />
     </RadioGroup>
 
     <Button
         android:id="@+id/buttonApply"
         style="@style/CardTextButton"
-        android:backgroundTint="@color/dark_batches"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:text="Apply"
