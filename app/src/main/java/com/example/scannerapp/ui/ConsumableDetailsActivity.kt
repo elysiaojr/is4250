@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.example.scannerapp.viewmodels.PinCodeViewModel
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -85,18 +86,29 @@ class ConsumableDetailsActivity : AppCompatActivity(),
   }
 
   private fun showDeleteConfirmationDialog() {
-    val editText = EditText(this)
-    editText.inputType = InputType.TYPE_CLASS_NUMBER // Only allow numeric input
+    val dialogView = layoutInflater.inflate(R.layout.dialog_pin, null)
+
+    val title = dialogView.findViewById<TextView>(R.id.title)
+    val pinInputEditText = dialogView.findViewById<TextInputEditText>(R.id.pinInputEditText)
+    val deleteButton = dialogView.findViewById<Button>(R.id.confirm_button)
+    val backButton = dialogView.findViewById<Button>(R.id.back_button)
+
+    title.text = "Delete Consumable"
+
     val dialog = AlertDialog.Builder(this)
-      .setTitle("Delete Consumable")
-      .setMessage("Enter pin code to confirm deletion:")
-      .setView(editText)
-      .setPositiveButton("Confirm") { _, _ ->
-        val enteredPin = editText.text.toString()
-        verifyPinAndDelete(enteredPin)
-      }
-      .setNegativeButton("Cancel", null)
+      .setView(dialogView)
       .create()
+
+    deleteButton.setOnClickListener {
+      val enteredPin = pinInputEditText.text.toString()
+      verifyPinAndDelete(enteredPin)
+      dialog.dismiss()
+    }
+
+    backButton.setOnClickListener {
+      dialog.dismiss()
+    }
+
     dialog.show()
   }
 
