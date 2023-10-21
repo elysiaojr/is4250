@@ -40,7 +40,10 @@
         android:textSize="13sp"
         app:layout_constraintTop_toBottomOf="@+id/recordType"
         app:layout_constraintStart_toEndOf="@+id/recordIcon"
-        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
+        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
     <TextView
         android:id="@+id/batchNumber"
         android:layout_width="0dp"
