@@ -20,11 +20,13 @@
         android:enabled="true"
         android:icon="@drawable/vaccines_24px"
         android:title="Consumables" />
+
     <item
         android:id="@+id/item_settings"
         android:enabled="true"
         android:visible="false"
         android:icon="@drawable/vaccines_24px"
         android:title="Settings" />
+
     <!--        android:visible="false"-->
 </menu>

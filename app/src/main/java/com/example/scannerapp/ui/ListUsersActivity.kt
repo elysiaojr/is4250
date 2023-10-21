@@ -10,6 +10,7 @@ import com.example.scannerapp.adapters.UserListAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
@@ -20,7 +21,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 
-class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
+class ListUsersActivity : AppCompatActivity(R.layout.activity_list_users) {
     private lateinit var userViewModel: UserViewModel
     private lateinit var backButton: ImageView
 
@@ -34,7 +35,7 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
         backButton = findViewById<ImageView>(R.id.back_icon)
 
         backButton.setOnClickListener {
-            startActivity(Intent(this, MainLandingActivity::class.java))
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
         // Observe the LiveData and update the adapter when data changes
@@ -53,17 +54,17 @@ class ListUsersActivity : BaseActivity(R.layout.activity_list_users) {
     }
 
     // for navigation bar
-    companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, ListUsersActivity::class.java)
-        }
-    }
+//    companion object {
+//        fun getIntent(context: Context): Intent {
+//            return Intent(context, ListUsersActivity::class.java)
+//        }
+//    }
 
     // for navigation bar
-    override fun setActiveNavigationItem() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.item_settings
-    }
+//    override fun setActiveNavigationItem() {
+//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+//        bottomNavigationView.selectedItemId = R.id.item_users
+//    }
 
     private fun showCreateUserDialog() {
         val builder = AlertDialog.Builder(this)

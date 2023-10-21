@@ -49,7 +49,7 @@ class MainLandingActivity: BaseActivity(R.layout.activity_main_landing) {
         // Settings circular button
         settingsButton = findViewById<ConstraintLayout>(R.id.settings_button)
         settingsButton.setOnClickListener {
-            val intent = Intent(this, ListUsersActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 

@@ -64,11 +64,20 @@ abstract class BaseActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity
         R.id.item_settings -> {
           println("from BA: to settings")
           // Respond to navigation item 4 click
-          if (javaClass != ListUsersActivity::class.java) {
-            startActivity(Intent(this, ListUsersActivity::class.java))
+          if (javaClass != SettingsActivity::class.java) {
+            startActivity(Intent(this, SettingsActivity::class.java))
           }
           true
         }
+//
+//        R.id.item_users -> {
+//          println("from BA: to users")
+//          // Respond to navigation item 4 click
+//          if (javaClass != ListUsersActivity::class.java) {
+//            startActivity(Intent(this, ListUsersActivity::class.java))
+//          }
+//          true
+//        }
 
         else -> {
           println("from BA: FALSE")
