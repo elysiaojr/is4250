@@ -29,6 +29,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class RecordsListAdapter(
   private val context: Context,
@@ -131,17 +133,33 @@ class RecordsListAdapter(
         } else {
           val filterPattern = constraint.toString().toLowerCase().trim()
 
-          for (item in unfilteredRecordsList) {
-            if (item.recordId.toString().contains(filterPattern) ||
-              item.recordDate.toLowerCase().contains(filterPattern)
-            ) {
-              filteredList.add(item)
+          runBlocking {
+            for (item in unfilteredRecordsList) {
+              if (shouldAddItem(item, filterPattern)) {
+                filteredList.add(item)
+              }
             }
           }
           results.values = filteredList
         }
 
         return results
+      }
+
+      suspend fun shouldAddItem(item: Record, filterPattern: String): Boolean {
+        val consumableName = withContext(Dispatchers.IO) {
+          batchDetailsViewModel.getBatchDetailConsumableName(item.batchId)
+        }
+        val batchName = withContext(Dispatchers.IO) {
+          batchDetailsViewModel.getBatchDetailsNameById(item.batchId)
+        }
+        val batchExpiryDate = withContext(Dispatchers.IO) {
+          batchDetailsViewModel.getBatchExpiryDateById(item.batchId)
+        }
+        return consumableName.toLowerCase().contains(filterPattern) ||
+                batchName.toLowerCase().contains(filterPattern) ||
+                batchExpiryDate.toLowerCase().contains(filterPattern) ||
+                item.recordDate.toLowerCase().contains(filterPattern)
       }
 
       override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
