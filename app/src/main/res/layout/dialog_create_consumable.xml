@@ -185,7 +185,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="Status *"
-          android:textSize="15sp" />
+          android:textSize="15sp"
+          android:visibility="gone" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
           android:id="@+id/switchStatus"
@@ -194,7 +195,8 @@
           android:layout_weight="1"
           android:checked="true"
           app:thumbTint="@color/switch_thumb_enabled"
-          app:trackTint="@drawable/switch_track_color" />
+          app:trackTint="@drawable/switch_track_color"
+          android:visibility="gone" />
 
       </LinearLayout>
 
