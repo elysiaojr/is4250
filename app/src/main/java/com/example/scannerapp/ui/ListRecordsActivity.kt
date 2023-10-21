@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -24,6 +25,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.adapters.BatchDetailsListAdapter
 import com.example.scannerapp.adapters.RecordsListAdapter
+import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.dataclass.BatchDetailsFilterSortState
+import com.example.scannerapp.dataclass.RecordFilterSortState
+import com.example.scannerapp.dataclass.SortOrderEnum
 import com.example.scannerapp.ui.utils.showHide
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
@@ -34,8 +40,12 @@ import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
 
@@ -48,6 +58,10 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
     private lateinit var searchButton: Button
     private lateinit var adapter: RecordsListAdapter
     private val activityScope = CoroutineScope(Dispatchers.Main)
+
+    private lateinit var filteredList: List<Record>
+    private var recordFilterSort = RecordFilterSortState(active = false, inactive = false, expired = false, record = false, sortOrder = SortOrderEnum.ASCENDING)
+    private var currentSortOrder: SortOrderEnum = SortOrderEnum.LAST_TAKEOUT
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -89,18 +103,25 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
         super.onCreate(savedInstanceState)
 
         recordsViewModel = ViewModelProvider(this).get(RecordViewModel::class.java)
+        batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
         recordsListView = findViewById<ListView>(R.id.recordsList)
         searchView = findViewById(R.id.recordsSearchView)
         searchButton = findViewById(R.id.recordsListSearchButton)
 
+        // Initialize the filter state
+        recordFilterSort = RecordFilterSortState(active = false, inactive = false, expired = false, record = false, sortOrder = currentSortOrder)
+
         // Create the adapter and set it initially
-        adapter = RecordsListAdapter(this, emptyList(), recordsViewModel)
+        adapter = RecordsListAdapter(this, emptyList(), recordsViewModel, batchDetailsViewModel)
         recordsListView.adapter = adapter
 
         // Observe the LiveData and update the adapter when data changes
         recordsViewModel.allRecords.observe(this, Observer { records ->
-            adapter.updateData(records)
+
+            adapter.updateData(sortRecordsByTakeOutDateDescending(records))
         })
+        // Apply the filter to the default state
+        updateList(recordFilterSort.active, recordFilterSort.inactive, recordFilterSort.record, recordFilterSort.expired)
 
         // Set up the SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -137,6 +158,11 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
             val intent = integrator.createScanIntent()
             barcodeLauncher.launch(intent)
         }
+
+        val filterButton = findViewById<Button>(R.id.recordsListFilterButton)
+        filterButton.setOnClickListener {
+            showFilterSortDialog()
+        }
     }
     // Composable function for barcode scanning
     @Composable
@@ -154,6 +180,66 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
             Text(text = "Scan Barcode")
         }
     }
+
+    private fun showFilterSortDialog() {
+        val dialogFragment = FilterSortRecordsDialog.newInstance(recordFilterSort, currentSortOrder)
+        dialogFragment.onFilterSortAppliedListener = object : FilterSortRecordsDialog.OnFilterSortAppliedListener {
+            override suspend fun onFilterSortApplied(
+                active: Boolean,
+                inactive: Boolean,
+                record: Boolean,
+                expired: Boolean,
+                sortOrder: SortOrderEnum
+            ) {
+                updateList(active, inactive, record, expired)
+                currentSortOrder = sortOrder // Update the sorting order
+                //saveLastSelectedSortOrder(sortOrder) // Save the last selected sorting order
+                recordFilterSort = RecordFilterSortState(active, inactive, record, expired, sortOrder) // Update the filter state
+            }
+        }
+        dialogFragment.show(supportFragmentManager, "FilterSortDialogFragment")
+    }
+    private fun updateList(active: Boolean, inactive: Boolean, record: Boolean, expired: Boolean) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val list = recordsViewModel.allRecords.value.orEmpty()
+
+            Log.d("currentsortorder", currentSortOrder.toString())
+
+            filteredList = list.filter {record ->
+                (record.isActive == 1) || (record.recordQuantityChanged != 0)
+            }
+            filteredList = when (currentSortOrder) {
+                SortOrderEnum.ASCENDING -> filteredList
+                SortOrderEnum.DESCENDING -> filteredList
+                SortOrderEnum.LAST_TAKEOUT -> sortRecordsByTakeOutDateDescending(filteredList)
+                SortOrderEnum.FIRST_EXPIRY -> sortRecordsByExpiryDateAscending(filteredList)
+            }
+
+            adapter.updateData(filteredList)
+        }
+    }
+
+    private fun sortRecordsByTakeOutDateDescending(recordList: List<Record>): List<Record> {
+        val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+        return recordList.sortedWith(Comparator { record1, record2 ->
+            val date1 = LocalDate.parse(record1.recordDate, dateFormat)
+            val date2 = LocalDate.parse(record2.recordDate, dateFormat)
+            date2.compareTo(date1)
+        })
+    }
+
+    private suspend fun sortRecordsByExpiryDateAscending(recordList: List<Record>): List<Record> {
+        return withContext(Dispatchers.Default) {
+            val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            recordList.sortedWith(Comparator { record1, record2 ->
+                val date1 = runBlocking { LocalDate.parse(batchDetailsViewModel.getBatchExpiryDateById(record1.batchId), dateFormat) }
+                val date2 = runBlocking { LocalDate.parse(batchDetailsViewModel.getBatchExpiryDateById(record2.batchId), dateFormat) }
+                date1.compareTo(date2)
+            })
+        }
+    }
+
 
     // for navigation bar
     companion object {

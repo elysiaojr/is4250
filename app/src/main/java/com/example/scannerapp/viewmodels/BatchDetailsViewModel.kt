@@ -121,6 +121,13 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     return batchDetailsRepository.getBatchDetailUOM(consumableId)
   }
 
+  suspend fun getBatchDetailsNameById (batchId: Int): String {
+    return batchDetailsRepository.getBatchDetailsNameById(batchId)
+  }
+
+  suspend fun getBatchExpiryDateById(batchId: Int): String {
+    return batchDetailsRepository.getBatchExpiryDateById(batchId)
+  }
   suspend fun getBatchIdByBatchNumber(batchNumber: String): Int {
     return batchDetailsRepository.getBatchIdByBatchNumber(batchNumber)
   }

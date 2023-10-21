@@ -31,7 +31,9 @@ class UserRepository(private val userDao: UserDao) {
   suspend fun getUserById(userId: Int): User {
     return userDao.getUserById(userId)
   }
-
+  suspend fun getUserNameById(userId: Int): String {
+    return userDao.getUserNameById(userId)
+  }
   private fun validateUser(user: User) {
     if (user.name.trim().isEmpty()) {
       throw InvalidUserNameException("User name cannot be empty")

@@ -27,6 +27,8 @@ interface UserDao {
   @Query("SELECT * FROM user WHERE userId = :id")
   suspend fun getUserById(id: Int): User
 
+  @Query("SELECT user.name FROM user WHERE userId = :id")
+  suspend fun getUserNameById(id: Int): String
   @Query("SELECT * FROM user")
   fun getAllUsers(): LiveData<List<User>>
 }

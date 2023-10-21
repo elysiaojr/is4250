@@ -40,6 +40,11 @@ interface BatchDetailsDao {
   @Query("SELECT batch_details.batchId FROM batch_details WHERE batchNumber = :batchNumber")
   suspend fun getBatchIdByBatchNumber(batchNumber: String): Int
 
+  @Query("SELECT batch_details.batchNumber FROM batch_details WHERE batchId = :batchId")
+  suspend fun getBatchDetailsNameById(batchId: Int): String
+
+  @Query("SELECT batch_details.expiryDate FROM batch_details WHERE batchId = :batchId")
+  suspend fun getBatchExpiryDateById(batchId: Int): String
   @Query("SELECT unitOfMeasurement FROM consumable WHERE consumableId = :id")
   suspend fun getBatchDetailUOM(id: Int): UnitOfMeasurement
 

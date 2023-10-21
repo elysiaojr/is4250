@@ -197,9 +197,9 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
 
         switchRecordType.setOnClickListener {
             if (switchRecordType.isChecked) {
-                titleView.text = "Add Take-Out Record"
+                titleView.text = "Add Take Out Record"
             } else {
-                titleView.text = "Add Put-In Record"
+                titleView.text = "Add Return Record"
             }
         }
 
@@ -290,9 +290,12 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             // Searchable Spinner: Filer by SelectedConsumableId
             batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batches ->
 
-                batchNumbers = batches
-                    .filter { it.consumableId == selectedConsumableId }
-                    .map { it.batchNumber }
+                // Sort batches by expiry date in ascending order (earliest first)
+                val sortedBatches = batches.filter { it.consumableId == selectedConsumableId && !isExpired(it.expiryDate) }
+                    .sortedBy { LocalDate.parse(it.expiryDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")) }
+
+                // Extract batch numbers from the sorted list
+                batchNumbers = sortedBatches.map { it.batchNumber }
 
                 // Create an ArrayAdapter and set it to the SearchableSpinner
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, batchNumbers)
@@ -328,6 +331,14 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         }
     }
 
+    private fun isExpired(expiryDate: String?): Boolean {
+        // Parse the expiry date string to a LocalDate object
+        val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val expiryLocalDate = LocalDate.parse(expiryDate, dateFormat)
+
+        // Check if the expiry date is before the current date
+        return expiryLocalDate.isBefore(LocalDate.now())
+    }
     private fun processIfBatchNumberExists(batchDetailsBatchNumber: String) {
         var exists: Boolean
         activityScope.launch {
