@@ -133,7 +133,7 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
       // For initial rendering, show active batch details only
       val activeBatchDetails = batchDetails.filter { batchDetail ->
-        batchDetail.isActive == 1
+        (!showArchives && batchDetail.isActive == 1) || (showArchives && batchDetail.isActive == 0)
       }
       adapter.updateBatchDetailsData(activeBatchDetails)
     })
