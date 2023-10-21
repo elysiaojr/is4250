@@ -1,9 +1,13 @@
 package com.example.scannerapp.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
@@ -11,6 +15,7 @@ import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
+import com.example.scannerapp.viewmodels.PinCodeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -18,10 +23,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // This activity displays details of a batch.
-class BatchDetailsActivity : AppCompatActivity(), EditBatchDetailsDialog.OnBatchDetailsUpdatedListener {
+class BatchDetailsActivity : AppCompatActivity(),
+  EditBatchDetailsDialog.OnBatchDetailsUpdatedListener {
 
   // Define UI elements and data models.
   private lateinit var batchDetailsViewModel: BatchDetailsViewModel
+  private lateinit var pinCodeViewModel: PinCodeViewModel
   private lateinit var batchNumberTextView: TextView
   private lateinit var createDateTextView: TextView
   private lateinit var expiryDateTextView: TextView
@@ -39,6 +46,9 @@ class BatchDetailsActivity : AppCompatActivity(), EditBatchDetailsDialog.OnBatch
 
     // Retrieve the selected batch detail from the intent.
     batchDetail = intent.getParcelableExtra("batchDetail")
+
+    batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+    pinCodeViewModel = ViewModelProvider(this).get(PinCodeViewModel::class.java)
 
     // Initialize views.
     batchNumberTextView = findViewById(R.id.batchNumberTextView)
@@ -78,6 +88,58 @@ class BatchDetailsActivity : AppCompatActivity(), EditBatchDetailsDialog.OnBatch
     }
     // val fab = findViewById<Button>(R.id.batchEditButton)
     // fab.setOnClickListener { /* Handle edit click here */ }
+
+    val deleteButton = findViewById<Button>(R.id.batchDeleteButton)
+    deleteButton.setOnClickListener {
+      showDeleteConfirmationDialog()
+    }
+  }
+
+  // This method is for showing the deletion dialog with pin code input.
+  private fun showDeleteConfirmationDialog() {
+    val editText = EditText(this)
+    editText.inputType = InputType.TYPE_CLASS_NUMBER // Only allow numeric input
+    val dialog = AlertDialog.Builder(this)
+      .setTitle("Delete Batch")
+      .setMessage("Enter pin code to confirm deletion:")
+      .setView(editText)
+      .setPositiveButton("Confirm") { _, _ ->
+        val enteredPin = editText.text.toString()
+        verifyPinAndDelete(enteredPin)
+      }
+      .setNegativeButton("Cancel", null)
+      .create()
+    dialog.show()
+  }
+
+  // This method verifies the pin and deletes the batch if the pin is correct.
+  private fun verifyPinAndDelete(enteredPin: String) {
+    activityScope.launch {
+      val storedPin = withContext(Dispatchers.IO) {
+        pinCodeViewModel.getPinCode()
+      }
+      if (enteredPin == storedPin) {
+        deleteBatch()
+      } else {
+        Toast.makeText(this@BatchDetailsActivity, "Incorrect pin code!", Toast.LENGTH_SHORT)
+          .show()
+      }
+    }
+  }
+
+  // This method is for deleting the batch. You might want to adjust it based on how you manage deletion in your batch database.
+  private fun deleteBatch() {
+    batchDetail?.let { batch ->
+      val updatedBatchDetails = batch.copy(isActive = 0)
+      activityScope.launch {
+        withContext(Dispatchers.IO) {
+          batchDetailsViewModel.updateBatchDetails(updatedBatchDetails)
+        }
+        Toast.makeText(this@BatchDetailsActivity, "Batch deleted!", Toast.LENGTH_SHORT)
+          .show()
+        finish() // Close this activity and return to the previous one.
+      }
+    }
   }
 
   // Handle the back button press.
@@ -107,7 +169,6 @@ class BatchDetailsActivity : AppCompatActivity(), EditBatchDetailsDialog.OnBatch
 
   // Method to
   private fun updateConsumableName(consumableId: Int) {
-    batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
     activityScope.launch {
       val consumableName = withContext(Dispatchers.IO) {
         batchDetailsViewModel.getBatchDetailConsumableName(consumableId)

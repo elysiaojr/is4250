@@ -9,15 +9,17 @@ import com.example.scannerapp.database.dao.BatchDetailsDao
 import com.example.scannerapp.database.dao.ConsumableDao
 import com.example.scannerapp.database.converters.DateConverters
 import com.example.scannerapp.database.converters.EnumConverters
+import com.example.scannerapp.database.dao.PinCodeDao
 import com.example.scannerapp.database.dao.RecordDao
 import com.example.scannerapp.database.dao.UserDao
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.Record
 import com.example.scannerapp.database.entities.User
+import com.example.scannerapp.database.entities.PinCode
 
 @Database(
-  entities = [Consumable::class, BatchDetails::class, Record::class, User::class],
+  entities = [Consumable::class, BatchDetails::class, Record::class, User::class, PinCode::class],
   version = 1,
   exportSchema = false
 )
@@ -32,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
   @TypeConverters(EnumConverters::class, DateConverters::class)
   abstract fun recordDao(): RecordDao
   abstract fun userDao(): UserDao
+  abstract fun pinCodeDao(): PinCodeDao
 
   companion object {
     // Writes to this field are immediately made visible to other threads
