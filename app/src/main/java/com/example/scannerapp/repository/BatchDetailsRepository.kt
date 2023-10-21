@@ -20,6 +20,9 @@ Most business logic are here.
 class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
   val getAllBatchDetails: LiveData<List<BatchDetails>> =
     batchDetailsDao.getAllBatchDetailsByLatestDate()
+
+  val getAllActiveBatchDetails: LiveData<List<BatchDetails>> =
+    batchDetailsDao.getAllActiveBatchDetailsByLatestDate()
 //  val getAllBatchDetailsByExpiryDate: LiveData<List<BatchDetails>> =
 //    batchDetailsDao.getAllBatchDetailsByExpiryDate()
 //  val getAllBatchDetailsByConsumableNameAsc: LiveData<List<BatchDetails>> =

@@ -17,6 +17,8 @@ Most business logic are here.
 class ConsumableRepository(private val consumableDao: ConsumableDao) {
   val getAllConsumables: LiveData<List<Consumable>> = consumableDao.getAllConsumables()
 
+  val getAllActiveConsumables: LiveData<List<Consumable>> = consumableDao.getAllActiveConsumables()
+
   /*
    * Adds a new consumable to the database after validation.
    * Checks for uniqueness of barcode ID.

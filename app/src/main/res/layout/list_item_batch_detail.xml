@@ -28,7 +28,9 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
         app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:maxLines="2"
+        android:ellipsize="end"/>
 
     <TextView
         android:id="@+id/batchNumber"
@@ -40,7 +42,9 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
         app:layout_constraintStart_toEndOf="@+id/batchDetailsIcon"
-        app:layout_constraintTop_toBottomOf="@+id/consumableName" />
+        app:layout_constraintTop_toBottomOf="@+id/consumableName"
+        android:maxLines="2"
+        android:ellipsize="end"/>
 
     <TextView
         android:id="@+id/batchExpiryDate"

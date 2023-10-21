@@ -27,6 +27,7 @@ It's designed to store and manage UI-related data so that the data survives conf
 class BatchDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
   val allBatchDetails: LiveData<List<BatchDetails>>
+  val allActiveBatchDetails: LiveData<List<BatchDetails>>
   private val batchDetailsRepository: BatchDetailsRepository
   val errorLiveData = MutableLiveData<String>()
   val selectedBatchDetails = MutableLiveData<BatchDetails?>()
@@ -38,6 +39,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     val batchDetailsDao = AppDatabase.getDatabase(application).batchDetailsDao()
     batchDetailsRepository = BatchDetailsRepository(batchDetailsDao)
     allBatchDetails = batchDetailsRepository.getAllBatchDetails
+    allActiveBatchDetails = batchDetailsRepository.getAllActiveBatchDetails
 //    allBatchDetailsByExpiryDate = batchDetailsRepository.getAllBatchDetailsByExpiryDate
 //    allBatchDetailsByConsumableNameAsc = batchDetailsRepository.getAllBatchDetailsByConsumableNameAsc
 //    allBatchDetailsByConsumableNameDesc = batchDetailsRepository.getAllBatchDetailsByConsumableNameDesc

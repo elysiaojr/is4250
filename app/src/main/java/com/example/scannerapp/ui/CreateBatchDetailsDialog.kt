@@ -161,7 +161,7 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
     var selectedConsumableId: Int = -1
 
     // Fetch the list of consumables from the ViewModel
-    consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+    consumableViewModel.allActiveConsumables.observe(viewLifecycleOwner) { consumables ->
       // Update the consumableNames list when data is available
       consumableNames =
         consumables.map { it.consumableName + ", " + it.consumableBrand + ", " + it.consumableType + ", " + it.consumableSize }
@@ -268,9 +268,12 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
         else -> {
           val receivedQuantity = receivedQuantityValue.toInt()
 
+          // Process Strings
+          val sanitisedBatchNumber = batchNumber.replace(Regex("\\n+"), ", ").trim()
+
           val newBatchDetail = BatchDetails(
             batchId = 0,
-            batchNumber = batchNumber,
+            batchNumber = sanitisedBatchNumber,
             createDate = createDate,
             expiryDate = expiryDate,
             batchReceivedQuantity = receivedQuantity,
