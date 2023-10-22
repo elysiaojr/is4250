@@ -27,6 +27,7 @@ import com.example.scannerapp.adapters.BatchDetailsListAdapter
 import com.example.scannerapp.adapters.RecordsListAdapter
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Record
+import com.example.scannerapp.database.entities.RecordType
 import com.example.scannerapp.dataclass.BatchDetailsFilterSortState
 import com.example.scannerapp.dataclass.RecordFilterSortState
 import com.example.scannerapp.dataclass.SortOrderEnum
@@ -209,8 +210,8 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
                 (record.isActive == 1) || (record.recordQuantityChanged != 0)
             }
             filteredList = when (currentSortOrder) {
-                SortOrderEnum.ASCENDING -> filteredList
-                SortOrderEnum.DESCENDING -> filteredList
+                SortOrderEnum.ASCENDING -> filterRecordsByOnlyTakeout(filteredList)
+                SortOrderEnum.DESCENDING -> filterRecordsByOnlyPutIn(filteredList)
                 SortOrderEnum.LAST_TAKEOUT -> sortRecordsByTakeOutDateDescending(filteredList)
                 SortOrderEnum.FIRST_EXPIRY -> sortRecordsByExpiryDateAscending(filteredList)
             }
@@ -218,7 +219,14 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
             adapter.updateData(filteredList)
         }
     }
-
+    private fun filterRecordsByOnlyTakeout(recordList: List<Record>): List<Record> {
+        val unfilteredList = recordsViewModel.allRecords.value
+        return recordList.filter { it.recordType.equals(RecordType.TAKE_OUT) }
+    }
+    private fun filterRecordsByOnlyPutIn(recordList: List<Record>): List<Record> {
+        val unfilteredList = recordsViewModel.allRecords.value
+        return recordList.filter { it.recordType.equals(RecordType.PUT_IN) }
+    }
     private fun sortRecordsByTakeOutDateDescending(recordList: List<Record>): List<Record> {
         val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 

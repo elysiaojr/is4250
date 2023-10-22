@@ -27,6 +27,7 @@ class RecordActivity : AppCompatActivity() {
     private lateinit var batchDetailsViewModel: BatchDetailsViewModel
     private lateinit var recordIDTextView: TextView
     private lateinit var createDateTextView: TextView
+    private lateinit var expiryDateTextView: TextView
     private lateinit var recordTypeTextView: TextView
     private lateinit var recordQuantityTextView: TextView
     private lateinit var batchIDTextView:  TextView
@@ -46,6 +47,7 @@ class RecordActivity : AppCompatActivity() {
         // Initialize views.
         recordIDTextView = findViewById(R.id.recordIDTextView)
         createDateTextView = findViewById(R.id.createDateTextView)
+        expiryDateTextView = findViewById(R.id.expiryDateTextView)
         recordTypeTextView = findViewById(R.id.recordTypeTextView)
         recordQuantityTextView = findViewById(R.id.recordQuantityTextView)
         batchIDTextView =  findViewById(R.id.batchIDTextView)
@@ -103,6 +105,7 @@ class RecordActivity : AppCompatActivity() {
 
         updateUserName(record.userId)
         updateBatchNumberName(record.batchId)
+        updateBatchExpiryDate(record.batchId)
     }
     private fun updateUserName(userId: Int) {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
@@ -111,6 +114,16 @@ class RecordActivity : AppCompatActivity() {
                 userViewModel.getUserNameById(userId)
             }
             userIDTextView.text = userName
+        }
+    }
+
+    private fun updateBatchExpiryDate(batchId: Int) {
+        batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+        activityScope.launch {
+            val batchExpiryDate = withContext(Dispatchers.IO) {
+                batchDetailsViewModel.getBatchExpiryDateById(batchId)
+            }
+            expiryDateTextView.text = batchExpiryDate
         }
     }
 

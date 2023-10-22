@@ -110,6 +110,31 @@
                 android:layout_column="1"
                 android:layout_marginBottom="10dp" />
 
+            <!-- Expiry Date -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expiry Date: "
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="start|center_vertical"
+                android:gravity="start"
+                android:layout_column="0"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:id="@+id/expiryDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01/01/2025"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:layout_gravity="end|center_vertical"
+                android:gravity="start"
+                android:layout_column="1"
+                android:layout_marginBottom="10dp" />
+
             <!-- Record Quantity -->
             <TextView
                 android:layout_width="wrap_content"

@@ -52,7 +52,17 @@
         app:layout_constraintTop_toBottomOf="@+id/consumableName"
         app:layout_constraintStart_toEndOf="@+id/recordIcon"
         app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
-
+    <TextView
+        android:id="@+id/quantityChanged"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp"
+        android:text="Quantity Changed: 0"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@+id/batchNumber"
+        app:layout_constraintStart_toEndOf="@+id/recordIcon"
+        app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
     <TextView
         android:id="@+id/expiryDate"
         android:layout_width="0dp"
@@ -61,7 +71,7 @@
         android:layout_marginEnd="8dp"
         android:text="Expiry Date: 01/01/2025"
         android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@+id/batchNumber"
+        app:layout_constraintTop_toBottomOf="@+id/quantityChanged"
         app:layout_constraintStart_toEndOf="@+id/recordIcon"
         app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
 
