@@ -125,7 +125,7 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
         })
 
         // Searchable Spinner: Fetch the list of consumables from the ViewModel
-        consumableViewModel.allConsumables.observe(viewLifecycleOwner) { consumables ->
+        consumableViewModel.allActiveConsumables.observe(viewLifecycleOwner) { consumables ->
             // Update the consumableNames list when data is available
             consumableNames = consumables.map { it.getConsumableTitle() }
             // Create an ArrayAdapter and set it to the SearchableSpinner
@@ -288,7 +288,7 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
             var batchNumbers: List<String> = emptyList()
 
             // Searchable Spinner: Filer by SelectedConsumableId
-            batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner) { batches ->
+            batchDetailsViewModel.allActiveBatchDetails.observe(viewLifecycleOwner) { batches ->
 
                 // Sort batches by expiry date in ascending order (earliest first)
                 val sortedBatches = batches.filter { it.consumableId == selectedConsumableId && !isExpired(it.expiryDate) }

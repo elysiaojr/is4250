@@ -1,76 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_width="271dp"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+  android:layout_height="wrap_content"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:padding="16dp"
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
-        android:id="@+id/closeButton"
-        style="@style/IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        app:icon="@drawable/close_24px" />
+  <Button
+    android:id="@+id/closeButton"
+    style="@style/IconButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    app:icon="@drawable/close_24px" />
+
+  <TextView
+    android:id="@+id/textViewAddUser"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="7.5dp"
+    android:text="Edit User"
+    android:textSize="24sp"
+    android:textStyle="bold" />
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/textInputLayoutName"
+    style="@style/TextInputLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:hint="Name">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:id="@+id/textInputEditTextName"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="5dp"
+    android:gravity="center_vertical">
 
     <TextView
-        android:id="@+id/textViewAddUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7.5dp"
-        android:text="Edit User"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Status"
+      android:textSize="15sp"
+      android:visibility="gone" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutName"
-        style="@style/TextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Name">
+    <com.google.android.material.materialswitch.MaterialSwitch
+      android:id="@+id/switchStatus"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      app:thumbTint="@color/switch_thumb_enabled"
+      app:trackTint="@drawable/switch_track_color"
+      android:visibility="gone" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+  </LinearLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginVertical="5dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            android:textSize="15sp" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switchStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:thumbTint="@color/switch_thumb_enabled"
-            app:trackTint="@drawable/switch_track_color" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonSave"
-        style="@style/CardTextButton"
-        android:layout_width="236dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="parent" />
+  <Button
+    android:id="@+id/buttonSave"
+    style="@style/CardTextButton"
+    android:layout_width="236dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:text="Save"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toEndOf="parent" />
 
 </LinearLayout>
 

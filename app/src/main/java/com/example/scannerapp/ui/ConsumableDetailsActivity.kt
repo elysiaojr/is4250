@@ -1,14 +1,20 @@
 package com.example.scannerapp.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scannerapp.R
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.ConsumableViewModel
+import com.example.scannerapp.viewmodels.PinCodeViewModel
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +30,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
   private lateinit var consumableCurrentQuantityTextView: TextView
   private lateinit var consumableMinimumQuantityTextView: TextView
   private lateinit var consumableViewModel: ConsumableViewModel
+  private lateinit var pinCodeViewModel: PinCodeViewModel
   private val activityScope = CoroutineScope(Dispatchers.Main)
   private var consumable: Consumable? = null
 
@@ -32,6 +39,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
     setContentView(R.layout.activity_consumable_details)
 
     consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
+    pinCodeViewModel = ViewModelProvider(this).get(PinCodeViewModel::class.java)
 
     // Retrieve the selected consumable from the intent.
     consumable = intent.getParcelableExtra("consumable")
@@ -70,6 +78,66 @@ class ConsumableDetailsActivity : AppCompatActivity(),
       dialogFragment?.consumableUpdatedListener = this
       dialogFragment?.show(supportFragmentManager, "EditConsumableDialog")
     }
+
+    val deleteButton = findViewById<Button>(R.id.consumableDeleteButton)
+    deleteButton.setOnClickListener {
+      showDeleteConfirmationDialog()
+    }
+  }
+
+  private fun showDeleteConfirmationDialog() {
+    val dialogView = layoutInflater.inflate(R.layout.dialog_pin, null)
+
+    val title = dialogView.findViewById<TextView>(R.id.title)
+    val pinInputEditText = dialogView.findViewById<TextInputEditText>(R.id.pinInputEditText)
+    val deleteButton = dialogView.findViewById<Button>(R.id.confirm_button)
+    val backButton = dialogView.findViewById<Button>(R.id.back_button)
+
+    title.text = "Delete Consumable"
+
+    val dialog = AlertDialog.Builder(this)
+      .setView(dialogView)
+      .create()
+
+    deleteButton.setOnClickListener {
+      val enteredPin = pinInputEditText.text.toString()
+      verifyPinAndDelete(enteredPin)
+      dialog.dismiss()
+    }
+
+    backButton.setOnClickListener {
+      dialog.dismiss()
+    }
+
+    dialog.show()
+  }
+
+  private fun verifyPinAndDelete(enteredPin: String) {
+    activityScope.launch {
+      val storedPin = withContext(Dispatchers.IO) {
+        pinCodeViewModel.getPinCode()
+      }
+      if (enteredPin == storedPin) {
+        deleteConsumable()
+      } else {
+        Toast.makeText(this@ConsumableDetailsActivity, "Incorrect pin code!", Toast.LENGTH_SHORT)
+          .show()
+      }
+    }
+  }
+
+  private fun deleteConsumable() {
+    consumable?.let { consumable ->
+      val updatedConsumable = consumable.copy(isActive = 0)
+      activityScope.launch {
+        withContext(Dispatchers.IO) {
+          consumableViewModel.updateConsumable(updatedConsumable)
+        }
+        Toast.makeText(this@ConsumableDetailsActivity, "Consumable deleted!", Toast.LENGTH_SHORT)
+          .show()
+        finish() // Close this activity and return to the previous one.
+      }
+    }
   }
 
   // Handle the back button press.
@@ -77,18 +145,10 @@ class ConsumableDetailsActivity : AppCompatActivity(),
     super.onBackPressed()
   }
 
-  // Convert the status of the GS1 barcode to a readable string.
-  private fun getIsGS1BarcodeText(status: Int): String {
-    return when (status) {
-      0 -> "No"
-      1 -> "Yes"
-      else -> "Unknown"
-    }
-  }
-
   // Update the UI views with data from the Consumable object.
   private fun updateUIWithConsumableData(consumable: Consumable) {
-    consumableNameTextView.text = consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
+    consumableNameTextView.text =
+      consumable.consumableName + ", " + consumable.consumableBrand + ", " + consumable.consumableType + ", " + consumable.consumableSize
     consumableItemCodeTextView.text = consumable.itemCode
 
     consumable?.let {

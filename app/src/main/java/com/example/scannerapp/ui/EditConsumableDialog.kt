@@ -189,13 +189,20 @@ class EditConsumableDialog(private var consumable: Consumable) : DialogFragment(
           0
         } // 1 for enabled, 0 for disabled
 
+        // Process Strings
+        val sanitisedItem = item.replace(Regex("\\n+"), ", ").trim()
+        val sanitisedBrand = brand.replace(Regex("\\n+"), ", ").trim()
+        val sanitisedType = type.replace(Regex("\\n+"), ", ").trim()
+        val sanitisedSize = size.replace(Regex("\\n+"), ", ").trim()
+        val sanitisedItemCode = itemCode.replace(Regex("\\n+"), ", ").trim()
+
         val updatedConsumable = Consumable(
           consumableId = 0,
-          consumableName = item,
-          consumableBrand = brand,
-          consumableType = type,
-          consumableSize = size,
-          itemCode = itemCode,
+          consumableName = sanitisedItem,
+          consumableBrand = sanitisedBrand,
+          consumableType = sanitisedType,
+          consumableSize = sanitisedSize,
+          itemCode = sanitisedItemCode,
           unitOfMeasurement = UnitOfMeasurement.valueOf(uom),
           minimumQuantity = minQuantity,
           isActive = status

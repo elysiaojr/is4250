@@ -59,14 +59,14 @@
                 </ListView>
             </ScrollView>
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:menu="@menu/navigation_bar_menu"
-                app:elevation="8dp"
-                app:backgroundTint="@color/white"/>
+<!--            <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--                android:id="@+id/bottom_navigation"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:menu="@menu/navigation_bar_menu"-->
+<!--                app:elevation="8dp"-->
+<!--                app:backgroundTint="@color/white"/>-->
 
         </LinearLayout>
 
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.95" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/fab"

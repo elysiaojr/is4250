@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.scannerapp.database.entities.BatchDetails
+import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.UnitOfMeasurement
 
 /*
@@ -86,6 +87,22 @@ ORDER BY
 """
   )
   fun getAllBatchDetailsByLatestDate(): LiveData<List<BatchDetails>>
+
+  @Query(
+    """
+    SELECT b.*
+    FROM batch_details AS b
+    LEFT JOIN record AS r ON b.batchId = r.batchId
+    WHERE b.isActive = 1
+    GROUP BY b.batchId
+    ORDER BY
+      CASE
+          WHEN MAX(SUBSTR(r.recordDate,7,4) || '-' || SUBSTR(r.recordDate,4,2) || '-' || SUBSTR(r.recordDate,1,2)) IS NULL THEN SUBSTR(b.createDate,7,4) || '-' || SUBSTR(b.createDate,4,2) || '-' || SUBSTR(b.createDate,1,2)
+          ELSE MAX(SUBSTR(r.recordDate,7,4) || '-' || SUBSTR(r.recordDate,4,2) || '-' || SUBSTR(r.recordDate,1,2))
+    END DESC;
+"""
+  )
+  fun getAllActiveBatchDetailsByLatestDate(): LiveData<List<BatchDetails>>
 
 
 //  @Query(

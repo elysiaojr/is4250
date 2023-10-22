@@ -1,215 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:padding="16dp">
+
+  <Button
+    android:id="@+id/closeButton"
+    style="@style/IconButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    app:icon="@drawable/close_24px" />
+
+  <TextView
+    android:id="@+id/titleViewAddRecord"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="7.5dp"
+    android:layout_marginBottom="16dp"
+    android:text="Add Take Out Details"
+    android:textSize="24sp"
+    android:textStyle="bold" />
+
+  <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="0dp"
+    android:layout_weight="1">
 
-    <Button
-        android:id="@+id/closeButton"
-        style="@style/IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        app:icon="@drawable/close_24px" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/titleViewAddRecord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7.5dp"
-        android:layout_marginBottom="16dp"
-        android:text="Add Take Out Details"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ScrollView
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Is a Take Out Record?"
+          android:textColor="@color/black"
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="5dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+          android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Is a Take Out Record?"
-                    android:textColor="@color/black"
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchRecordType"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:checked="true"
+          app:thumbTint="@color/switch_thumb_enabled"
+          app:trackTint="@drawable/switch_track_color" />
 
-                    android:textSize="15sp" />
+      </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchRecordType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    app:thumbTint="@color/switch_thumb_enabled"
-                    app:trackTint="@drawable/switch_track_color" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-            </LinearLayout>
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Is Active?"
+          android:textColor="@color/black"
+          android:layout_marginEnd="120dp"
+          android:textSize="15sp"
+          android:visibility="gone" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="5dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchStatus"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:checked="true"
+          app:thumbTint="@color/switch_thumb_enabled"
+          app:trackTint="@drawable/switch_track_color"
+          android:visibility="gone" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Is Active?"
-                    android:textColor="@color/black"
-                    android:layout_marginEnd="120dp"
-                    android:textSize="15sp" />
+      </LinearLayout>
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    app:thumbTint="@color/switch_thumb_enabled"
-                    app:trackTint="@drawable/switch_track_color" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutConsumableTitleFromBarcodeData"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Consumable *"
+        android:textColorHint="@color/black"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. ABC123">
 
-            </LinearLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextConsumableTitleFromBarcodeData"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutConsumableTitleFromBarcodeData"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Consumable *"
-                android:textColorHint="@color/black"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. ABC123">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextConsumableTitleFromBarcodeData"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutBatchNumber"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Batch Number *"
+        android:textColorHint="@color/black"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. ABC123">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextBatchNumber"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutBatchNumber"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Batch Number *"
-                android:textColorHint="@color/black"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. ABC123">
+      </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextBatchNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+      <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/searchableSpinnerConsumable"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
+        app:hintText="Consumable *"
+        android:background="@drawable/searchable_spinner_background" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/searchableSpinnerConsumable"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginTop="16dp"
-                app:hintText="Consumable *"
-                android:background="@drawable/searchable_spinner_background"/>
-
-            <TextView
-                android:id="@+id/searchableSpinnerGuide"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select a Consumable to find Batch"
-                android:textColor="@macro/m3_comp_outlined_text_field_supporting_text_color"
-                android:textSize="13dp"
-                android:paddingTop="2dp"
-                android:paddingLeft="15dp"/>
+      <TextView
+        android:id="@+id/searchableSpinnerGuide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select a Consumable to find Batch"
+        android:textColor="@macro/m3_comp_outlined_text_field_supporting_text_color"
+        android:textSize="13dp"
+        android:paddingTop="2dp"
+        android:paddingLeft="15dp" />
 
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/searchableSpinnerBatch"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginTop="16dp"
-                app:hintText="Batch *"
-                android:background="@drawable/searchable_spinner_background"
-                android:visibility="gone" />
+      <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/searchableSpinnerBatch"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
+        app:hintText="Batch *"
+        android:background="@drawable/searchable_spinner_background"
+        android:visibility="gone" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                android:id="@+id/searchableSpinnerUser"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:layout_marginTop="16dp"
-                app:hintText="Recorded By *"
-                android:background="@drawable/searchable_spinner_background"/>
+      <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/searchableSpinnerUser"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
+        app:hintText="Recorded By *"
+        android:background="@drawable/searchable_spinner_background" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutQuantity"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Quantity *"
-                android:textColorHint="@color/black"
-                app:helperTextEnabled="true"
-                app:helperText="E.g. 1, 2">
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutQuantity"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Quantity *"
+        android:textColorHint="@color/black"
+        app:helperTextEnabled="true"
+        app:helperText="E.g. 1, 2">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextQuantity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number" />
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextQuantity"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputRemarks"
-                style="@style/TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Remarks"
-                android:textColorHint="@color/black"
-                app:helperTextEnabled="true"
-                app:helperText="(Optional)">
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputRemarks"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Remarks"
+        android:textColorHint="@color/black"
+        app:helperTextEnabled="true"
+        app:helperText="(Optional)">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEditTextRemarks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/textInputEditTextRemarks"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/buttonSave"
-                style="@style/CardTextButton"
-                android:layout_width="236dp"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:layout_gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="parent" />
+      <Button
+        android:id="@+id/buttonSave"
+        style="@style/CardTextButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="parent" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </ScrollView>
+  </ScrollView>
 
 </LinearLayout>

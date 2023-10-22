@@ -23,6 +23,7 @@ It's designed to store and manage UI-related data so that the data survives conf
 class ConsumableViewModel(application: Application) : AndroidViewModel(application) {
 
   val allConsumables: LiveData<List<Consumable>>
+  val allActiveConsumables: LiveData<List<Consumable>>
   private val consumableRepository: ConsumableRepository
   val selectedConsumable = MutableLiveData<Consumable?>()
   val errorLiveData = MutableLiveData<String>() // To pass error message to UI
@@ -31,6 +32,7 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
     val consumableDao = AppDatabase.getDatabase(application).consumablesDao()
     consumableRepository = ConsumableRepository(consumableDao)
     allConsumables = consumableRepository.getAllConsumables
+    allActiveConsumables = consumableRepository.getAllActiveConsumables
   }
 
   private fun handleException(e: Exception) {

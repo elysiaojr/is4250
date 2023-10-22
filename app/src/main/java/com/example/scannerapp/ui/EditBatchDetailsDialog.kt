@@ -286,9 +286,12 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
                 else -> {
                     val receivedQuantity = receivedQuantityValue.toInt()
 
+                    // Process Strings
+                    val sanitisedBatchNumber = batchNumber.replace(Regex("\\n+"), ", ").trim()
+
                     val updatedBatchDetails = BatchDetails(
                         batchId = 0,
-                        batchNumber = batchNumber,
+                        batchNumber = sanitisedBatchNumber,
                         createDate = createDate,
                         expiryDate = expiryDate,
                         batchReceivedQuantity = receivedQuantity,

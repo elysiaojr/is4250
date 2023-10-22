@@ -75,7 +75,7 @@ class ListConsumablesActivity(showArchives: Boolean = false) : BaseActivity(R.la
       val sortedConsumables = consumables.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
       // For initial rendering, show active batch details only
       val activeConsumables = sortedConsumables.filter { consumable ->
-          consumable.isActive == 1
+        (!showArchives && consumable.isActive == 1) || (showArchives && consumable.isActive == 0)
       }
       adapter.updateData(activeConsumables)
     })
