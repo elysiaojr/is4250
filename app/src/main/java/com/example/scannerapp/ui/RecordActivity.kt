@@ -66,13 +66,13 @@ class RecordActivity : AppCompatActivity() {
         }
 
         // Define and set the action for the edit button.
-//        val fabEditRecord = findViewById<Button>(R.id.recordEditButton)
-//        fabEditRecord.setOnClickListener {
-//            // Open the EditBatchDetailsDialog to edit the batch details.
-//            val dialogFragment = record?.let { it1 -> EditRecordDialog(it1) }
-//            dialogFragment?.batchDetailsUpdatedListener = this
-//            dialogFragment?.show(supportFragmentManager, "EditBatchDetailsDialog")
-//        }
+        val fabEditRecord = findViewById<Button>(R.id.recordEditButton)
+        fabEditRecord.setOnClickListener {
+            // Open the EditBatchDetailsDialog to edit the batch details.
+            val dialogFragment = record?.let { it1 -> EditRecordDialog(it1) }
+            dialogFragment?.recordsUpdatedListener = this
+            dialogFragment?.show(supportFragmentManager, "EditRecordsDialog")
+        }
     }
 
     private fun handleOnBackpressed() {
