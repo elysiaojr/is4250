@@ -14,6 +14,9 @@
     // Search bar button
     <color name="search_bar">#A9EFECEC</color>
 
+    // Archives item
+    <color name="archived_item">#A9EBEDEF</color>
+
     // main landing archives switch
     <color name="dark_archives">#FFB8CCDB</color>
     <color name="light_archives">#FFD9ECFA</color>
