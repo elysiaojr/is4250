@@ -39,6 +39,8 @@ class FilterSortRecordsDialog : DialogFragment() {
         val applyButton = view.findViewById<Button>(R.id.buttonApply)
         val resetButton = view.findViewById<Button>(R.id.buttonReset)
         val sortRadioGroup = view.findViewById<RadioGroup>(R.id.sortRadioGroup)
+        val radioTakeoutOnly = view.findViewById<RadioButton>(R.id.radioTakeoutOnly)
+        val radioPutInOnly = view.findViewById<RadioButton>(R.id.radioPutInOnly)
         val radioSortLastTakeout = view.findViewById<RadioButton>(R.id.radioSortLatestTakeout)
         val radioSortFirstExpiry = view.findViewById<RadioButton>(R.id.radioSortFirstExpiry)
 
@@ -49,8 +51,8 @@ class FilterSortRecordsDialog : DialogFragment() {
             // Retrieve the last selected sorting order and set the corresponding radio button as checked.
             currentSortOrder = args.getSerializable("sortOrder") as SortOrderEnum
             when (currentSortOrder) {
-                SortOrderEnum.ASCENDING -> radioSortLastTakeout.isChecked = true
-                SortOrderEnum.DESCENDING -> radioSortLastTakeout.isChecked = true
+                SortOrderEnum.ASCENDING -> radioTakeoutOnly.isChecked = true
+                SortOrderEnum.DESCENDING -> radioPutInOnly.isChecked = true
                 SortOrderEnum.LAST_TAKEOUT -> radioSortLastTakeout.isChecked = true
                 SortOrderEnum.FIRST_EXPIRY -> radioSortFirstExpiry.isChecked = true
             }
@@ -65,6 +67,8 @@ class FilterSortRecordsDialog : DialogFragment() {
 
             // Determine the selected sorting option
             val sortOrder = when (sortRadioGroup.checkedRadioButtonId) {
+                R.id.radioTakeoutOnly -> SortOrderEnum.ASCENDING
+                R.id.radioPutInOnly -> SortOrderEnum.DESCENDING
                 R.id.radioSortLatestTakeout -> SortOrderEnum.LAST_TAKEOUT
                 R.id.radioSortFirstExpiry -> SortOrderEnum.FIRST_EXPIRY
                 else -> SortOrderEnum.LAST_TAKEOUT // Default to last takeout if none is selected
