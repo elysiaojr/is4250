@@ -164,7 +164,7 @@
           android:layout_weight="1"
           android:backgroundTint="@color/delete"
           android:drawableLeft="@drawable/baseline_delete_outline_24"
-          android:text="Delete"
+          android:text="Update"
           android:textAlignment="textStart"
           android:textSize="16sp" />
 

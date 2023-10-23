@@ -53,6 +53,7 @@
 
     // button
     <color name="button_background">#71AACC</color>
+    <color name="update_button">#8db8a3</color>
 
     // navigation bar active indicator
     <color name="nav_bar_active_indicator">#E3EEF5</color>
