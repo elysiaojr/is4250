@@ -12,9 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.compose.ui.text.toLowerCase
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
 import com.example.scannerapp.database.entities.Consumable
@@ -69,6 +71,7 @@ class BatchDetailsListAdapter(
     val batchExpiryDateTextView = view.findViewById<TextView>(R.id.batchExpiryDate)
     val batchRemainingQuantityTextView = view.findViewById<TextView>(R.id.batchRemainingQuantity)
     val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
+    val batchIcon = view.findViewById<ImageView>(R.id.batchDetailsIcon)
 
     adapterScope.launch {
       val unitOfMeasurement = batchDetailsViewModel.getBatchDetailUOM(batchDetail.consumableId)
@@ -76,6 +79,15 @@ class BatchDetailsListAdapter(
       // Once you get the unitOfMeasurement, update the UI on the main thread
       val uomText = "Remaining: ${batchDetail.batchRemainingQuantity} ${unitOfMeasurement}"
       batchRemainingQuantityTextView.text = getBoldSpannable(uomText, "Remaining:")
+
+      // UI: Indicate shortage
+      if (batchDetail.batchRemainingQuantity < 1) {
+        batchIcon.setColorFilter(
+          ContextCompat.getColor(context, R.color.delete),
+          android.graphics.PorterDuff.Mode.SRC_IN
+        );
+        batchRemainingQuantityTextView.setTextColor(ContextCompat.getColor(context, R.color.delete))
+      }
     }
 
     adapterScope.launch {
