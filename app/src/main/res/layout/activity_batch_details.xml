@@ -43,6 +43,18 @@
       android:textSize="18sp"
       android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/inactiveStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="INACTIVE"
+        android:textAlignment="center"
+        android:textColor="@color/delete"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:visibility="gone" />
+
     <View
       android:layout_width="match_parent"
       android:layout_height="2dp"

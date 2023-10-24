@@ -221,7 +221,9 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
 
         val saveButton = view.findViewById<MaterialButton>(R.id.buttonSave)
 
-        closeButton.setOnClickListener { dismiss() }
+        closeButton.setOnClickListener {
+            dismiss()
+        }
 
         saveButton.setOnClickListener {
             val batchNumber = batchNumberInput.text.toString().trim()

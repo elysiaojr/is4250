@@ -27,6 +27,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
   // Define UI elements and data models.
   private lateinit var consumableNameTextView: TextView
+  private lateinit var inactiveStatusTextView: TextView
   private lateinit var consumableItemCodeTextView: TextView
   private lateinit var consumableCurrentQuantityTextView: TextView
   private lateinit var consumableMinimumQuantityTextView: TextView
@@ -47,6 +48,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
     // Initialize views.
     consumableNameTextView = findViewById(R.id.consumableNameTextView)
+    inactiveStatusTextView = findViewById(R.id.inactiveStatus)
     consumableItemCodeTextView = findViewById(R.id.consumableItemCodeTextView)
     consumableCurrentQuantityTextView = findViewById(R.id.consumableCurrentQuantityTextView)
     consumableMinimumQuantityTextView = findViewById(R.id.consumableMinimumQuantityTextView)
@@ -83,6 +85,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
     val deleteButton = findViewById<Button>(R.id.consumableDeleteButton)
 
     if ((consumable?.isActive ?: Int) == 0) {
+      inactiveStatusTextView.visibility = TextView.VISIBLE
       deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.update_button))
       deleteButton.setCompoundDrawablesWithIntrinsicBounds(
         R.drawable.power_settings_new_24px, 0, 0, 0)

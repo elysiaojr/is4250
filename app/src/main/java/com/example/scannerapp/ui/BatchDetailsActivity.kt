@@ -33,6 +33,7 @@ class BatchDetailsActivity : AppCompatActivity(),
   private lateinit var batchDetailsViewModel: BatchDetailsViewModel
   private lateinit var pinCodeViewModel: PinCodeViewModel
   private lateinit var batchNumberTextView: TextView
+  private lateinit var inactiveStatusTextView: TextView
   private lateinit var createDateTextView: TextView
   private lateinit var expiryDateTextView: TextView
   private lateinit var batchReceivedQuantityTextView: TextView
@@ -55,6 +56,7 @@ class BatchDetailsActivity : AppCompatActivity(),
 
     // Initialize views.
     batchNumberTextView = findViewById(R.id.batchNumberTextView)
+    inactiveStatusTextView = findViewById(R.id.inactiveStatus)
     createDateTextView = findViewById(R.id.createDateTextView)
     expiryDateTextView = findViewById(R.id.expiryDateTextView)
     batchReceivedQuantityTextView = findViewById(R.id.batchReceivedQuantityTextView)
@@ -95,6 +97,7 @@ class BatchDetailsActivity : AppCompatActivity(),
     val deleteButton = findViewById<Button>(R.id.batchDeleteButton)
 
     if ((batchDetail?.isActive ?: Int) == 0) {
+      inactiveStatusTextView.visibility = TextView.VISIBLE
       deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.update_button))
       deleteButton.setCompoundDrawablesWithIntrinsicBounds(
         R.drawable.power_settings_new_24px, 0, 0, 0)
