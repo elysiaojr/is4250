@@ -1,32 +1,22 @@
 package com.example.scannerapp.ui
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.NumberPicker
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.marginTop
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
-import com.example.scannerapp.database.entities.BatchDetails
-import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.Record
 import com.example.scannerapp.database.entities.RecordType
-import com.example.scannerapp.database.entities.User
-import com.example.scannerapp.exceptions.InsufficientQuantityException
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.example.scannerapp.viewmodels.RecordViewModel
@@ -343,14 +333,24 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
               position: Int,
               id: Long
             ) {
-              // Get the selected consumable item
+              // Get the selected batch item
               val selectedBatchNumber = batchNumbers[position]
 
-              // Find the corresponding Consumable object based on the name
+              // Find the corresponding Batch object based on the name
               val selectedBatch = batches.find { it.batchNumber == selectedBatchNumber }
 
               if (selectedBatch != null) {
-                selectedBatchId = selectedBatch.batchId
+
+                activityScope.launch {
+                  // Call the method here to check for earlier expiry batches.
+                  val shouldProceed = checkForEarlierExpiryBatches(selectedBatchNumber)
+                  if (shouldProceed) {
+                    selectedBatchId = selectedBatch.batchId
+                  } else {
+                    searchableSpinnerBatch.setSelection(-1)
+                    (searchableSpinnerBatch.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                  }
+                }
               }
             }
 
@@ -369,6 +369,50 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
       searchableSpinnerBatch.layoutParams = layoutParams
 
     }
+  }
+
+  private suspend fun checkForEarlierExpiryBatches(enteredBatchNumber: String): Boolean {
+    val enteredBatch = withContext(Dispatchers.IO) {
+      batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(enteredBatchNumber)
+    }
+
+    val earlierBatches = withContext(Dispatchers.IO) {
+      val convertedDate = convertToSqlDateFormat(enteredBatch.expiryDate)
+      batchDetailsViewModel.getBatchesWithEarlierExpiryDates(
+        convertedDate,
+        enteredBatch.consumableId
+      ) // assuming expiryDate is a property of scannedBatch
+    }
+
+    // Logging the content of earlierBatches
+    Log.d("EarlierBatches", "Content: $earlierBatches")
+
+    if (earlierBatches.isNotEmpty()) {
+      // Sort the list by expiry date
+      val sortedEarlierBatches = earlierBatches.sortedBy { it.expiryDate }
+      val firstBatch = sortedEarlierBatches.first()
+
+      // Show dialog or toast to inform user
+      withContext(Dispatchers.Main) {
+        AlertDialog.Builder(requireContext())
+          .setTitle("Attention")
+          .setMessage("Please take out batch ${firstBatch.batchNumber} with expiry date ${firstBatch.expiryDate} first.")
+          .setPositiveButton("Ok") { dialog, _ ->
+            dialog.dismiss()
+          }
+          .create()
+          .show()
+      }
+      return false // Don't proceed
+    }
+    return true // Proceed
+  }
+
+  fun convertToSqlDateFormat(inputDate: String): String {
+    // Input format: dd/MM/yyyy
+    // Output format: yyyy-MM-dd
+    val parts = inputDate.split("/")
+    return "${parts[2]}-${parts[1]}-${parts[0]}"
   }
 
   private fun isExpired(expiryDate: String?): Boolean {

@@ -110,7 +110,7 @@ ORDER BY
   SELECT b.*
   FROM batch_details AS b
   WHERE DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) < DATE(:date)
-    AND b.consumableId = :consumableId
+    AND b.consumableId = :consumableId AND b.isActive = 1
   ORDER BY DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) ASC
   """
   )
