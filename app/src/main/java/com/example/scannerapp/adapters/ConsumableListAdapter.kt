@@ -1,6 +1,5 @@
 package com.example.scannerapp.adapters
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -53,7 +52,6 @@ class ConsumableListAdapter(
     notifyDataSetChanged()
   }
 
-  @SuppressLint("SetTextI18n")
   override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
     val consumable = getItem(position) as Consumable
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
