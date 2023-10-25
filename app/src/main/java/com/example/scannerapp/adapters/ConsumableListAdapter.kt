@@ -18,14 +18,23 @@ import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.ui.ConsumableDetailsActivity
 import android.util.Log
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.scannerapp.viewmodels.ConsumableViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ConsumableListAdapter(
   private val context: Context,
   private var consumableList: List<Consumable>,
+  private val consumableViewModel: ConsumableViewModel,
   private var remainingQuantitiesMap: Map<Int, Int> = emptyMap()
 
 ) : BaseAdapter(), Filterable {
-
+  private val activityScope = CoroutineScope(Dispatchers.Main)
   private var unfilteredConsumableList = consumableList
 
   override fun getCount(): Int {
@@ -60,6 +69,7 @@ class ConsumableListAdapter(
     val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
     val consumableItemCodeTextView = view.findViewById<TextView>(R.id.consumableItemCode)
     val consumableRemainingQuantityTextView = view.findViewById<TextView>(R.id.consumableRemainingQuantity)
+    val consumableIcon = view.findViewById<ImageView>(R.id.consumableIcon)
 
     // Set user data to views
     val consumableTitleDisplay =
@@ -68,9 +78,29 @@ class ConsumableListAdapter(
     val itemCodeDisplay = "Item Code: " + consumable.itemCode
     consumableItemCodeTextView.text = getBoldSpannable(itemCodeDisplay, "Item Code: ")
 
-    // Check if remaining quantities map contains the consumable ID
-    val consumableRemainingQuantity = remainingQuantitiesMap[consumable.consumableId] ?: 0
-    consumableRemainingQuantityTextView.text = "Remaining: $consumableRemainingQuantity"
+//    // Check if remaining quantities map contains the consumable ID
+//    val consumableRemainingQuantity = remainingQuantitiesMap[consumable.consumableId] ?: 0
+//    val remainingText = "Remaining: $consumableRemainingQuantity"
+//    consumableRemainingQuantityTextView.text = remainingText
+
+    consumable?.let {
+      // Fetch and update the remaining quantity
+      activityScope.launch {
+        val remainingQuantity = withContext(Dispatchers.IO) {
+          consumableViewModel.getAllBatchesQuantityRemaining(it.consumableId)
+        }
+        consumableRemainingQuantityTextView.text = "Remaining: $remainingQuantity ${it.unitOfMeasurement}"
+        
+        // UI: Indicate shortage
+        if (consumable.minimumQuantity > remainingQuantity) {
+          consumableIcon.setColorFilter(
+            ContextCompat.getColor(context, R.color.delete),
+            android.graphics.PorterDuff.Mode.SRC_IN
+          );
+          consumableRemainingQuantityTextView.setTextColor(ContextCompat.getColor(context, R.color.delete))
+        }
+      }
+    }
 
     // Handle clicking into a Consumable Item
     val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
