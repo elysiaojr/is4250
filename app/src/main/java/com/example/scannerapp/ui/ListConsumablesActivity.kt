@@ -80,6 +80,12 @@ class ListConsumablesActivity(showArchives: Boolean = false) : BaseActivity(R.la
       adapter.updateData(activeConsumables)
     })
 
+    // Observe the remaining quantities
+    consumableViewModel.remainingQuantities.observe(this, Observer { remainingQuantitiesMap ->
+      // Update the data in your adapter
+      adapter.updateRemainingQuantities(remainingQuantitiesMap)
+    })
+
     // Set up the SearchView
     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
       override fun onQueryTextSubmit(query: String?): Boolean {

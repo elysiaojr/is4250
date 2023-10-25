@@ -44,9 +44,20 @@
       app:layout_constraintTop_toBottomOf="@+id/consumableName"
       app:layout_constraintStart_toEndOf="@+id/consumableIcon"
       app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"
-      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/consumableRemainingQuantity"
       android:maxLines="1"
       android:ellipsize="end"/>
+  <TextView
+      android:id="@+id/consumableRemainingQuantity"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:layout_marginEnd="8dp"
+      android:textSize="13sp"
+      android:text="Remaining"
+      app:layout_constraintTop_toBottomOf="@+id/consumableItemCode"
+      app:layout_constraintStart_toEndOf="@+id/consumableIcon"
+      app:layout_constraintEnd_toStartOf="@+id/chevronRightIcon"/>
 
   <ImageView
       android:id="@+id/chevronRightIcon"

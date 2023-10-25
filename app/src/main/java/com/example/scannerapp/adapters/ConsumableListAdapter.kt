@@ -1,5 +1,6 @@
 package com.example.scannerapp.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -21,7 +22,9 @@ import android.util.Log
 
 class ConsumableListAdapter(
   private val context: Context,
-  private var consumableList: List<Consumable>
+  private var consumableList: List<Consumable>,
+  private var remainingQuantitiesMap: Map<Int, Int> = emptyMap()
+
 ) : BaseAdapter(), Filterable {
 
   private var unfilteredConsumableList = consumableList
@@ -45,6 +48,12 @@ class ConsumableListAdapter(
     notifyDataSetChanged()
   }
 
+  fun updateRemainingQuantities(newMap: Map<Int, Int>) {
+    remainingQuantitiesMap = newMap
+    notifyDataSetChanged()
+  }
+
+  @SuppressLint("SetTextI18n")
   override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
     val consumable = getItem(position) as Consumable
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -52,6 +61,7 @@ class ConsumableListAdapter(
 
     val consumableNameTextView = view.findViewById<TextView>(R.id.consumableName)
     val consumableItemCodeTextView = view.findViewById<TextView>(R.id.consumableItemCode)
+    val consumableRemainingQuantityTextView = view.findViewById<TextView>(R.id.consumableRemainingQuantity)
 
     // Set user data to views
     val consumableTitleDisplay =
@@ -59,6 +69,10 @@ class ConsumableListAdapter(
     consumableNameTextView.text = consumableTitleDisplay// Replace with user's name
     val itemCodeDisplay = "Item Code: " + consumable.itemCode
     consumableItemCodeTextView.text = getBoldSpannable(itemCodeDisplay, "Item Code: ")
+
+    // Check if remaining quantities map contains the consumable ID
+    val consumableRemainingQuantity = remainingQuantitiesMap[consumable.consumableId] ?: 0
+    consumableRemainingQuantityTextView.text = "Remaining: $consumableRemainingQuantity"
 
     // Handle clicking into a Consumable Item
     val listItemLayout = view.findViewById<ConstraintLayout>(R.id.consumable_list_item)
