@@ -46,6 +46,7 @@ interface BatchDetailsDao {
 
   @Query("SELECT batch_details.expiryDate FROM batch_details WHERE batchId = :batchId")
   suspend fun getBatchExpiryDateById(batchId: Int): String
+
   @Query("SELECT unitOfMeasurement FROM consumable WHERE consumableId = :id")
   suspend fun getBatchDetailUOM(id: Int): UnitOfMeasurement
 
@@ -103,6 +104,17 @@ ORDER BY
 """
   )
   fun getAllActiveBatchDetailsByLatestDate(): LiveData<List<BatchDetails>>
+
+  @Query(
+    """
+  SELECT b.*
+  FROM batch_details AS b
+  WHERE DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) < DATE(:date)
+    AND b.consumableId = :consumableId
+  ORDER BY DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) ASC
+  """
+  )
+  suspend fun getBatchesWithEarlierExpiryDates(date: String, consumableId: Int): List<BatchDetails>
 
 
 //  @Query(

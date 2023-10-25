@@ -123,13 +123,14 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     return batchDetailsRepository.getBatchDetailUOM(consumableId)
   }
 
-  suspend fun getBatchDetailsNameById (batchId: Int): String {
+  suspend fun getBatchDetailsNameById(batchId: Int): String {
     return batchDetailsRepository.getBatchDetailsNameById(batchId)
   }
 
   suspend fun getBatchExpiryDateById(batchId: Int): String {
     return batchDetailsRepository.getBatchExpiryDateById(batchId)
   }
+
   suspend fun getBatchIdByBatchNumber(batchNumber: String): Int {
     return batchDetailsRepository.getBatchIdByBatchNumber(batchNumber)
   }
@@ -145,13 +146,22 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   suspend fun getBatchDetailConsumableNameByBatchNumber(batchNumber: String): String {
     val nameString = batchDetailsRepository.getBatchDetailConsumableNameByBatchNumber(batchNumber)
     val brandString = batchDetailsRepository.getBatchDetailConsumableBrandByBatchNumber(batchNumber)
-    val typeString = batchDetailsRepository.getBatchDetailConsumableTypeByBatchNumber(batchNumber) ?: ""
-    val sizeString = batchDetailsRepository.getBatchDetailConsumableSizeByBatchNumber(batchNumber) ?: ""
+    val typeString =
+      batchDetailsRepository.getBatchDetailConsumableTypeByBatchNumber(batchNumber) ?: ""
+    val sizeString =
+      batchDetailsRepository.getBatchDetailConsumableSizeByBatchNumber(batchNumber) ?: ""
     return "$nameString, $brandString, $typeString, $sizeString"
   }
 
   suspend fun checkIfBatchNumberExists(batchNumber: String): Boolean {
     return batchDetailsRepository.countOfBatchDetailsByBatchNumber(batchNumber) > 0
+  }
+
+  suspend fun getBatchesWithEarlierExpiryDates(
+    date: String,
+    consumableId: Int
+  ): List<BatchDetails> {
+    return batchDetailsRepository.getBatchesWithEarlierExpiryDates(date, consumableId)
   }
   // More functions...
 
