@@ -8,7 +8,8 @@
 
     <!-- Base application theme. -->
     <style name="Base.Theme.ScannerApp" parent="Theme.Material3.DayNight.NoActionBar">
-    <item name="colorSecondaryContainer">@color/nav_bar_grey</item>
+        <item name="colorPrimary">@color/scrollview_overflow</item>
+        <item name="colorSecondaryContainer">@color/nav_bar_grey</item>
     </style>
 
     <style name="Widget.App.NavBarActiveIndicator_consumables" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
