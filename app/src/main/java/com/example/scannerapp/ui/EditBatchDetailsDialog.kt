@@ -2,9 +2,7 @@ package com.example.scannerapp.ui
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +12,11 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatSpinner
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
-import com.example.scannerapp.database.entities.Consumable
-import com.example.scannerapp.database.entities.UnitOfMeasurement
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
 import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.google.android.material.button.MaterialButton
@@ -36,7 +31,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
-class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
+class EditBatchDetailsDialog(private var batchDetails: BatchDetails, private var existingBatchDialogFragment: ExistingBatchDialogFragment? = null) :
   DialogFragment(), CoroutineScope {
   private val job = Job()
   private lateinit var consumableViewModel: ConsumableViewModel
@@ -93,11 +88,13 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
       Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
     })
 
-    batchDetailsViewModel.editSuccessLiveData.observe(viewLifecycleOwner, Observer { batchNumberEdited ->
+    batchDetailsViewModel.editSuccessLiveData.observe(viewLifecycleOwner, Observer { batchDetail ->
       Toast.makeText(requireContext(), "Batch edited successfully!", Toast.LENGTH_SHORT)
         .show()
-      val intent = Intent(requireContext(), ListBatchDetailsActivity::class.java)
-      startActivity(intent)
+//      val intent = Intent(requireContext(), BatchDetailsActivity::class.java)
+//      intent.putExtra("batchDetail", batchDetail)
+//      requireContext().startActivity(intent)
+      existingBatchDialogFragment?.dismiss()
       dismiss()
     })
 
@@ -380,13 +377,13 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
 
                 batchDetailsViewModel.updateBatchDetails(updatedBatchDetails)
 
-                batchDetailsViewModel.successLiveData.observe(viewLifecycleOwner, Observer {
-                  // Notify the BatchDetailsActivity with the updated batchDetails
-                  batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
-                  Toast.makeText(requireContext(), "Batch updated successfully!", Toast.LENGTH_SHORT)
-                    .show()
-                  dismiss() // Only dismiss EditBatchDetailsDialog here
-                })
+//                batchDetailsViewModel.successLiveData.observe(viewLifecycleOwner, Observer {
+//                  // Notify the BatchDetailsActivity with the updated batchDetails
+//                  batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
+//                  Toast.makeText(requireContext(), "Batch updated successfully!", Toast.LENGTH_SHORT)
+//                    .show()
+//                  dismiss() // Only dismiss EditBatchDetailsDialog here
+//                })
                 // Notify the BatchDetailsActivity with the updated batchDetails
                 batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
 

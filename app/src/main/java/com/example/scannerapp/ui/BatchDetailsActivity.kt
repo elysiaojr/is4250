@@ -2,9 +2,7 @@ package com.example.scannerapp.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.InputType
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,9 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
-import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
-import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.example.scannerapp.viewmodels.PinCodeViewModel
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
 
 // This activity displays details of a batch.
 class BatchDetailsActivity : AppCompatActivity(),

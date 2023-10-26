@@ -31,7 +31,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   private val batchDetailsRepository: BatchDetailsRepository
   val errorLiveData = MutableLiveData<String>()
   val successLiveData = MutableLiveData<String>() // To pass error message to UI
-  val editSuccessLiveData = MutableLiveData<String>()
+  val editSuccessLiveData = MutableLiveData<BatchDetails>()
   val selectedBatchDetails = MutableLiveData<BatchDetails?>()
 //  val allBatchDetailsByExpiryDate: LiveData<List<BatchDetails>>
 //  val allBatchDetailsByConsumableNameAsc: LiveData<List<BatchDetails>>
@@ -81,7 +81,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
       try {
         batchDetailsRepository.updateBatchDetails(updatedBatchDetails)
         successLiveData.postValue(updatedBatchDetails.batchId.toString())
-        editSuccessLiveData.postValue(updatedBatchDetails.batchNumber)
+        editSuccessLiveData.postValue(updatedBatchDetails)
       } catch (e: Exception) {
         handleException(e)
       }
