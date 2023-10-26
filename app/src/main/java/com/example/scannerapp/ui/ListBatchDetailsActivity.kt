@@ -116,7 +116,7 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     title = findViewById(R.id.title)
 
     // Initialize the filter state
-    batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = currentSortOrder)
+    batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = true, empty = false, expired = false, sortOrder = currentSortOrder)
 
     // Apply the filter to the default state
     updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
@@ -132,8 +132,11 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     // Observe the LiveData and update the adapter when data changes
     batchDetailsViewModel.allBatchDetails.observe(this, Observer { batchDetails ->
       // For initial rendering, show active batch details only
-      val activeBatchDetails = batchDetails.filter { batchDetail ->
+      var activeBatchDetails = batchDetails.filter { batchDetail ->
         (!showArchives && batchDetail.isActive == 1) || (showArchives && batchDetail.isActive == 0)
+      }
+      activeBatchDetails = activeBatchDetails.filter { batchDetail ->
+        (batchDetailsFilterSort.nonEmpty && batchDetail.batchRemainingQuantity != 0) || (batchDetailsFilterSort.empty && batchDetail.batchRemainingQuantity == 0)
       }
       adapter.updateBatchDetailsData(activeBatchDetails)
     })

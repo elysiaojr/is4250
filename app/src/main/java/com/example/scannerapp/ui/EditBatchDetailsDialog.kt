@@ -293,12 +293,13 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
 
           // Process Strings
           val sanitisedBatchNumber = batchNumber.replace(Regex("\\n+"), ", ").trim()
+          val oldSanitisedBatchNumber = batchDetails.batchNumber.replace(Regex("\\n+"), ", ").trim()
 
           activityScope.launch {
             val remainingQuantity =
-              batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(sanitisedBatchNumber).batchRemainingQuantity
+              batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(oldSanitisedBatchNumber).batchRemainingQuantity
             val receivedQuantityActual =
-              batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(sanitisedBatchNumber).batchReceivedQuantity
+              batchDetailsViewModel.getBatchDetailsLiveDataByBatchNumber(oldSanitisedBatchNumber).batchReceivedQuantity
 
             val receivedQuantityDifference = receivedQuantityUpdated - receivedQuantityActual
 
@@ -326,18 +327,22 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
 
                 batchDetailsViewModel.updateBatchDetails(updatedBatchDetails)
 
-                // Notify the BatchDetailsActivity with the updated batchDetails
-                batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
+                batchDetailsViewModel.successLiveData.observe(viewLifecycleOwner, Observer {
+                  // Notify the BatchDetailsActivity with the updated batchDetails
+                  batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
+                  Toast.makeText(requireContext(), "Batch updated successfully!", Toast.LENGTH_SHORT)
+                    .show()
+                  dismiss() // Only dismiss EditBatchDetailsDialog here
+                })
 
-                dismiss()
               }
 
-              // display success message
-              Toast.makeText(
-                requireContext(),
-                "Batch Details updated successfully!",
-                Toast.LENGTH_SHORT
-              ).show()
+//              // display success message
+//              Toast.makeText(
+//                requireContext(),
+//                "Batch Details updated successfully!",
+//                Toast.LENGTH_SHORT
+//              ).show()
               // Decrease in Received Quantity
             } else if (receivedQuantityDifference < 0 && Math.abs(receivedQuantityDifference) <= remainingQuantity) {
 
@@ -365,18 +370,21 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
 
                 batchDetailsViewModel.updateBatchDetails(updatedBatchDetails)
 
-                // Notify the BatchDetailsActivity with the updated batchDetails
-                batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
-
-                dismiss()
+                batchDetailsViewModel.successLiveData.observe(viewLifecycleOwner, Observer {
+                  // Notify the BatchDetailsActivity with the updated batchDetails
+                  batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
+                  Toast.makeText(requireContext(), "Batch updated successfully!", Toast.LENGTH_SHORT)
+                    .show()
+                  dismiss() // Only dismiss EditBatchDetailsDialog here
+                })
               }
 
-              // display success message
-              Toast.makeText(
-                requireContext(),
-                "Batch Details updated successfully!",
-                Toast.LENGTH_SHORT
-              ).show()
+//              // display success message
+//              Toast.makeText(
+//                requireContext(),
+//                "Batch Details updated successfully!",
+//                Toast.LENGTH_SHORT
+//              ).show()
             } else {
               Toast.makeText(
                 requireContext(),
@@ -390,7 +398,6 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
       }
     }
   }
-
 
   override fun onDestroy() {
     super.onDestroy()
