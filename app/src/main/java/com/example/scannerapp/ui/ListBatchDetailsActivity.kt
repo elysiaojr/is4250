@@ -64,7 +64,7 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     get() = Dispatchers.Main + job
 
   private lateinit var filteredList: List<BatchDetails>
-  private var batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = SortOrderEnum.ASCENDING)
+  private var batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = false, empty = false, expired = false, sortOrder = SortOrderEnum.ASCENDING, -1)
   private var currentSortOrder: SortOrderEnum = SortOrderEnum.LAST_TAKEOUT
 
   private val barcodeLauncher =
@@ -116,10 +116,10 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     title = findViewById(R.id.title)
 
     // Initialize the filter state
-    batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = true, empty = false, expired = false, sortOrder = currentSortOrder)
+    batchDetailsFilterSort = BatchDetailsFilterSortState(active = false, inactive = false, nonEmpty = true, empty = false, expired = false, sortOrder = currentSortOrder, -1)
 
     // Apply the filter to the default state
-    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+    updateList(batchDetailsFilterSort.active, batchDetailsFilterSort.inactive, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired, batchDetailsFilterSort.consumableId)
 
     // Create the adapter and set it initially
     adapter = BatchDetailsListAdapter(
@@ -248,21 +248,26 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
         nonEmpty: Boolean,
         empty: Boolean,
         expired: Boolean,
-        sortOrder: SortOrderEnum
+        sortOrder: SortOrderEnum,
+        consumableId: Int
       ) {
-        updateList(active, inactive, nonEmpty, empty, expired)
+        updateList(active, inactive, nonEmpty, empty, expired, consumableId)
         currentSortOrder = sortOrder // Update the sorting order
         //saveLastSelectedSortOrder(sortOrder) // Save the last selected sorting order
-        batchDetailsFilterSort = BatchDetailsFilterSortState(active, inactive, nonEmpty, empty, expired, sortOrder) // Update the filter state
+        batchDetailsFilterSort = BatchDetailsFilterSortState(active, inactive, nonEmpty, empty, expired, sortOrder, consumableId) // Update the filter state
       }
     }
     dialogFragment.show(supportFragmentManager, "FilterSortDialogFragment")
   }
 
 
-  private fun updateList(active: Boolean, inactive: Boolean, nonEmpty: Boolean, empty: Boolean, expired: Boolean) {
+  private fun updateList(active: Boolean, inactive: Boolean, nonEmpty: Boolean, empty: Boolean, expired: Boolean, consumableId: Int) {
     CoroutineScope(Dispatchers.Main).launch {
-      val list =  batchDetailsViewModel.allBatchDetails.value.orEmpty()
+      var list =  batchDetailsViewModel.allBatchDetails.value.orEmpty()
+
+      if (consumableId != -1) {
+        list = list.filter { batchDetails -> batchDetails.consumableId == consumableId }
+      }
 
       Log.d("currentsortorder", currentSortOrder.toString())
       Log.d("sortedlist", list.toString())
@@ -335,12 +340,12 @@ class ListBatchDetailsActivity : BaseActivity(R.layout.activity_list_batch_detai
     showArchives = if (showArchives) {
       title.text = "Manage Batches"
       archivesButtonIcon.setImageResource(R.drawable.archives_icon)
-      updateList(active = true, inactive = false, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+      updateList(active = true, inactive = false, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired, -1)
       false
     } else {
       archivesButtonIcon.setImageResource(R.drawable.baseline_chevron_right_24)
       title.text = "Batches Archives"
-      updateList(active = false, inactive = true, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired)
+      updateList(active = false, inactive = true, batchDetailsFilterSort.nonEmpty, batchDetailsFilterSort.empty, batchDetailsFilterSort.expired, -1)
       true
     }
   }

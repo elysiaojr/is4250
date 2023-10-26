@@ -53,7 +53,13 @@
         android:layout_height="wrap_content"
         android:text="Inactive Batches"
         android:visibility="gone"/>
-    
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/searchableSpinnerConsumable"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:hintText="Consumable"/>
+
     <CheckBox
         android:id="@+id/nonEmptyCheckBox"
         android:layout_width="wrap_content"
