@@ -2,6 +2,7 @@ package com.example.scannerapp.ui
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -90,6 +91,14 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
 
     batchDetailsViewModel.errorLiveData.observe(viewLifecycleOwner, Observer { errorMessage ->
       Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+    })
+
+    batchDetailsViewModel.editSuccessLiveData.observe(viewLifecycleOwner, Observer { batchNumberEdited ->
+      Toast.makeText(requireContext(), "Batch edited successfully!", Toast.LENGTH_SHORT)
+        .show()
+      val intent = Intent(requireContext(), ListBatchDetailsActivity::class.java)
+      startActivity(intent)
+      dismiss()
     })
 
 //        batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner, Observer { batchDetails ->
@@ -329,7 +338,7 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
                 // Notify the BatchDetailsActivity with the updated batchDetails
                 batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
 
-                dismiss()
+//                dismiss()
               }
 
               // display success message
@@ -368,7 +377,7 @@ class EditBatchDetailsDialog(private var batchDetails: BatchDetails) :
                 // Notify the BatchDetailsActivity with the updated batchDetails
                 batchDetailsUpdatedListener?.onBatchDetailsUpdated(updatedBatchDetails)
 
-                dismiss()
+//                dismiss()
               }
 
               // display success message
