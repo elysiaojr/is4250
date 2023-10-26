@@ -30,6 +30,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
   val allActiveBatchDetails: LiveData<List<BatchDetails>>
   private val batchDetailsRepository: BatchDetailsRepository
   val errorLiveData = MutableLiveData<String>()
+  val successLiveData = MutableLiveData<String>() // To pass error message to UI
   val selectedBatchDetails = MutableLiveData<BatchDetails?>()
 //  val allBatchDetailsByExpiryDate: LiveData<List<BatchDetails>>
 //  val allBatchDetailsByConsumableNameAsc: LiveData<List<BatchDetails>>
@@ -66,6 +67,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     viewModelScope.launch(Dispatchers.IO) {
       try {
         batchDetailsRepository.addBatchDetails(batchDetails)
+        successLiveData.postValue(batchDetails.batchId.toString())
       } catch (e: Exception) {
         Log.e("BatchDetailsViewModel", "Error adding batch details", e) // Log the exception
         handleException(e)
@@ -77,6 +79,7 @@ class BatchDetailsViewModel(application: Application) : AndroidViewModel(applica
     viewModelScope.launch(Dispatchers.IO) {
       try {
         batchDetailsRepository.updateBatchDetails(updatedBatchDetails)
+        successLiveData.postValue(updatedBatchDetails.batchId.toString())
       } catch (e: Exception) {
         handleException(e)
       }

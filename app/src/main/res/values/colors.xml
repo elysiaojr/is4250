@@ -59,5 +59,8 @@
     <color name="nav_bar_active_indicator">#E3EEF5</color>
     <color name="nav_bar_grey">#f2f2f2</color>
 
+    // scrollview
+    <color name="scrollview_overflow">#7f7f7f</color>
+
 
 </resources>

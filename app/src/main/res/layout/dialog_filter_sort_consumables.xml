@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.App.CheckBox_consumables"
-        android:text="Shortage (Remaining qty less than min qty)" />
+        android:text="Shortage (Current quantity is less than minimum quantity)" />
 
     <View
         android:layout_width="match_parent"

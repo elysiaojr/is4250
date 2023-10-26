@@ -1,4 +1,4 @@
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="271dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -54,19 +54,25 @@
         android:text="Inactive Batches"
         android:visibility="gone"/>
 
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/searchableSpinnerConsumable"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:hintText="Consumable"/>
+
     <CheckBox
         android:id="@+id/nonEmptyCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.App.CheckBox_batches"
-        android:text="Non-empty Batches" />
+        android:text="Non-zero Batches" />
 
     <CheckBox
         android:id="@+id/emptyCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.App.CheckBox_batches"
-        android:text="Empty Batches" />
+        android:text="Zero Batches" />
 
     <CheckBox
         android:id="@+id/expiredCheckBox"

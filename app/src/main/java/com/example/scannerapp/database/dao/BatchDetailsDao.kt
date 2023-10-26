@@ -84,6 +84,10 @@ ORDER BY
     CASE
         WHEN MAX(SUBSTR(r.recordDate,7,4) || '-' || SUBSTR(r.recordDate,4,2) || '-' || SUBSTR(r.recordDate,1,2)) IS NULL THEN SUBSTR(b.createDate,7,4) || '-' || SUBSTR(b.createDate,4,2) || '-' || SUBSTR(b.createDate,1,2)
         ELSE MAX(SUBSTR(r.recordDate,7,4) || '-' || SUBSTR(r.recordDate,4,2) || '-' || SUBSTR(r.recordDate,1,2))
+    END DESC,
+    CASE 
+        WHEN MAX(r.recordDate) IS NULL THEN 0
+        ELSE MAX(r.recordId) 
     END DESC;
 """
   )
@@ -110,7 +114,7 @@ ORDER BY
   SELECT b.*
   FROM batch_details AS b
   WHERE DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) < DATE(:date)
-    AND b.consumableId = :consumableId AND b.isActive = 1
+    AND b.consumableId = :consumableId AND b.isActive = 1 AND b.batchRemainingQuantity > 0
   ORDER BY DATE(SUBSTR(b.expiryDate, 7, 4) || '-' || SUBSTR(b.expiryDate, 4, 2) || '-' || SUBSTR(b.expiryDate, 1, 2)) ASC
   """
   )
