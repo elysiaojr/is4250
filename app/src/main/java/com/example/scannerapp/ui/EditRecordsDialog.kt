@@ -56,31 +56,31 @@ import kotlin.coroutines.CoroutineContext
 //        return inflater.inflate(R.layout.dialog_edit_record, container, false)
 //    }
 //}
-class EditRecordsDialog(private var record: Record) :
-    DialogFragment(), CoroutineScope {
-    private val job = Job()
-    private lateinit var batchDetailsViewModel: BatchDetailsViewModel
-    private lateinit var recordViewModel: RecordViewModel
-    var recordUpdatedListener: onRecordsUpdatedListener? = null
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    interface onRecordsUpdatedListener {
-        fun onRecordUpdated(record: Record)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Set dialog style
-        setStyle(STYLE_NORMAL, R.style.FullScreenDialog)
-    }
-
-    override fun OnCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.dialog_edit_record, container, false)
-    }
-}
+//class EditRecordsDialog(private var record: Record) :
+//    DialogFragment(), CoroutineScope {
+//    private val job = Job()
+//    private lateinit var batchDetailsViewModel: BatchDetailsViewModel
+//    private lateinit var recordViewModel: RecordViewModel
+//    var recordUpdatedListener: onRecordsUpdatedListener? = null
+//
+//    override val coroutineContext: CoroutineContext
+//        get() = Dispatchers.Main + job
+//
+//    interface onRecordsUpdatedListener {
+//        fun onRecordUpdated(record: Record)
+//    }
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        // Set dialog style
+//        setStyle(STYLE_NORMAL, R.style.FullScreenDialog)
+//    }
+//
+//    override fun OnCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return inflater.inflate(R.layout.dialog_edit_record, container, false)
+//    }
+//}

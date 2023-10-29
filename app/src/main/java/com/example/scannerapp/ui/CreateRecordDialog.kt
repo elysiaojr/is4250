@@ -309,13 +309,14 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
       // Searchable Spinner: Filer by SelectedConsumableId
       batchDetailsViewModel.allActiveBatchDetails.observe(viewLifecycleOwner) { batches ->
 
-        // Sort batches by expiry date in ascending order (earliest first)
+      // Sort batches by expiry date in ascending order (earliest first) and filter out batches with batchRemainingQuantity = 0
         val sortedBatches =
-          batches.filter { it.consumableId == selectedConsumableId && !isExpired(it.expiryDate) }
+          batches.filter { it.consumableId == selectedConsumableId && !isExpired(it.expiryDate) && it.batchRemainingQuantity > 0 }
             .sortedBy { LocalDate.parse(it.expiryDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")) }
 
+
         // Extract batch numbers from the sorted list
-        batchNumbers = sortedBatches.map { it.batchNumber }
+        batchNumbers = sortedBatches.map { "${it.batchNumber} | Expiry Date: ${it.expiryDate}" }
 
         // Create an ArrayAdapter and set it to the SearchableSpinner
         val adapter = ArrayAdapter(
@@ -334,7 +335,7 @@ class CreateRecordDialog : DialogFragment(), CoroutineScope {
               id: Long
             ) {
               // Get the selected batch item
-              val selectedBatchNumber = batchNumbers[position]
+              val selectedBatchNumber = sortedBatches[position].batchNumber
 
               // Find the corresponding Batch object based on the name
               val selectedBatch = batches.find { it.batchNumber == selectedBatchNumber }
