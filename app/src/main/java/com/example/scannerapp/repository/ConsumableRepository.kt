@@ -1,6 +1,7 @@
 package com.example.scannerapp.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.scannerapp.database.dao.ConsumableDao
 import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.database.entities.UnitOfMeasurement
@@ -19,6 +20,9 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
 
   val getAllActiveConsumables: LiveData<List<Consumable>> = consumableDao.getAllActiveConsumables()
 
+  // LiveData to hold the remaining quantities
+  private val remainingQuantitiesLiveData: MutableLiveData<Map<Int, Int>> = MutableLiveData()
+
   /*
    * Adds a new consumable to the database after validation.
    * Checks for uniqueness of barcode ID.
@@ -34,6 +38,22 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     validateConsumable(consumable)
 
     consumableDao.insert(consumable)
+    updateRemainingQuantitiesLiveData()
+  }
+
+  fun getRemainingQuantitiesLiveData(): LiveData<Map<Int, Int>> = remainingQuantitiesLiveData
+
+  private fun updateRemainingQuantitiesLiveData() {
+    val consumables = getAllConsumables.value.orEmpty()
+    val remainingQuantitiesMap = mutableMapOf<Int, Int>()
+
+    for (consumable in consumables) {
+      val consumableId = consumable.consumableId
+      val remainingQuantity = getAllBatchesQuantityRemaining(consumableId)
+      remainingQuantitiesMap[consumableId] = remainingQuantity
+    }
+
+    remainingQuantitiesLiveData.postValue(remainingQuantitiesMap)
   }
 
   /*
@@ -52,10 +72,12 @@ class ConsumableRepository(private val consumableDao: ConsumableDao) {
     validateConsumable(consumable)
 
     consumableDao.update(consumable)
+    updateRemainingQuantitiesLiveData()
   }
 
   suspend fun deleteConsumable(consumable: Consumable) {
     consumableDao.delete(consumable)
+    updateRemainingQuantitiesLiveData()
   }
 
 

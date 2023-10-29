@@ -66,11 +66,12 @@ class ListConsumablesActivity(showArchives: Boolean = false) : BaseActivity(R.la
     updateList(consumableFilterState.active, consumableFilterState.inactive, consumableFilterState.remainingQuantity)
 
     // Create the adapter and set it initially
-    adapter = ConsumableListAdapter(this, emptyList())
+    adapter = ConsumableListAdapter(this, emptyList(),consumableViewModel)
     consumableListView.adapter = adapter
 
     // Observe the LiveData and update the adapter when data changes
     consumableViewModel.allConsumables.observe(this, Observer { consumables ->
+      print("remainingQuantitiesMap: allConsumables")
       // Sort the list in ascending alphabetical order (the default option)
       val sortedConsumables = consumables.sortedWith(compareBy (String.CASE_INSENSITIVE_ORDER) { it.consumableName + it.consumableBrand + it.consumableType + it.consumableSize })
       // For initial rendering, show active batch details only
@@ -79,6 +80,12 @@ class ListConsumablesActivity(showArchives: Boolean = false) : BaseActivity(R.la
       }
       adapter.updateData(activeConsumables)
     })
+
+//    // Observe the remaining quantities
+//    consumableViewModel.remainingQuantities.observe(this, Observer { remainingQuantitiesMap ->
+//      // Update the data in your adapter
+//      adapter.updateRemainingQuantities(remainingQuantitiesMap)
+//    })
 
     // Set up the SearchView
     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

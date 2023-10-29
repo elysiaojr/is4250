@@ -6,5 +6,6 @@ data class BatchDetailsFilterSortState(
     val nonEmpty: Boolean,
     val empty: Boolean,
     val expired: Boolean,
-    val sortOrder: SortOrderEnum
+    val sortOrder: SortOrderEnum,
+    val consumableId: Int
 )

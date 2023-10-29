@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.scannerapp.R
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.database.entities.Consumable
@@ -26,6 +27,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
   // Define UI elements and data models.
   private lateinit var consumableNameTextView: TextView
+  private lateinit var inactiveStatusTextView: TextView
   private lateinit var consumableItemCodeTextView: TextView
   private lateinit var consumableCurrentQuantityTextView: TextView
   private lateinit var consumableMinimumQuantityTextView: TextView
@@ -46,6 +48,7 @@ class ConsumableDetailsActivity : AppCompatActivity(),
 
     // Initialize views.
     consumableNameTextView = findViewById(R.id.consumableNameTextView)
+    inactiveStatusTextView = findViewById(R.id.inactiveStatus)
     consumableItemCodeTextView = findViewById(R.id.consumableItemCodeTextView)
     consumableCurrentQuantityTextView = findViewById(R.id.consumableCurrentQuantityTextView)
     consumableMinimumQuantityTextView = findViewById(R.id.consumableMinimumQuantityTextView)
@@ -80,6 +83,14 @@ class ConsumableDetailsActivity : AppCompatActivity(),
     }
 
     val deleteButton = findViewById<Button>(R.id.consumableDeleteButton)
+
+    if ((consumable?.isActive ?: Int) == 0) {
+      inactiveStatusTextView.visibility = TextView.VISIBLE
+      deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.update_button))
+      deleteButton.setCompoundDrawablesWithIntrinsicBounds(
+        R.drawable.power_settings_new_24px, 0, 0, 0)
+    }
+
     deleteButton.setOnClickListener {
       showDeleteConfirmationDialog()
     }
@@ -93,23 +104,53 @@ class ConsumableDetailsActivity : AppCompatActivity(),
     val deleteButton = dialogView.findViewById<Button>(R.id.confirm_button)
     val backButton = dialogView.findViewById<Button>(R.id.back_button)
 
-    title.text = "Delete Consumable"
+    if ((consumable?.isActive ?: Int) == 1) {
+      title.text = "Update Consumable"
 
-    val dialog = AlertDialog.Builder(this)
-      .setView(dialogView)
-      .create()
+      deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.delete))
+      deleteButton.text = "Update status as Inactive"
 
-    deleteButton.setOnClickListener {
-      val enteredPin = pinInputEditText.text.toString()
-      verifyPinAndDelete(enteredPin)
-      dialog.dismiss()
+      val dialog = AlertDialog.Builder(this)
+        .setView(dialogView)
+        .create()
+
+      deleteButton.setOnClickListener {
+        val enteredPin = pinInputEditText.text.toString()
+        verifyPinAndDelete(enteredPin)
+//        dialog.dismiss()
+      }
+
+      backButton.setOnClickListener {
+        dialog.dismiss()
+      }
+
+      dialog.show()
+    } else {
+      title.text = "Update Consumable"
+
+      deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.update_button))
+      deleteButton.text = "Update status as Active"
+      deleteButton.setCompoundDrawablesWithIntrinsicBounds(
+        R.drawable.power_settings_new_24px, 0, 0, 0)
+
+      val dialog = AlertDialog.Builder(this)
+        .setView(dialogView)
+        .create()
+
+      deleteButton.setOnClickListener {
+        val enteredPin = pinInputEditText.text.toString()
+        verifyPinAndActivate(enteredPin)
+        dialog.dismiss()
+      }
+
+      backButton.setOnClickListener {
+        dialog.dismiss()
+      }
+
+      dialog.show()
     }
 
-    backButton.setOnClickListener {
-      dialog.dismiss()
-    }
 
-    dialog.show()
   }
 
   private fun verifyPinAndDelete(enteredPin: String) {
@@ -126,6 +167,20 @@ class ConsumableDetailsActivity : AppCompatActivity(),
     }
   }
 
+  private fun verifyPinAndActivate(enteredPin: String) {
+    activityScope.launch {
+      val storedPin = withContext(Dispatchers.IO) {
+        pinCodeViewModel.getPinCode()
+      }
+      if (enteredPin == storedPin) {
+        activateConsumable()
+      } else {
+        Toast.makeText(this@ConsumableDetailsActivity, "Incorrect pin code!", Toast.LENGTH_SHORT)
+          .show()
+      }
+    }
+  }
+
   private fun deleteConsumable() {
     consumable?.let { consumable ->
       val updatedConsumable = consumable.copy(isActive = 0)
@@ -133,7 +188,21 @@ class ConsumableDetailsActivity : AppCompatActivity(),
         withContext(Dispatchers.IO) {
           consumableViewModel.updateConsumable(updatedConsumable)
         }
-        Toast.makeText(this@ConsumableDetailsActivity, "Consumable deleted!", Toast.LENGTH_SHORT)
+        Toast.makeText(this@ConsumableDetailsActivity, "Consumable updated: inactive", Toast.LENGTH_SHORT)
+          .show()
+        finish() // Close this activity and return to the previous one.
+      }
+    }
+  }
+
+  private fun activateConsumable() {
+    consumable?.let { consumable ->
+      val updatedConsumable = consumable.copy(isActive = 1)
+      activityScope.launch {
+        withContext(Dispatchers.IO) {
+          consumableViewModel.updateConsumable(updatedConsumable)
+        }
+        Toast.makeText(this@ConsumableDetailsActivity, "Consumable updated: active", Toast.LENGTH_SHORT)
           .show()
         finish() // Close this activity and return to the previous one.
       }

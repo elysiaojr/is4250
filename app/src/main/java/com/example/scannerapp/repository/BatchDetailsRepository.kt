@@ -78,6 +78,7 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
   suspend fun getBatchExpiryDateById(batchId: Int): String {
     return batchDetailsDao.getBatchExpiryDateById(batchId)
   }
+
   suspend fun getBatchDetailsLiveDataByBatchNumber(batchNumber: String): BatchDetails {
     return batchDetailsDao.getBatchDetailsLiveDataByBatchNumber(batchNumber)
   }
@@ -120,6 +121,13 @@ class BatchDetailsRepository(private val batchDetailsDao: BatchDetailsDao) {
 
   suspend fun getBatchDetailConsumableSizeByBatchNumber(batchNumber: String): String {
     return batchDetailsDao.getBatchDetailConsumableSizeByBatchNumber(batchNumber)
+  }
+
+  suspend fun getBatchesWithEarlierExpiryDates(
+    date: String,
+    consumableId: Int
+  ): List<BatchDetails> {
+    return batchDetailsDao.getBatchesWithEarlierExpiryDates(date, consumableId)
   }
 
   private fun validateBatchDetails(batchDetails: BatchDetails) {

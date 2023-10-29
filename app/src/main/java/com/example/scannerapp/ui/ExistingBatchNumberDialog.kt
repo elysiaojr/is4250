@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
 
@@ -25,6 +23,7 @@ class ExistingBatchDialogFragment(private var batchDetails: BatchDetails) : Dial
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // Find and set the message and button click listeners
         val messageTextView = view.findViewById<TextView>(R.id.dialog_message)
         val okButton = view.findViewById<Button>(R.id.dialog_ok_button)
@@ -38,7 +37,7 @@ class ExistingBatchDialogFragment(private var batchDetails: BatchDetails) : Dial
         editBatchButton.setOnClickListener {
             batchDetails?.let {
                 // Pass the BatchDetails object to EditBatchDetailsDialog
-                val dialogFragment = EditBatchDetailsDialog(it)
+                val dialogFragment = EditBatchDetailsDialog(it, this)
                 dialogFragment.show(childFragmentManager, "EditBatchDetailsDialog")
             }
         }

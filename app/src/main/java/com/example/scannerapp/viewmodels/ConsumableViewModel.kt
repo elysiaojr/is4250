@@ -24,15 +24,19 @@ class ConsumableViewModel(application: Application) : AndroidViewModel(applicati
 
   val allConsumables: LiveData<List<Consumable>>
   val allActiveConsumables: LiveData<List<Consumable>>
+  val remainingQuantities: LiveData<Map<Int, Int>>
   private val consumableRepository: ConsumableRepository
   val selectedConsumable = MutableLiveData<Consumable?>()
   val errorLiveData = MutableLiveData<String>() // To pass error message to UI
+
 
   init {
     val consumableDao = AppDatabase.getDatabase(application).consumablesDao()
     consumableRepository = ConsumableRepository(consumableDao)
     allConsumables = consumableRepository.getAllConsumables
+    remainingQuantities = consumableRepository.getRemainingQuantitiesLiveData()
     allActiveConsumables = consumableRepository.getAllActiveConsumables
+
   }
 
   private fun handleException(e: Exception) {

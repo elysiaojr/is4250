@@ -73,12 +73,16 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
       Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
     })
 
+    batchDetailsViewModel.successLiveData.observe(viewLifecycleOwner, Observer {
+      dismiss() // Only dismiss CreateBatchDetailsDialog here
+    })
+
     batchDetailsViewModel.allBatchDetails.observe(viewLifecycleOwner, Observer { batchDetails ->
       // You need to get the batch number inside this observer to avoid reference issues
       val batchNumber = batchNumberInput.text.toString().trim()
 
       if (batchDetails.any { it.batchNumber == batchNumber }) {
-        Toast.makeText(requireContext(), "Batch Detail created successfully!", Toast.LENGTH_SHORT)
+        Toast.makeText(requireContext(), "Batch created successfully!", Toast.LENGTH_SHORT)
           .show()
         dismiss()
       }
@@ -284,8 +288,6 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
 
           batchDetailsViewModel.addBatchDetails(newBatchDetail)
 
-
-          dismiss()
         }
       }
     }

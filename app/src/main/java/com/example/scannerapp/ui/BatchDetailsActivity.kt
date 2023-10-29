@@ -2,19 +2,16 @@ package com.example.scannerapp.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.InputType
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.scannerapp.R
 import com.example.scannerapp.database.entities.BatchDetails
-import com.example.scannerapp.database.entities.Consumable
 import com.example.scannerapp.viewmodels.BatchDetailsViewModel
-import com.example.scannerapp.viewmodels.ConsumableViewModel
 import com.example.scannerapp.viewmodels.PinCodeViewModel
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
 
 // This activity displays details of a batch.
 class BatchDetailsActivity : AppCompatActivity(),
@@ -32,6 +28,7 @@ class BatchDetailsActivity : AppCompatActivity(),
   private lateinit var batchDetailsViewModel: BatchDetailsViewModel
   private lateinit var pinCodeViewModel: PinCodeViewModel
   private lateinit var batchNumberTextView: TextView
+  private lateinit var inactiveStatusTextView: TextView
   private lateinit var createDateTextView: TextView
   private lateinit var expiryDateTextView: TextView
   private lateinit var batchReceivedQuantityTextView: TextView
@@ -54,6 +51,7 @@ class BatchDetailsActivity : AppCompatActivity(),
 
     // Initialize views.
     batchNumberTextView = findViewById(R.id.batchNumberTextView)
+    inactiveStatusTextView = findViewById(R.id.inactiveStatus)
     createDateTextView = findViewById(R.id.createDateTextView)
     expiryDateTextView = findViewById(R.id.expiryDateTextView)
     batchReceivedQuantityTextView = findViewById(R.id.batchReceivedQuantityTextView)
@@ -92,6 +90,14 @@ class BatchDetailsActivity : AppCompatActivity(),
     // fab.setOnClickListener { /* Handle edit click here */ }
 
     val deleteButton = findViewById<Button>(R.id.batchDeleteButton)
+
+    if ((batchDetail?.isActive ?: Int) == 0) {
+      inactiveStatusTextView.visibility = TextView.VISIBLE
+      deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.update_button))
+      deleteButton.setCompoundDrawablesWithIntrinsicBounds(
+        R.drawable.power_settings_new_24px, 0, 0, 0)
+    }
+
     deleteButton.setOnClickListener {
       showDeleteConfirmationDialog()
     }
@@ -106,23 +112,52 @@ class BatchDetailsActivity : AppCompatActivity(),
     val deleteButton = dialogView.findViewById<Button>(R.id.confirm_button)
     val backButton = dialogView.findViewById<Button>(R.id.back_button)
 
-    title.text = "Delete Batch"
+    title.text = "Update Batch"
 
-    val dialog = AlertDialog.Builder(this)
-      .setView(dialogView)
-      .create()
+    if ((batchDetail?.isActive ?: Int) == 1) {
 
-    deleteButton.setOnClickListener {
-      val enteredPin = pinInputEditText.text.toString()
-      verifyPinAndDelete(enteredPin)
-      dialog.dismiss()
+      deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.delete))
+      deleteButton.text = "Update status as Inactive"
+
+      val dialog = AlertDialog.Builder(this)
+        .setView(dialogView)
+        .create()
+
+      deleteButton.setOnClickListener {
+        val enteredPin = pinInputEditText.text.toString()
+        verifyPinAndDelete(enteredPin)
+        dialog.dismiss()
+      }
+
+      backButton.setOnClickListener {
+        dialog.dismiss()
+      }
+
+      dialog.show()
+
+    } else {
+
+      deleteButton.setBackgroundColor(ContextCompat.getColor(this, R.color.update_button))
+      deleteButton.text = "Update status as Active"
+      deleteButton.setCompoundDrawablesWithIntrinsicBounds(
+        R.drawable.power_settings_new_24px, 0, 0, 0)
+
+      val dialog = AlertDialog.Builder(this)
+        .setView(dialogView)
+        .create()
+
+      deleteButton.setOnClickListener {
+        val enteredPin = pinInputEditText.text.toString()
+        verifyPinAndActivate(enteredPin)
+        dialog.dismiss()
+      }
+
+      backButton.setOnClickListener {
+        dialog.dismiss()
+      }
+
+      dialog.show()
     }
-
-    backButton.setOnClickListener {
-      dialog.dismiss()
-    }
-
-    dialog.show()
   }
 
   // This method verifies the pin and deletes the batch if the pin is correct.
@@ -140,6 +175,20 @@ class BatchDetailsActivity : AppCompatActivity(),
     }
   }
 
+  private fun verifyPinAndActivate(enteredPin: String) {
+    activityScope.launch {
+      val storedPin = withContext(Dispatchers.IO) {
+        pinCodeViewModel.getPinCode()
+      }
+      if (enteredPin == storedPin) {
+        activateBatch()
+      } else {
+        Toast.makeText(this@BatchDetailsActivity, "Incorrect pin code!", Toast.LENGTH_SHORT)
+          .show()
+      }
+    }
+  }
+
   // This method is for deleting the batch. You might want to adjust it based on how you manage deletion in your batch database.
   private fun deleteBatch() {
     batchDetail?.let { batch ->
@@ -148,7 +197,21 @@ class BatchDetailsActivity : AppCompatActivity(),
         withContext(Dispatchers.IO) {
           batchDetailsViewModel.updateBatchDetails(updatedBatchDetails)
         }
-        Toast.makeText(this@BatchDetailsActivity, "Batch deleted!", Toast.LENGTH_SHORT)
+        Toast.makeText(this@BatchDetailsActivity, "Batch updated: inactive", Toast.LENGTH_SHORT)
+          .show()
+        finish() // Close this activity and return to the previous one.
+      }
+    }
+  }
+
+  private fun activateBatch() {
+    batchDetail?.let { batch ->
+      val updatedBatchDetails = batch.copy(isActive = 1)
+      activityScope.launch {
+        withContext(Dispatchers.IO) {
+          batchDetailsViewModel.updateBatchDetails(updatedBatchDetails)
+        }
+        Toast.makeText(this@BatchDetailsActivity, "Batch updated: active", Toast.LENGTH_SHORT)
           .show()
         finish() // Close this activity and return to the previous one.
       }
