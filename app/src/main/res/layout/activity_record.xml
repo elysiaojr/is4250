@@ -223,13 +223,13 @@
             android:layout_marginTop="0dp">
 
             <Button
-                android:id="@+id/recordEditButton"
+                android:id="@+id/createReturnRecordButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/mid_records_white_text_button"
                 android:drawableLeft="@drawable/baseline_edit_24"
-                android:text="Edit Record"
+                android:text="Create Return Record"
                 android:textSize="16sp"
                 android:gravity="center"/>
 

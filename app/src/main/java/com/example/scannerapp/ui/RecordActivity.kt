@@ -65,14 +65,14 @@ class RecordActivity : AppCompatActivity() {
             handleOnBackpressed() // Navigate back to the previous screen.
         }
 
-        // Define and set the action for the edit button.
-//        val fabEditRecord = findViewById<Button>(R.id.recordEditButton)
-//        fabEditRecord.setOnClickListener {
-//            // Open the EditBatchDetailsDialog to edit the batch details.
-//            val dialogFragment = record?.let { it1 -> EditRecordDialog(it1) }
-//            dialogFragment?.recordsUpdatedListener = this
-//            dialogFragment?.show(supportFragmentManager, "EditRecordsDialog")
-//        }
+        // Define and set the action for the Return Record button.
+        val fabCreateReturnRecord = findViewById<Button>(R.id.createReturnRecordButton)
+        fabCreateReturnRecord.setOnClickListener {
+            // Open the EditBatchDetailsDialog to edit the batch details.
+            val dialogFragment = record?.let { it1 -> CreateReturnRecordDialog(it1) }
+            dialogFragment?.recordsUpdatedListener = this
+            dialogFragment?.show(supportFragmentManager, "CreateReturnRecordsDialog.kt")
+        }
     }
 
     private fun handleOnBackpressed() {
