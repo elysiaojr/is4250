@@ -35,7 +35,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
-class CreateReturnRecordDialog : DialogFragment(), CoroutineScope {
+class CreateReturnRecordDialog(record: Record) : DialogFragment(), CoroutineScope {
     private val job = Job()
     private var selectedBatchId: Int = -1
     private var hasValidScannedBatchNumber: Boolean = false
@@ -74,7 +74,13 @@ class CreateReturnRecordDialog : DialogFragment(), CoroutineScope {
             view.findViewById<TextInputEditText>(R.id.textInputEditTextQuantity)
         val remarksInput =
             view.findViewById<TextInputEditText>(R.id.textInputEditTextRemarks)
+
+        val switchRecordText = view.findViewById<TextView>(R.id.isTakeOutText)
+        switchRecordText.visibility = View.GONE
+        // Don't want them to switch as a Return Record only
         val switchRecordType = view.findViewById<MaterialSwitch>(R.id.switchRecordType)
+        switchRecordType.visibility = View.GONE
+
         val switchStatus = view.findViewById<MaterialSwitch>(R.id.switchStatus)
         val batchNumberInput = view.findViewById<TextInputEditText>(R.id.textInputEditTextBatchNumber)
         val batchNumberInputLayout = view.findViewById<TextInputLayout>(R.id.textInputLayoutBatchNumber)
@@ -96,7 +102,7 @@ class CreateReturnRecordDialog : DialogFragment(), CoroutineScope {
         searchableSpinnerConsumable.setTitle("Select Consumable");
 
         // Retrieve the scanned data from the arguments (from barcode)
-        val scannedData = arguments?.getString("scannedData")
+        val scannedData = arguments?.getString("batchNumber") ?: ""
 
         if (!scannedData.isNullOrBlank()) { // Barcode scanner detected barcode number
             processIfBatchNumberExists(scannedData)
@@ -142,21 +148,35 @@ class CreateReturnRecordDialog : DialogFragment(), CoroutineScope {
                         position: Int,
                         id: Long
                     ) {
-                        // Get the selected consumable item
+                        val consumableName = arguments?.getString("consumableName") ?: ""
+
                         val selectedConsumableName = consumableNames[position]
 
-                        // Find the corresponding Consumable object based on the name
-                        val selectedConsumable =
-                            consumables.find { it.getConsumableTitle() == selectedConsumableName }
+                        // Check if the selected consumableName matches the pre-selected consumableName
+                        if (selectedConsumableName == consumableName) {
+                            // The selected consumable matches the pre-selected consumableName
+                            val selectedConsumable = consumables.find { it.getConsumableTitle() == selectedConsumableName }
 
-                        if (selectedConsumable != null) {
-                            selectedConsumableId = selectedConsumable.consumableId
+                            if (selectedConsumable != null) {
+                                selectedConsumableId = selectedConsumable.consumableId
 
-                            // Show the SearchableSpinner for Batch
-                            showHideSpinnerBatch(
-                                searchableSpinnerBatch = searchableSpinnerBatch,
-                                selectedConsumableId = selectedConsumableId
-                            )
+                                // Show the SearchableSpinner for Batch
+                                showHideSpinnerBatch(
+                                    searchableSpinnerBatch = searchableSpinnerBatch,
+                                    selectedConsumableId = selectedConsumableId
+                                )
+                            }
+                        } else {
+                            // The selected consumable doesn't match the pre-selected consumableName
+                            // Handle this case as needed, e.g., show an error message, reset the selection, etc.
+                            // For example:
+                            // Toast.makeText(requireContext(), "Please select the pre-selected consumable.", Toast.LENGTH_SHORT).show()
+
+                            // Reset the selection to the pre-selected consumableName (optional)
+                            val preSelectedPosition = consumableNames.indexOf(consumableName)
+                            if (preSelectedPosition != -1) {
+                                searchableSpinnerConsumable.setSelection(preSelectedPosition)
+                            }
                         }
                     }
 
@@ -208,13 +228,16 @@ class CreateReturnRecordDialog : DialogFragment(), CoroutineScope {
 
         val titleView = view.findViewById<TextView>(R.id.titleViewAddRecord)
 
-        switchRecordType.setOnClickListener {
-            if (switchRecordType.isChecked) {
-                titleView.text = "Add Take Out Record"
-            } else {
-                titleView.text = "Add Return Record"
-            }
-        }
+        titleView.text = "Add Return Record"
+        switchRecordType.isChecked = false
+
+//        switchRecordType.setOnClickListener {
+//            if (switchRecordType.isChecked) {
+//                titleView.text = "Add Return Record"
+//            } else {
+//                titleView.text = "Add Return Record"
+//            }
+//        }
 
         saveButton.setOnClickListener {
             // Get the current date

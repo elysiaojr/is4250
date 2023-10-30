@@ -25,6 +25,7 @@ class RecordActivity : AppCompatActivity() {
     private lateinit var recordViewModel: RecordViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var batchDetailsViewModel: BatchDetailsViewModel
+    private lateinit var consumableViewModel: ConsumableViewModel
     private lateinit var recordIDTextView: TextView
     private lateinit var createDateTextView: TextView
     private lateinit var expiryDateTextView: TextView
@@ -68,10 +69,37 @@ class RecordActivity : AppCompatActivity() {
         // Define and set the action for the Return Record button.
         val fabCreateReturnRecord = findViewById<Button>(R.id.createReturnRecordButton)
         fabCreateReturnRecord.setOnClickListener {
-            // Open the EditBatchDetailsDialog to edit the batch details.
-            val dialogFragment = record?.let { it1 -> CreateReturnRecordDialog(it1) }
-            dialogFragment?.recordsUpdatedListener = this
-            dialogFragment?.show(supportFragmentManager, "CreateReturnRecordsDialog.kt")
+            // Ensure record is not null before launching the coroutine
+            record?.let { nonNullRecord ->
+                val dialogFragment = CreateReturnRecordDialog(nonNullRecord) // Pass the non-null record to the dialog
+                consumableViewModel = ViewModelProvider(this).get(ConsumableViewModel::class.java)
+                batchDetailsViewModel = ViewModelProvider(this).get(BatchDetailsViewModel::class.java)
+
+                activityScope.launch {
+                    // Retrieve batch number using the non-null record's batchId
+                    val tempBatchNumber = withContext(Dispatchers.IO) {
+                        batchDetailsViewModel.getBatchDetailsNameById(nonNullRecord.batchId)
+                    }
+                    // Retrieve consumable name using the retrieved batch number
+                    val tempConsumableName = withContext(Dispatchers.IO) {
+                        batchDetailsViewModel.getBatchDetailConsumableNameByBatchNumber(tempBatchNumber)
+                    }
+
+                    // Create a Bundle and set the retrieved values
+                    val bundle = Bundle()
+                    bundle.putString("consumableName", tempConsumableName)
+                    bundle.putString("batchNumber", tempBatchNumber)
+
+                    // Set the arguments for the dialogFragment
+                    dialogFragment.arguments = bundle
+
+                    // Show the dialogFragment
+                    dialogFragment.show(supportFragmentManager, "CreateReturnRecordsDialog.kt")
+                }
+            } ?: run {
+                // Handle the case when record is null, if needed
+                // For example, show a toast message or log an error
+            }
         }
     }
 
