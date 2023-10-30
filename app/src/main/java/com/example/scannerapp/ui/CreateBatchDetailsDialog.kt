@@ -33,7 +33,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
-class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
+class CreateBatchDetailsDialog(private var noExistingBatchDialogFragment: NoExistingBatchDialogFragment? = null) : DialogFragment(), CoroutineScope {
   private val job = Job()
   private var searchedConsumables: List<Consumable> = listOf()
   private lateinit var batchDetailsViewModel: BatchDetailsViewModel
@@ -86,6 +86,16 @@ class CreateBatchDetailsDialog : DialogFragment(), CoroutineScope {
           .show()
         dismiss()
       }
+    })
+
+    batchDetailsViewModel.successLiveData.observe(viewLifecycleOwner, Observer { batchDetail ->
+      Toast.makeText(requireContext(), "Batch created successfully!", Toast.LENGTH_SHORT)
+        .show()
+//      val intent = Intent(requireContext(), BatchDetailsActivity::class.java)
+//      intent.putExtra("batchDetail", batchDetail)
+//      requireContext().startActivity(intent)
+      noExistingBatchDialogFragment?.dismiss()
+      dismiss()
     })
 
     val months = arrayOf(

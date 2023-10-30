@@ -34,7 +34,7 @@ class NoExistingBatchDialogFragment : DialogFragment() {
         messageTextView.text = scannedTextMessage
 
         createNewBatchButton.setOnClickListener {
-            val dialogFragment = CreateBatchDetailsDialog()
+            val dialogFragment = CreateBatchDetailsDialog(this)
             val bundle = Bundle()
             bundle.putString("scannedData", scannedData)
             dialogFragment.arguments = bundle
