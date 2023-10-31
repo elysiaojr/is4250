@@ -47,7 +47,7 @@
           android:layout_height="wrap_content"
           android:text="Is a Take Out Record?"
           android:textColor="@color/black"
-
+          android:id="@+id/isTakeOutText"
           android:textSize="15sp" />
 
         <com.google.android.material.materialswitch.MaterialSwitch

@@ -142,8 +142,7 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
 
     // Observe the LiveData and update the adapter when data changes
     recordsViewModel.allRecords.observe(this, Observer { records ->
-
-      adapter.updateData(sortRecordsByTakeOutDateDescending(records))
+      adapter.updateData(sortRecords(records))
     })
     // Apply the filter to the default state
     updateList(
@@ -276,6 +275,15 @@ class ListRecordsActivity : BaseActivity(R.layout.activity_list_records), Corout
       val date2 = LocalDate.parse(record2.recordDate, dateFormat)
       date2.compareTo(date1)
     })
+  }
+
+  private fun sortRecords(records: List<Record>): List<Record> {
+    val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+    return records.sortedWith(
+      compareByDescending<Record> { it.recordId } // Sort by recordID in descending order
+        .thenByDescending { LocalDate.parse(it.recordDate, dateFormat) } // Sort by take-out date in descending order
+    )
   }
 
   private suspend fun sortRecordsByExpiryDateAscending(recordList: List<Record>): List<Record> {
