@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="Reset All"
             android:textAlignment="viewEnd"
-            android:textColor="@color/dark_batches"
+            android:textColor="@color/dark_records"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>
@@ -51,28 +51,28 @@
             android:id="@+id/radioTakeoutOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.RadioButton_batches"
+            style="@style/Widget.App.RadioButton_records"
             android:text="Takeout only" />
 
         <RadioButton
             android:id="@+id/radioPutInOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.RadioButton_batches"
+            style="@style/Widget.App.RadioButton_records"
             android:text="Return only" />
 
         <RadioButton
             android:id="@+id/radioSortLatestTakeout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.RadioButton_batches"
+            style="@style/Widget.App.RadioButton_records"
             android:text="Last Takeout" />
 
         <RadioButton
             android:id="@+id/radioSortFirstExpiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.App.RadioButton_batches"
+            style="@style/Widget.App.RadioButton_records"
             android:text="First Expiry" />
 
     </RadioGroup>
@@ -87,7 +87,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        android:backgroundTint="@color/dark_batches"
+        android:backgroundTint="@color/dark_records"
         app:layout_constraintStart_toEndOf="parent" />
 
 </LinearLayout>

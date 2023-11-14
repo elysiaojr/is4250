@@ -26,6 +26,7 @@
     <color name="mid_records">#FFC4E0F5</color> // For FAB
     <color name="mid_records_white_text_button">#FF63A2C6</color> // For FAB
     <color name="very_light_records">#99C4E0F5</color> // for navbar
+    <color name="dark_records">#7ec0f2</color> // for checkboxes
 
     // Batches colours
     <color name="light_batches">#FFFDE7F2</color>

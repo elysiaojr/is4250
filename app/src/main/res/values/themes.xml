@@ -32,6 +32,10 @@
         <item name="buttonTint">@color/button_tint_batches</item>
     </style>
 
+    <style name="Widget.App.RadioButton_records" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/button_tint_records</item>
+    </style>
+
     <style name="Widget.App.CheckBox_consumables" parent="Widget.Material3.CompoundButton.CheckBox">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.CheckBox_consumables</item>
     </style>

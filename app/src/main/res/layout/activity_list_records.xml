@@ -42,21 +42,12 @@
                 android:id="@+id/archives_button"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@drawable/circular_button"
                 android:backgroundTint="@color/mid_records"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
-                <ImageView
-                    android:id="@+id/archives_button_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/archives_button"
-                    app:layout_constraintEnd_toEndOf="@+id/archives_button"
-                    app:layout_constraintStart_toStartOf="@+id/archives_button"
-                    app:layout_constraintTop_toTopOf="@+id/archives_button"
-                    app:srcCompat="@drawable/archives_icon" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
